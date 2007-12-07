@@ -1,0 +1,156 @@
+%define name                    sblim-wbemsmt-dhcp
+%define version                 @PACKAGE_VERSION@
+%define build_release           CVS
+%define release                 %{build_release}jpp
+%define section                 free
+
+
+###############################################################################
+
+Name:           %{name}
+Version:        %{version}
+Release:        %{release}
+License:        Common Public License
+Url:            http://sblim.sourceforge.net/
+Group:          Systems Management/Web Application
+Vendor:         IBM
+Summary:        Provides a wbemsmt-based task that provides support to configure DHCP
+SOURCE0:        %{name}-%{version}-src.tar.bz2
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}
+BuildArch:      noarch
+	
+BuildRequires: jpackage-utils >= 0:1.5.32
+BuildRequires: ant >= 0:1.6
+BuildRequires: sblim-cim-client >= 0:1.3
+BuildRequires: sblim-wbemsmt-commons => 0.5.0
+BuildRequires: jakarta-commons-lang >= 2.0
+#BuildRequires: jakarta-commons-cli >= 1.0
+#BuildRequires:  myfaces >= 1.1.5
+#BuildRequires:  tomahawk >= 1.1.3
+#BuildRequires:  xbeans >= 2.2.0
+
+###############################################################################
+
+Requires: jpackage-utils >= 0:1.5.32
+Requires: sblim-cim-client >= 0:1.3
+Requires: sblim-wbemsmt-commons => 0.5.0
+Requires: sblim-wbemsmt-webapp => 0.5.0
+Requires: jakarta-commons-lang >= 2.0
+#Requires: jakarta-commons-cli >= 1.0
+#Requires:  myfaces >= 1.1.5
+#Requires:  tomahawk >= 1.1.3
+
+###############################################################################
+
+%description
+This module provides the wbemsmt-based task that provides the support to
+configure DHCP.
+It contains the generated data containers, the generated first class objects 
+and the business logic for the DHCP app. It also contains the generated cli 
+interface for the dhcp task. 
+
+###############################################################################
+
+%prep
+%setup -q -n %{name}
+
+###############################################################################
+
+%build
+CLASSPATH=$(build-classpath sblim-cim-client)
+CLASSPATH=$(build-classpath commons-cli commons-lang):$CLASSPATH
+CLASSPATH=$(build-classpath myfaces-api myfaces-impl tomahawk xbean):$CLASSPATH
+CLASSPATH=$(build-classpath sblim-wbemsmt/sblim-wbemsmt-commons sblim-wbemsmt/sblim-wbemsmt-commons-launcher-config):$CLASSPATH
+export CLASSPATH
+
+ant build-jar
+
+
+###############################################################################
+
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_bindir}/
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/sblim-wbemsmt/tasklauncher.d
+install -d $RPM_BUILD_ROOT%{_javadir}/sblim-wbemsmt
+install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/help
+
+# Installation of documentation files
+install COPYING   $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/COPYING
+install AUTHORS   $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/AUTHORS
+install README    $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/README
+install ChangeLog $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ChangeLog
+install NEWS      $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/NEWS
+install TroubleShooting $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/TroubleShooting
+install MultipleHostsSupport $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/MultipleHostsSupport
+
+install target/package/etc/sblim-wbemsmt/tasklauncher.d/dhcp-task-config.xml $RPM_BUILD_ROOT%{_sysconfdir}/sblim-wbemsmt/tasklauncher.d/
+install target/package/cli-scripts/sblim-wbemsmt-dhcp-cli.sh $RPM_BUILD_ROOT%{_bindir}/sblim-wbemsmt-dhcp-cli.sh
+
+# Installation of java files
+install target/package/%{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/sblim-wbemsmt
+(
+  cd $RPM_BUILD_ROOT%{_javadir}/sblim-wbemsmt &&
+    ln -sf %{name}-%{version}.jar %{name}.jar;
+)
+
+# Moving help files to the webapp directory
+mv target/package/help/* $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/help
+
+###############################################################################
+
+%post
+unset JAVA_HOME
+[ -z "$JAVA_HOME" ] && [ -r %{_sysconfdir}/java/java.conf ] && \
+    . %{_sysconfdir}/java/java.conf
+[ -z "$JAVA_HOME" ] && JAVA_HOME=%{_jvmdir}/java
+
+unset WBEMSMT_WEBAPP_HOME
+[ -r %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-webapp.conf ] && . %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-webapp.conf
+[ -z "$WBEMSMT_WEBAPP_HOME" ] && WBEMSMT_WEBAPP_HOME=%{_localstatedir}/lib/sblim-wbemsmt-webapp/webapps/sblim-wbemsmt-webapp
+
+unset WBEMSMT_HELPDIR
+[ -r %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-commons.conf ] && . %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-commons.conf
+[ -z "$WBEMSMT_HELPDIR" ] && WBEMSMT_HELPDIR=/var/lib/sblim-wbemsmt/help
+ln -sf %{_localstatedir}/lib/%{name}/help/plugins/org.sblim.wbemsmt.help.dhcp $WBEMSMT_HELPDIR/plugins/org.sblim.wbemsmt.help.dhcp
+
+build-jar-repository $WBEMSMT_WEBAPP_HOME/WEB-INF/lib sblim-wbemsmt/%{name}
+
+
+###############################################################################
+
+%preun
+unset WBEMSMT_WEBAPP_HOME
+[ -r %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-webapp.conf ] && . %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-webapp.conf
+[ -z "$WBEMSMT_WEBAPP_HOME" ] && WBEMSMT_WEBAPP_HOME=%{_localstatedir}/lib/sblim-wbemsmt-webapp/webapps/sblim-wbemsmt-webapp
+rm -f $WBEMSMT_WEBAPP_HOME/WEB-INF/lib/\[sblim-wbemsmt\]\[%{name}.jar\]*.jar
+
+unset WBEMSMT_HELPDIR
+[ -r %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-commons.conf ] && . %{_sysconfdir}/sblim-wbemsmt/sblim-wbemsmt-commons.conf
+[ -z "$WBEMSMT_HELPDIR" ] && WBEMSMT_HELPDIR=/var/lib/sblim-wbemsmt/help
+unlink $WBEMSMT_HELPDIR/plugins/org.sblim.wbemsmt.help.dhcp
+
+
+###############################################################################
+
+%files
+%defattr(0644,root,root,0755)
+%doc %{_docdir}/%{name}-%{version}/COPYING
+%doc %{_docdir}/%{name}-%{version}/AUTHORS
+%doc %{_docdir}/%{name}-%{version}/README
+%doc %{_docdir}/%{name}-%{version}/ChangeLog
+%doc %{_docdir}/%{name}-%{version}/NEWS
+%doc %{_docdir}/%{name}-%{version}/TroubleShooting
+%doc %{_docdir}/%{name}-%{version}/MultipleHostsSupport
+%{_localstatedir}/lib/%{name}/help/*
+%{_javadir}/sblim-wbemsmt/%{name}.jar
+%{_javadir}/sblim-wbemsmt/%{name}-%{version}.jar
+%{_bindir}/sblim-wbemsmt-dhcp-cli.sh
+%attr(444,root,tomcat) %config(noreplace) %{_sysconfdir}/sblim-wbemsmt/tasklauncher.d/dhcp-task-config.xml
+
+###############################################################################
+%changelog
+    
+* Tue Nov 27 2007 Sam Kannan  <samkannan{at}de.ibm.com> 0.1.1-1
+  - Initial upload of distributed CVS modules

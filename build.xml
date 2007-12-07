@@ -1,0 +1,210 @@
+<!--
+ * build.xml
+ *
+ * (C) Copyright IBM Corp. 2007
+ *
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
+ *
+ * You can obtain a current copy of the Common Public License from
+ * http://www.opensource.org/licenses/cpl1.0.php
+ *
+ * Author:     Sam Kannan <samkannan(at)us.ibm.com>
+ *
+ * Contributors:
+  -->
+
+<project name="wbemsmt-dhcp" default="build-release" basedir="." >
+    <description>
+        Build file for SBLIM WBEM-SMT DHCP Task Client packages.
+    </description>
+	
+    <property name="Manifest.version"        value="0.5.2"/>
+    <property name="Manifest.release"        value="1"/>
+    <property name="Manifest.title"          value="WBEM-SMT: Task DHCP"/>
+    <property name="Manifest.url"            value="http://sblim.sourceforge.net"/>
+    <property name="Manifest.vendor"         value="IBM Corp."/>
+	
+    <property name="dir.compile.output"      value="target/compile"/>
+    <property name="dir.package.output"      value="target/package"/>
+    <property name="dir.release.output"      value="target/release"/>
+
+    <property name="javac.compiler"          value="modern"/>
+    <property name="javac.debug"             value="true"/>
+    <property name="javac.deprecation"       value="true"/>
+    <property name="javac.listfiles"         value="false"/>
+    <property name="javac.optimize"          value="false"/>
+    <property name="jar.index"               value="true"/>
+    <property name="clean.verbose"           value="true"/>
+    <property name="tar.longfile"            value="gnu"/>
+
+	
+	<path id="project.class.path">
+        <pathelement path="${java.class.path}/"/>
+    </path>
+
+
+    <!-- ================================= 
+          target: compile
+         ================================= -->
+    <target name="compile" description="--> Compile the sources of ${ant.project.name}">
+        <mkdir dir="${basedir}/${dir.compile.output}"/>
+        <mkdir dir="${basedir}/${dir.compile.output}/java"/>
+        <mkdir dir="${basedir}/${dir.compile.output}/etc/sblim-wbemsmt/tasklauncher.d"/>
+        <mkdir dir="${basedir}/${dir.compile.output}/help/plugins/org.sblim.wbemsmt.help.dhcp"/>
+
+        <javac destdir="${basedir}/${dir.compile.output}/java"
+               excludes    ="**/package.html"
+               debug       ="${javac.debug}"
+               listfiles   ="${javac.listfiles}"
+               compiler    ="${javac.compiler}"
+               deprecation ="${javac.deprecation}"
+               optimize    ="${javac.optimize}"
+               encoding    ="UTF-8">
+            <classpath>
+                <path refid="project.class.path"/>
+            </classpath>
+            <src path="java"/>
+        </javac>
+
+        <copy todir="${dir.compile.output}">
+            <fileset dir="${basedir}">
+                <include name="cli-scripts/**"/>
+                <include name="java/**"/>
+                <include name="help/**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy todir="${dir.compile.output}/etc/sblim-wbemsmt/tasklauncher.d">
+            <fileset dir="${basedir}/conf">
+                <include name="dhcp-task-config.xml"/>
+            </fileset>
+        </copy>    	
+    </target>
+
+
+    <!-- ================================= 
+          target: build-jar
+         ================================= -->
+    <target name="build-jar" depends="compile" description="--> Packages the JAR files for ${ant.project.name} components">
+        <mkdir dir="${dir.package.output}"/>
+        <mkdir dir="${dir.package.output}/etc/sblim-wbemsmt/tasklauncher.d/"/>
+
+    	<jar jarfile="${dir.package.output}/sblim-${ant.project.name}-${Manifest.version}.jar"
+             basedir="${dir.compile.output}/java"
+             index="${jar.index}">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Implementation-Version" value="${Manifest.version}-${Manifest.release}"/>
+                <attribute name="Implementation-Title"   value="${Manifest.title}"/>
+                <attribute name="Implementation-URL"     value="${Manifest.url}"/>
+                <attribute name="Implementation-Vendor"  value="${Manifest.vendor}"/>
+            </manifest>
+        </jar>        
+
+        <copy todir="${dir.package.output}">
+            <fileset dir="${dir.compile.output}">
+                <include name="cli-scripts/**"/>
+                <include name="help/**"/>
+            </fileset>
+        </copy>
+    	<copy 
+    		tofile="${dir.package.output}/etc/sblim-wbemsmt/tasklauncher.d/dhcp-task-config.xml"
+    		file="${dir.compile.output}/etc/sblim-wbemsmt/tasklauncher.d/dhcp-task-config.xml"/>
+    	
+    </target>
+
+
+    <!-- ================================= 
+          target: build-release
+         ================================= -->
+    <target name="build-release" depends="clean, package-src-tar, package-bin-tar" description="--> Build a release of ${ant.project.name}."/>
+
+	
+    <!-- ================================= 
+          target: package-src-tar
+         ================================= -->
+    <target name="package-src-tar" description="--> Package a source TAR ball for ${ant.project.name}">
+        <mkdir dir="${dir.release.output}"/>
+
+    	<copy file="${basedir}/sblim-wbemsmt-dhcp.spec.in" tofile="${basedir}/sblim-wbemsmt-dhcp.spec"/>
+        <replace file="${basedir}/sblim-wbemsmt-dhcp.spec" token="@PACKAGE_VERSION@" value="${Manifest.version}"/>
+    	
+        <tar destfile="${dir.release.output}/sblim-${ant.project.name}-${Manifest.version}-src.tar.bz2"
+             compression="bzip2" longfile="${tar.longfile}">
+          <tarfileset
+            dir="${basedir}"
+            includes="java/**,
+                      help/**
+                      cli-scripts/**,
+                      conf/dhcp-task-config.xml,
+                      build.xml,
+                      AUTHORS,
+                      ChangeLog,
+                      COPYING,
+                      NEWS,
+                      README,
+                      MultipleHostsSupport,
+                      TroubleShooting,
+                      sblim-wbemsmt-dhcp.spec"
+            excludes="**/.ant-targets-build.xml, 
+                      ${dir.compile.output}/**, 
+                      ${dir.package.output}/**, 
+                      ${dir.release.output}/**"
+            prefix="sblim-${ant.project.name}"/>
+        </tar>
+    	
+    	<delete file="${basedir}/sblim-wbemsmt-dhcp.spec"/>
+
+    </target>
+
+
+    <!-- ================================= 
+          target: package-bin-tar
+         ================================= -->
+    <target name="package-bin-tar" depends="build-jar" description="--> Package a binary TAR ball for ${ant.project.name}">
+        <mkdir dir="${dir.release.output}"/>
+
+        <tar destfile="${dir.release.output}/sblim-${ant.project.name}-${Manifest.version}-bin.tar.bz2"
+             compression="bzip2" longfile="${tar.longfile}">
+            <tarfileset
+              dir="${dir.package.output}"
+              includes="**/*.jar,
+            	        cli-scripts/**,
+                        help/**
+            	        etc/**"
+              prefix="sblim-${ant.project.name}"/>
+            <tarfileset
+              dir="${basedir}"
+              includes="AUTHORS,
+                        ChangeLog,
+                        COPYING,
+                        NEWS,
+                        README,
+                        MultipleHostsSupport,
+    	                TroubleShooting"
+              excludes="${dir.compile.output}/**, ${dir.package.output}, ${dir.release.output}/**"
+              prefix="sblim-${ant.project.name}"/>
+        </tar>
+    </target>
+
+
+    <!-- ================================= 
+          target: clean
+         ================================= -->
+	<target name="clean" description="--> Cleaning up ${ant.project.name}.">
+        <delete verbose="${clean.versose}" includeemptydirs="true">
+		    <fileset dir="${basedir}" >
+		        <include name="${dir.compile.output}/**"/>
+		        <include name="${dir.package.output}/**"/>
+		        <include name="${dir.release.output}/**"/>
+		        <include name="target"/>
+		        <include name="**/*.jar"/>
+		        <include name="**/*.tar.bz2"/>
+		    </fileset>
+		</delete>
+	</target>
+	
+
+</project>

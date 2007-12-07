@@ -1,0 +1,607 @@
+{anchor:Index}
+| *editContainerIf* |  	[#editContainerIf.DHCPGlobalOptionsContainer] \\  	[#editContainerIf.DHCPGlobalParamsContainer] \\  	[#editContainerIf.DHCPGroupOptionsContainer] \\  	[#editContainerIf.DHCPGroupParamsContainer] \\  	[#editContainerIf.DHCPGroupsContainer] \\  	[#editContainerIf.DHCPHostOptionsContainer] \\  	[#editContainerIf.DHCPHostParamsContainer] \\  	[#editContainerIf.DHCPHostsContainer] \\  	[#editContainerIf.DHCPOptionsContainer] \\  	[#editContainerIf.DHCPParamsContainer] \\  	[#editContainerIf.DHCPPoolOptionsContainer] \\  	[#editContainerIf.DHCPPoolParamsContainer] \\  	[#editContainerIf.DHCPPoolsContainer] \\  	[#editContainerIf.DHCPSharednerOptionsContainer] \\  	[#editContainerIf.DHCPSharednetParamsContainer] \\  	[#editContainerIf.DHCPSharednetsContainer] \\  	[#editContainerIf.DHCPSubnetOptionsContainer] \\  	[#editContainerIf.DHCPSubnetParamsContainer] \\  	[#editContainerIf.DHCPSubnetsContainer] \\  	[#editContainerIf.DhcpServiceConfContainer] \\  	[#editContainerIf.WelcomeContainer] \\  |
+| *wizardContainerIf* |  	[#wizardContainerIf.NewGroupContainer] \\  	[#wizardContainerIf.NewHostContainer] \\  	[#wizardContainerIf.NewHostSummaryContainer] \\  	[#wizardContainerIf.NewPoolContainer] \\  	[#wizardContainerIf.NewPoolSummaryContainer] \\  	[#wizardContainerIf.NewSharednetContainer] \\  	[#wizardContainerIf.NewSharednetSummaryContainer] \\  	[#wizardContainerIf.NewSubnetContainer] \\  	[#wizardContainerIf.NewSubnetSummaryContainer] \\  |
+
+
+[#Index]
+{anchor:editContainerIf.DHCPGlobalOptionsContainer}
+{panel:title=editContainerIf.DHCPGlobalOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| timeoffset | STRING | TEXTFIELD | userdefined \\ | Userdefined | -timeoffset, Optional,no default |
+| subnetmask | STRING | TEXTFIELD | userdefined \\ | Userdefined | -subnetmask, Optional,no default |
+| domainname | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainname, Optional,no default |
+| staticroutes | STRING | TEXTFIELD | userdefined \\ | Userdefined | -staticroutes, Optional,no default |
+| policyfilter | STRING | TEXTFIELD | userdefined \\ | Userdefined | -policyfilter, Optional,no default |
+| interfacemtu | STRING | TEXTFIELD | userdefined \\ | Userdefined | -interfacemtu, Optional,no default |
+| hostname | STRING | TEXTFIELD | userdefined \\ | Userdefined | -hostname, Optional,no default |
+| dhcpclientidentifier | STRING | TEXTFIELD | userdefined \\ | Userdefined | -dhcpclientidentifier, Optional,no default |
+| trailerencapsulation | BOOLEAN | CHECKBOX | userdefined \\ | Userdefined | -trailerencapsulation, Optional,no default |
+| ipforwarding | BOOLEAN | CHECKBOX | userdefined \\ | Userdefined | -ipforwarding, Optional,no default |
+| nonlocalsourcerouting | BOOLEAN | CHECKBOX | userdefined \\ | Userdefined | -nonlocalsourcerouting, Optional,no default |
+| defaultipttl | STRING | TEXTFIELD | userdefined \\ | Userdefined | -defaultipttl, Optional,no default |
+| defaulttcpttl | STRING | TEXTFIELD | userdefined \\ | Userdefined | -defaulttcpttl, Optional,no default |
+| routers | STRING | TEXTFIELD | userdefined \\ | Userdefined | -routers, Optional,no default |
+| broadcastaddress | STRING | TEXTFIELD | userdefined \\ | Userdefined | -broadcastaddress, Optional,no default |
+| domainnameservers | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainnameservers, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPGlobalParamsContainer}
+{panel:title=editContainerIf.DHCPGlobalParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| range | STRING | TEXTFIELD | userdefined \\ | Userdefined | -range, Optional,no default |
+| usehostdeclnames | BOOLEAN | CHECKBOX | userdefined \\ | Userdefined | -usehostdeclnames, Optional,no default |
+| hardware | STRING | TEXTFIELD | userdefined \\ | Userdefined | -hardware, Optional,no default |
+| servername | STRING | TEXTFIELD | userdefined \\ | Userdefined | -servername, Optional,no default |
+| nextserver | STRING | TEXTFIELD | userdefined \\ | Userdefined | -nextserver, Optional,no default |
+| fixedaddress | STRING | TEXTFIELD | userdefined \\ | Userdefined | -fixedaddress, Optional,no default |
+| ddnsupdatestyle | STRING | TEXTFIELD | userdefined \\ | Userdefined | -ddnsupdatestyle, Optional,no default |
+| serveridentifier | STRING | TEXTFIELD | userdefined \\ | Userdefined | -serveridentifier, Optional,no default |
+| allow | STRING | TEXTFIELD | userdefined \\ | Userdefined | -allow, Optional,no default |
+| allowmembersof | STRING | TEXTFIELD | userdefined \\ | Userdefined | -allowmembersof, Optional,no default |
+| deny | STRING | TEXTFIELD | userdefined \\ | Userdefined | -deny, Optional,no default |
+| denymembersof | STRING | TEXTFIELD | userdefined \\ | Userdefined | -denymembersof, Optional,no default |
+| defaultleasetime | STRING | TEXTFIELD | userdefined \\ | Userdefined | -defaultleasetime, Optional,no default |
+| maxleasetime | STRING | TEXTFIELD | userdefined \\ | Userdefined | -maxleasetime, Optional,no default |
+| getleasehostnames | BOOLEAN | CHECKBOX | userdefined \\ | Userdefined | -getleasehostnames, Optional,no default |
+| dynamicbootpleaselength | STRING | TEXTFIELD | userdefined \\ | Userdefined | -dynamicbootpleaselength, Optional,no default |
+| bootunknownclients | STRING | TEXTFIELD | userdefined \\ | Userdefined | -bootunknownclients, Optional,no default |
+| leaselimit | STRING | TEXTFIELD | userdefined \\ | Userdefined | -leaselimit, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPGroupOptionsContainer}
+{panel:title=editContainerIf.DHCPGroupOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| domainname | STRING | TEXTFIELD | domainname \\ | Userdefined | -domainname, Optional,no default |
+| domainnameservers | STRING | TEXTFIELD | domainnameserver \\ | Userdefined | -domainnameservers, Optional,no default |
+| routers | STRING | TEXTFIELD | routers \\ | Userdefined | -routers, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPGroupParamsContainer}
+{panel:title=editContainerIf.DHCPGroupParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| nextserver | STRING | TEXTFIELD | nextserver \\ | Userdefined | -nextserver, Optional,no default |
+| filename | STRING | TEXTFIELD | filename \\ | Userdefined | -filename, Optional,no default |
+| maxleasetime | STRING | TEXTFIELD | maxleasetime \\ | Userdefined | -maxleasetime, Optional,no default |
+| defaultleasetime | STRING | TEXTFIELD | defaultleasetime \\ | Userdefined | -defaultleasetime, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPGroupsContainer}
+{panel:title=editContainerIf.DHCPGroupsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPHostOptionsContainer}
+{panel:title=editContainerIf.DHCPHostOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| hostname | STRING | TEXTFIELD | userdefined \\ | Userdefined | -hostname, Optional,no default |
+| domainnameservers | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainnameservers, Optional,no default |
+| domainname | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainname, Optional,no default |
+| dhcpclientidentifier | STRING | TEXTFIELD | userdefined \\ | Userdefined | -dhcpclientidentifier, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPHostParamsContainer}
+{panel:title=editContainerIf.DHCPHostParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| range | STRING | TEXTFIELD | range \\ | Userdefined | -range, Optional,no default |
+| fixedaddress | STRING | TEXTFIELD | userdefined \\ | Userdefined | -fixedaddress, Optional,no default |
+| hardware | STRING | TEXTFIELD | hardware \\ | Userdefined | -hardware, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPHostsContainer}
+{panel:title=editContainerIf.DHCPHostsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPHost |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | --- | -name, Required |
+| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | --- | -mACAddr, Required |
+| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | --- | -iPAddr, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPOptionsContainer}
+{panel:title=editContainerIf.DHCPOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPOptions |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Values | STRING | TEXTFIELD | Linux_DHCPOptions.get_Values \\ | --- | -values, Optional,no default |
+| Name | STRING | TEXTFIELD | Linux_DHCPOptions.get_Name \\ | --- | -name, Required |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPParamsContainer}
+{panel:title=editContainerIf.DHCPParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Values | STRING | TEXTFIELD | Linux_DHCPParams.get_Values \\ | --- | -values, Optional,no default |
+| Name | STRING | TEXTFIELD | Linux_DHCPParams.get_Name \\ | --- | -name, Required |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPPoolOptionsContainer}
+{panel:title=editContainerIf.DHCPPoolOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| domainnameservers | STRING | TEXTFIELD | domainnameservers \\ | Userdefined | -domainnameservers, Optional,no default |
+| domainname | STRING | TEXTFIELD | domainname \\ | Userdefined | -domainname, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPPoolParamsContainer}
+{panel:title=editContainerIf.DHCPPoolParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| range | STRING | TEXTFIELD | range \\ | Userdefined | -range, Optional,no default |
+| allow | STRING | TEXTFIELD | allow \\ | Userdefined | -allow, Optional,no default |
+| allowmembersof | STRING | TEXTFIELD | allowmembersof \\ | Userdefined | -allowmembersof, Optional,no default |
+| deny | STRING | TEXTFIELD | deny \\ | Userdefined | -deny, Optional,no default |
+| denymembersof | STRING | TEXTFIELD | denymembersof \\ | Userdefined | -denymembersof, Optional,no default |
+| maxleasetime | STRING | TEXTFIELD | maxleasetime \\ | Userdefined | -maxleasetime, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPPoolsContainer}
+{panel:title=editContainerIf.DHCPPoolsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPPool.get_Name \\ | --- | -name, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSharednerOptionsContainer}
+{panel:title=editContainerIf.DHCPSharednerOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| domainnameservers | STRING | TEXTFIELD | domainnameservers \\ | Userdefined | -domainnameservers, Optional,no default |
+| domainname | STRING | TEXTFIELD | domainname \\ | Userdefined | -domainname, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSharednetParamsContainer}
+{panel:title=editContainerIf.DHCPSharednetParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| maxleasetime | STRING | TEXTFIELD | maxleasetime \\ | Userdefined | -maxleasetime, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSharednetsContainer}
+{panel:title=editContainerIf.DHCPSharednetsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSharednet.get_Name \\ | --- | -name, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSubnetOptionsContainer}
+{panel:title=editContainerIf.DHCPSubnetOptionsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| subnetmask | STRING | TEXTFIELD | userdefined \\ | Userdefined | -subnetmask, Optional,no default |
+| broadcastaddress | STRING | TEXTFIELD | userdefined \\ | Userdefined | -broadcastaddress, Optional,no default |
+| domainnameservers | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainnameservers, Optional,no default |
+| domainname | STRING | TEXTFIELD | userdefined \\ | Userdefined | -domainname, Optional,no default |
+| routers | STRING | TEXTFIELD | routers \\ | Userdefined | -routers, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSubnetParamsContainer}
+{panel:title=editContainerIf.DHCPSubnetParamsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| range | STRING | TEXTFIELD | range \\ | Userdefined | -range, Optional,no default |
+| defaultleasetime | STRING | TEXTFIELD | userdefined \\ | Userdefined | -defaultleasetime, Optional,no default |
+| maxleasetime | STRING | TEXTFIELD | userdefined \\ | Userdefined | -maxleasetime, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DHCPSubnetsContainer}
+{panel:title=editContainerIf.DHCPSubnetsContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | CREATE, DELETE, MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Name \\ | --- | -name, Required |
+| Netmask | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Netmask \\ | --- | -netmask, Required |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.DhcpServiceConfContainer}
+{panel:title=editContainerIf.DhcpServiceConfContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPServiceConfiguration |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | MODIFY \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| ConfigurationFile | STRING | TEXTFIELD | Linux_DHCPServiceConfiguration.get_ConfigurationFile \\ | --- | -configurationFile, Required |
+| startService | UNSIGNED_INT32 | BUTTON | Linux_DHCPService.invoke_startService \\ | --- | -startService, Optional,no default |
+| stopService | UNSIGNED_INT32 | BUTTON | Linux_DHCPService.invoke_stopService \\ | --- | -stopService, Optional,no default |
+| restartservice | ACTION | BUTTON | userdefined \\ | Userdefined | -restartService, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:editContainerIf.WelcomeContainer}
+{panel:title=editContainerIf.WelcomeContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ |  ---  |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.edit |
+| *Actions* | --- \\ |
+| *CustomLayouter* \\ | X |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewGroupContainer}
+{panel:title=wizardContainerIf.NewGroupContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | CREATE, WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPGroup.get_Name \\ | Readonly | -name, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewHostContainer}
+{panel:title=wizardContainerIf.NewHostContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPHost |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | --- | -name, Required |
+| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | --- | -mACAddr, Required |
+| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | --- | -iPAddr, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewHostSummaryContainer}
+{panel:title=wizardContainerIf.NewHostSummaryContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPHost |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | CREATE, WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | Readonly | -name, Optional,no default |
+| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | Readonly | -mACAddr, Optional,no default |
+| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | Readonly | -iPAddr, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewPoolContainer}
+{panel:title=wizardContainerIf.NewPoolContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPPool.get_Name \\ | --- | -name, Required |
+| range | STRING | TEXTFIELD | range \\ | Userdefined | -range, Required |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewPoolSummaryContainer}
+{panel:title=wizardContainerIf.NewPoolSummaryContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | CREATE, WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPPool.get_Name \\ | Readonly | -name, Optional,no default |
+| range | STRING | TEXTFIELD | range \\ | Readonly, Userdefined | -range, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewSharednetContainer}
+{panel:title=wizardContainerIf.NewSharednetContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSharednet.get_Name \\ | --- | -name, Required |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewSharednetSummaryContainer}
+{panel:title=wizardContainerIf.NewSharednetSummaryContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | CREATE, WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSharednet.get_Name \\ | Readonly | -name, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewSubnetContainer}
+{panel:title=wizardContainerIf.NewSubnetContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Name \\ | --- | -name, Required |
+| Netmask | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Netmask \\ | --- | -netmask, Optional,no default |
+
+{panel}
+
+	
+
+[#Index]
+{anchor:wizardContainerIf.NewSubnetSummaryContainer}
+{panel:title=wizardContainerIf.NewSubnetSummaryContainer|titleBGColor=#CCE5FF| bgColor=#FFFFFF}
+
+| *Description* |  \\ |
+| *Related FCO*\\ | org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet |
+| *Adapter* \\ | DhcpCimAdapter |
+| *Package* \\ | Interface: org.sblim.wbemsmt.dhcp.bl.container.wizard |
+| *Actions* | CREATE, WIZARD \\ |
+| *CustomLayouter* \\ | --- |
+*Fields:*
+| *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
+| Name | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Name \\ | Readonly | -name, Optional,no default |
+| Netmask | STRING | TEXTFIELD | Linux_DHCPSubnet.get_Netmask \\ | Readonly | -netmask, Optional,no default |
+
+{panel}

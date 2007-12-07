@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--/**
+ *  Generated-File by XMLBeans
+ *
+ * © Copyright IBM Corp. 2007
+ *
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
+ *
+ * You can obtain a current copy of the Common Public License from
+ * http://www.opensource.org/licenses/cpl1.0.php
+ *
+ * Author:     org.sblim.wbemsmt.dcg.util.DCGModelUtil
+ *
+ * Contributors:  Prashanth Karnam <prkarnam@in.ibm.com>
+ */-->
+<cli:clientConfig version="VERSION_2_3" xmlns:cmd="http://sblim.org/wbemsmt/cmd" xmlns:cli="http://sblim.org/wbemsmt/clientconfig">
+    <cli:environment documentationDirectory="../wbemsmt-dhcp/docu" helpDirectory="../wbemsmt-dhcp/help" application="DHCP">
+        <cli:adapterPackage id="adapterPackage" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.adapter"/>
+        <cli:wizardPackage id="wizardPackage" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.wizard"/>
+        <cli:adapter id="DhcpCimAdapter" adapterclass="DhcpCimAdapter" adapterPackageId="adapterPackage"/>
+        <cli:resourceBundle name="messages"/>
+        <cli:resourceBundle name="messagesDhcp"/>
+    </cli:environment>
+    <dcg:container-definitions xmlns:dcg="http://sblim.org/wbemsmt/dcg">
+        <dcg:environment>
+            <dcg:fcoPackage id="fcos" dir="../wbemsmt-dhcp/bin" name="org.sblim.wbemsmt.dhcp"/>
+            <dcg:containerInterfacePkg id="editContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit"/>
+            <dcg:containerInterfacePkg id="wizardContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard"/>
+        </dcg:environment>
+        <dcg:container implPackageId="editImpl" name="DhcpServiceConfContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPServiceConfiguration" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="ConfigurationFile" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPServiceConfiguration.get_ConfigurationFile" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="configurationFile" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="startService" dataType="UNSIGNED_INT32" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_startService">
+                <cmd:option long="startService" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+            <dcg:field name="stopService" dataType="UNSIGNED_INT32" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_stopService" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="stopService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="restartservice" dataType="ACTION" userDefined="true" uiType="BUTTON" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="restartService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="false"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPGroupsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false"/>
+        <dcg:container implPackageId="editImpl" name="DHCPSharednetsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSharednet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSharednet.get_Name" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPSubnetsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSubnet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="Netmask" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Netmask" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="netmask" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPPoolsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPPool" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPPool.get_Name" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPHostsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPHost" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr">
+                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPParams" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Values" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPParams.get_Values">
+                <cmd:option long="values" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPParams.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPOptions" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Values" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPOptions.get_Values">
+                <cmd:option long="values" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPOptions.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPGlobalOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="timeoffset" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="timeoffset" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="subnetmask" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="subnetmask" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="staticroutes" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="staticroutes" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="policyfilter" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="policyfilter" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="interfacemtu" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="interfacemtu" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="hostname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="hostname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="dhcpclientidentifier" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="dhcpclientidentifier" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="trailerencapsulation" dataType="BOOLEAN" userDefined="true" uiType="CHECKBOX" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="trailerencapsulation" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="ipforwarding" dataType="BOOLEAN" userDefined="true" uiType="CHECKBOX" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="ipforwarding" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="nonlocalsourcerouting" dataType="BOOLEAN" userDefined="true" uiType="CHECKBOX" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="nonlocalsourcerouting" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="defaultipttl" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="defaultipttl" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="defaulttcpttl" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="defaulttcpttl" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="routers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="routers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="broadcastaddress" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="broadcastaddress" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPGlobalParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="usehostdeclnames" dataType="BOOLEAN" userDefined="true" uiType="CHECKBOX" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="usehostdeclnames" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="hardware" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="hardware" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="servername" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="servername" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="nextserver" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="nextserver" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="fixedaddress" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="fixedaddress" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="ddnsupdatestyle" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="ddnsupdatestyle" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="serveridentifier" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="serveridentifier" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="allow" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="allow" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="allowmembersof" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="allowmembersof" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="deny" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="deny" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="denymembersof" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="denymembersof" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="defaultleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="defaultleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="maxleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="maxleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="getleasehostnames" dataType="BOOLEAN" userDefined="true" uiType="CHECKBOX" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="getleasehostnames" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="dynamicbootpleaselength" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="dynamicbootpleaselength" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="bootunknownclients" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="bootunknownclients" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="leaselimit" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="leaselimit" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewHostContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPHost" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr">
+                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewHostSummaryContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPHost" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewPoolContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPPool" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPPool.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="range" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewPoolSummaryContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPPool" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPPool.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="range" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewSubnetContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSubnet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="Netmask" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Netmask">
+                <cmd:option long="netmask" scope="LOCAL_CONTAINER"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewSubnetSummaryContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSubnet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="Netmask" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSubnet.get_Netmask" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="netmask" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewSharednetContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSharednet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSharednet.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewSharednetSummaryContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPSharednet" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPSharednet.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="wizardContainerImpl" name="NewGroupContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
+            <dcg:fcoRelation fcoName="Linux_DHCPGroup" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
+            <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPGroup.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
+                <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="WelcomeContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="false" customLayouter="true" dynamic="false"/>
+        <dcg:container implPackageId="editImpl" name="DHCPHostOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="hostname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="hostname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="dhcpclientidentifier" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="dhcpclientidentifier" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPHostParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="range" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="fixedaddress" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="fixedaddress" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="hardware" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="hardware" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="hardware" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPPoolOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainnameservers" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainname" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPPoolParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="range" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="allow" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="allow" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="allow" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="allowmembersof" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="allowmembersof" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="allowmembersof" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="deny" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="deny" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="deny" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="denymembersof" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="denymembersof" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="denymembersof" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="maxleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="maxleasetime" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="maxleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPSubnetOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="subnetmask" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="subnetmask" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="broadcastaddress" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="broadcastaddress" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="routers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="routers" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="routers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPSubnetParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="range" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="range" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="range" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="defaultleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="defaultleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="maxleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="maxleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPSharednerOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainnameservers" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainname" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPSharednetParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="maxleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="maxleasetime" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="maxleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPGroupOptionsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="domainname" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainname" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainname" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="domainnameservers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="domainnameserver" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="domainnameservers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="routers" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="routers" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="routers" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+        <dcg:container implPackageId="editImpl" name="DHCPGroupParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="true" canDelete="false" isWizard="false" customLayouter="false" dynamic="false">
+            <dcg:field name="nextserver" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="nextserver" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="nextserver" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="filename" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="filename" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="filename" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="maxleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="maxleasetime" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="maxleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+            <dcg:field name="defaultleasetime" dataType="STRING" userDefined="true" uiType="TEXTFIELD" fcoFieldName="defaultleasetime" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="defaultleasetime" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
+            </dcg:field>
+        </dcg:container>
+    </dcg:container-definitions>
+    <pl:presentationLayer xmlns:pl="http://sblim.org/wbemsmt/pl">
+        <pl:environment doCmd="true" doJSF="true" doSwing="false" treeConfig="../wbemsmt-dhcp/java/dhcpTree.xml" taskConfig="../wbemsmt-dhcp/../wbemsmt-dhcp/conf/dhcp-task-config.xml">
+            <pl:listenerPackage packageId="listener1">
+                <pl:delegationPackage id="listener1Delegatee" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.listener"/>
+                <pl:jsfPackage id="listener1Jsf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.listener.jsf"/>
+                <pl:swingPackage id="listener1Swing" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.listener.jswing"/>
+                <pl:cmdPackage id="listener1Cmd" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.listener.cli"/>
+            </pl:listenerPackage>
+            <pl:containerImplPackage packageId="editImpl">
+                <pl:jsfPackage id="editImplJsf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit.jsf"/>
+                <pl:swingPackage id="editImplSwing" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit.jswing"/>
+                <pl:cmdPackage id="editImplCmd" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit.cli"/>
+            </pl:containerImplPackage>
+            <pl:containerImplPackage packageId="wizardContainerImpl">
+                <pl:jsfPackage id="wizardContainerImplJsf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.jsf"/>
+                <pl:swingPackage id="wizardContainerImplSwing" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.jswing"/>
+                <pl:cmdPackage id="wizardContainerImplCmd" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.cli"/>
+            </pl:containerImplPackage>
+            <pl:wizardImplPackage packageId="wizardImpl">
+                <pl:jsfPackage id="wizardImplJsf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.jsf"/>
+                <pl:swingPackage id="wizardImplSwing" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.jswing"/>
+                <pl:cmdPackage id="wizardImplCmd" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard.cli"/>
+            </pl:wizardImplPackage>
+            <pl:commandsPackage id="commands" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.cli"/>
+        </pl:environment>
+        <pl:createAction id="HostcreateAction" traceContainerContainerId="NewHostContainer" traceContainerPackageId="wizardContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="HostcreateActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:wizard id="NewHostWizard" description="">
+                <pl:wizardClass>
+                    <pl:wizardClassDefinition name="NewHostWizard" packageId="wizardImpl"/>
+                </pl:wizardClass>
+                <pl:wizardContainer>
+                    <pl:wizardContainerClassDefinition name="NewHostWizardContainer" packageId="wizardPackage"/>
+                </pl:wizardContainer>
+                <pl:wizardPanel id="NewHost" isFirst="true" isLast="false" linkedContainer="NewHostContainer" linkedPackage="wizardContainerIf"/>
+                <pl:wizardPanel id="NewHostSummary" isFirst="false" isLast="true" linkedContainer="NewHostSummaryContainer" linkedPackage="wizardContainerIf"/>
+            </pl:wizard>
+            <cmd:command commandName="CreateHostCommand">
+                <cmd:option long="CreateIn" scope="LOCAL_ACTION" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </cmd:command>
+        </pl:createAction>
+        <pl:createAction id="PoolcreateAction" traceContainerContainerId="NewPoolContainer" traceContainerPackageId="wizardContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="PoolcreateActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:wizard id="NewPoolWizard" description="">
+                <pl:wizardClass>
+                    <pl:wizardClassDefinition name="NewPoolWizard" packageId="wizardImpl"/>
+                </pl:wizardClass>
+                <pl:wizardContainer>
+                    <pl:wizardContainerClassDefinition name="NewPoolWizardContainer" packageId="wizardPackage"/>
+                </pl:wizardContainer>
+                <pl:wizardPanel id="NewPool" isFirst="true" isLast="false" linkedContainer="NewPoolContainer" linkedPackage="wizardContainerIf"/>
+                <pl:wizardPanel id="NewPoolSummary" isFirst="false" isLast="true" linkedContainer="NewPoolSummaryContainer" linkedPackage="wizardContainerIf"/>
+            </pl:wizard>
+            <cmd:command commandName="CreatePoolCommand">
+                <cmd:option long="CreateIn" scope="LOCAL_ACTION" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </cmd:command>
+        </pl:createAction>
+        <pl:createAction id="SubnetcreateAction" traceContainerContainerId="NewSubnetContainer" traceContainerPackageId="wizardContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SubnetcreateActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:wizard id="NewSubnetWizard" description="">
+                <pl:wizardClass>
+                    <pl:wizardClassDefinition name="NewSubnetWizard" packageId="wizardImpl"/>
+                </pl:wizardClass>
+                <pl:wizardContainer>
+                    <pl:wizardContainerClassDefinition name="NewSubnetWizardContainer" packageId="wizardPackage"/>
+                </pl:wizardContainer>
+                <pl:wizardPanel id="NewSubnet" isFirst="true" isLast="false" linkedContainer="NewSubnetContainer" linkedPackage="wizardContainerIf"/>
+                <pl:wizardPanel id="NewSubnetSummary" isFirst="false" isLast="true" linkedContainer="NewSubnetSummaryContainer" linkedPackage="wizardContainerIf"/>
+            </pl:wizard>
+            <cmd:command commandName="CreateSubnetCommand">
+                <cmd:option long="CreateIn" scope="LOCAL_ACTION" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </cmd:command>
+        </pl:createAction>
+        <pl:createAction id="SharednetcreateAction" traceContainerContainerId="NewSharednetContainer" traceContainerPackageId="wizardContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SharednetcreateActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:wizard id="NewSharednetWizard" description="">
+                <pl:wizardClass>
+                    <pl:wizardClassDefinition name="NewSharednetWizard" packageId="wizardImpl"/>
+                </pl:wizardClass>
+                <pl:wizardContainer>
+                    <pl:wizardContainerClassDefinition name="NewSharednetWizardContainer" packageId="wizardPackage"/>
+                </pl:wizardContainer>
+                <pl:wizardPanel id="NewSharednet" isFirst="true" isLast="false" linkedContainer="NewSharednetContainer" linkedPackage="wizardContainerIf"/>
+                <pl:wizardPanel id="NewSharednetSummary" isFirst="false" isLast="true" linkedContainer="NewSharednetSummaryContainer" linkedPackage="wizardContainerIf"/>
+            </pl:wizard>
+            <cmd:command commandName="CreateSharednetCommand">
+                <cmd:option long="CreateIn" scope="LOCAL_ACTION" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </cmd:command>
+        </pl:createAction>
+        <pl:createAction id="GroupcreateAction" traceContainerContainerId="NewGroupContainer" traceContainerPackageId="wizardContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="GroupcreateActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:wizard id="NewGroupWizard" description="">
+                <pl:wizardClass>
+                    <pl:wizardClassDefinition name="NewGroupWizard" packageId="wizardImpl"/>
+                </pl:wizardClass>
+                <pl:wizardContainer>
+                    <pl:wizardContainerClassDefinition name="NewGroupWizardContainer" packageId="wizardPackage"/>
+                </pl:wizardContainer>
+                <pl:wizardPanel id="NewGroup" isFirst="true" isLast="true" linkedContainer="NewGroupContainer" linkedPackage="wizardContainerIf"/>
+            </pl:wizard>
+            <cmd:command commandName="CreateGroupCommand">
+                <cmd:option long="CreateIn" scope="LOCAL_ACTION" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
+            </cmd:command>
+        </pl:createAction>
+        <pl:editAction id="DhcpServiceConfeditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="DhcpServiceConfeditActionListener" packageId="listener1"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:tab caption="SettingsTab">
+                    <pl:childEditPanel caption="DhcpServiceConfEditPanel" linkedContainer="DhcpServiceConfContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditServiceConfCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="GlobalOptionsTab">
+                    <pl:childEditPanel caption="GlobalOptionseditPanel" linkedContainer="DHCPGlobalOptionsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditGlobalOptionsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="GlobalParamsTab">
+                    <pl:childEditPanel caption="GlobalParamseditPanel" linkedContainer="DHCPGlobalParamsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditGlobalParamsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:editAction id="SubneteditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SubneteditActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:tab caption="SubnetTab">
+                    <pl:childEditPanel caption="SubneteditPanel" linkedContainer="DHCPSubnetsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditSubnetCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="SubnetOptionsTab">
+                    <pl:childEditPanel caption="SubnetoptionseditPanel" linkedContainer="DHCPSubnetOptionsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditsubnetoptionsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="SubnetParamsTab">
+                    <pl:childEditPanel caption="SubnetParamseditPanel" linkedContainer="DHCPSubnetParamsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditSubnetParamsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:editAction id="SharedneteditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SharedneteditActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:tab caption="SharednetTab">
+                    <pl:childEditPanel caption="SharedneteditPanel" linkedContainer="DHCPSharednetsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditSharednetCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="SharednetOptionTab">
+                    <pl:childEditPanel caption="SharednetOptionseditPanel" linkedContainer="DHCPSharednerOptionsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditSharednetOptionsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="SharednetParamTab">
+                    <pl:childEditPanel caption="SharednetParamseditPanel" linkedContainer="DHCPSharednetParamsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditSharednetParamsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:editAction id="GroupeditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="GroupeditActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:childEditPanel caption="GroupeditPanel" linkedContainer="DHCPGroupsContainer" linkedPackage="editContainerIf">
+                    <cmd:command commandName="EditGroupCommand"/>
+                </pl:childEditPanel>
+                <pl:childEditPanel caption="GroupOptionseditPanel" linkedContainer="DHCPGroupOptionsContainer" linkedPackage="editContainerIf">
+                    <cmd:command commandName="EditGroupOptionsCommand"/>
+                </pl:childEditPanel>
+                <pl:childEditPanel caption="GroupParamseditPanel" linkedContainer="DHCPGroupParamsContainer" linkedPackage="editContainerIf">
+                    <cmd:command commandName="EditGroupParamsCommand"/>
+                </pl:childEditPanel>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:editAction id="HosteditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="HosteditActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:tab caption="HostTab">
+                    <pl:childEditPanel caption="HosteditPanel" linkedContainer="DHCPHostsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditHostCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="HostOptionsTab">
+                    <pl:childEditPanel caption="HostOptionseditPanel" linkedContainer="DHCPHostOptionsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditHostOptionsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="HostParamsTab">
+                    <pl:childEditPanel caption="HostParamseditPanel" linkedContainer="DHCPHostParamsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditHostParamsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:editAction id="PooleditAction" saveSinglePanels="false">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="PooleditActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <pl:editPanel>
+                <pl:tab caption="PoolTab">
+                    <pl:childEditPanel caption="PooleditPanel" linkedContainer="DHCPPoolsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditPoolCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="PoolOptionsTab">
+                    <pl:childEditPanel caption="PoolOptionseditPanel" linkedContainer="DHCPPoolOptionsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditPoolOptionsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+                <pl:tab caption="PoolParamsTab">
+                    <pl:childEditPanel caption="PoolParamseditPanel" linkedContainer="DHCPPoolParamsContainer" linkedPackage="editContainerIf">
+                        <cmd:command commandName="EditPoolParamsCommand"/>
+                    </pl:childEditPanel>
+                </pl:tab>
+            </pl:editPanel>
+        </pl:editAction>
+        <pl:deleteAction id="HostdeleteAction" linkedContainer="DHCPHostsContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="HostdeleteActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <cmd:command commandName="DeleteHostCommand"/>
+        </pl:deleteAction>
+        <pl:deleteAction id="PooldeleteAction" linkedContainer="DHCPPoolsContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="PooldeleteActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <cmd:command commandName="DeletePoolCommand"/>
+        </pl:deleteAction>
+        <pl:deleteAction id="GroupdeleteAction" linkedContainer="DHCPGroupsContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="GroupdeleteActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <cmd:command commandName="DeleteGroupCommand"/>
+        </pl:deleteAction>
+        <pl:deleteAction id="SubnetdeleteAction" linkedContainer="DHCPSubnetsContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SubnetdeleteActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <cmd:command commandName="DeleteSubnetCommand"/>
+        </pl:deleteAction>
+        <pl:deleteAction id="SharednetdeleteAction" linkedContainer="DHCPSharednetsContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="SharednetdeleteActionListener" packageId="listener1" useCurrentTreeNodeForSelection="false"/>
+            </pl:actionListener>
+            <cmd:command commandName="DeleteSharednetCommand"/>
+        </pl:deleteAction>
+        <pl:welcomeAction linkedContainer="WelcomeContainer" linkedPackage="editContainerIf">
+            <pl:actionListener>
+                <pl:actionListenerClassDefinition name="WelcomeListener" packageId="listener1"/>
+            </pl:actionListener>
+        </pl:welcomeAction>
+        <cmd:commands>
+            <cmd:option long="hostname" required="true" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION"/>
+            <cmd:option long="port" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="5988"/>
+            <cmd:option long="namespace" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="/root/cimv2"/>
+            <cmd:option long="user" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="none"/>
+            <cmd:option long="password" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="none"/>
+            <cmd:option long="publickeyfile" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="none"/>
+            <cmd:option long="privatekeyfile" required="false" usedForSelection="true" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMUNICATION" defaultValue="none"/>
+            <cmd:option short="L" long="locale" required="false" usedForSelection="false" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMON" defaultValue="none"/>
+            <cmd:option short="h" long="help" required="false" usedForSelection="false" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMON" defaultValue="none"/>
+            <cmd:option short="?" required="false" usedForSelection="false" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMON" defaultValue="none"/>
+            <cmd:option long="serviceName" required="false" scope="GLOBAL_TASK" usedForSelection="true" duplicateOK="false" comment="" defaultValue="dhcpd"/>
+            <cmd:option long="listEntities" required="false" scope="GLOBAL_TASK" usedForSelection="false" duplicateOK="false" comment=""/>
+        </cmd:commands>
+    </pl:presentationLayer>
+</cli:clientConfig>
