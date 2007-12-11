@@ -20,7 +20,7 @@
         Build file for SBLIM WBEM-SMT DHCP Task Client packages.
     </description>
 	
-    <property name="Manifest.version"        value="0.5.2"/>
+    <property name="Manifest.version"        value="0.5.3"/>
     <property name="Manifest.release"        value="1"/>
     <property name="Manifest.title"          value="WBEM-SMT: Task DHCP"/>
     <property name="Manifest.url"            value="http://sblim.sourceforge.net"/>
@@ -130,6 +130,7 @@
 
     	<copy file="${basedir}/sblim-wbemsmt-dhcp.spec.in" tofile="${basedir}/sblim-wbemsmt-dhcp.spec"/>
         <replace file="${basedir}/sblim-wbemsmt-dhcp.spec" token="@PACKAGE_VERSION@" value="${Manifest.version}"/>
+    	<replace file="${basedir}/sblim-wbemsmt-dhcp.spec" token="@RELEASE_VERSION@" value="${Manifest.release}"/>
     	
         <tar destfile="${dir.release.output}/sblim-${ant.project.name}-${Manifest.version}-src.tar.bz2"
              compression="bzip2" longfile="${tar.longfile}">

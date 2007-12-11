@@ -1,6 +1,6 @@
 %define name                    sblim-wbemsmt-dhcp
 %define version                 @PACKAGE_VERSION@
-%define build_release           CVS
+%define build_release           @RELEASE_VERSION@
 %define release                 %{build_release}jpp
 %define section                 free
 
@@ -152,5 +152,5 @@ unlink $WBEMSMT_HELPDIR/plugins/org.sblim.wbemsmt.help.dhcp
 ###############################################################################
 %changelog
     
-* Tue Nov 27 2007 Sam Kannan  <samkannan{at}de.ibm.com> 0.1.1-1
+* Tue Nov 27 2007 Sam Kannan  <samkannan{at}us.ibm.com> 0.5.3-1
   - Initial upload of distributed CVS modules
