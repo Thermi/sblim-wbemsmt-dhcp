@@ -36,8 +36,6 @@ import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
 public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.WizardBasePanel implements org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostContainer
 	{
 			private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_Name;
-    		private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_MACAddr;
-    		private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_IPAddr;
     	
 		
 	
@@ -51,8 +49,6 @@ public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.Wiz
 				
     			
     	    		        		addComponent((org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent)get_Name());
-        	        		addComponent((org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent)get_MACAddr());
-        	        		addComponent((org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent)get_IPAddr());
         					
 		setFooter(getPanelForCustomLayout(),"NewHostContainer.footerText");
 		adapter.initContainer(this);
@@ -83,53 +79,6 @@ public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.Wiz
 						
     		return ic_Name;
     	}
-			/**
-		* 
-		* DataType STRING
-		* UIType TEXTFIELD
-		* ReadOnly false
-		*/
-
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_MACAddr() {
-    		if (ic_MACAddr == null)
-    		{
-				String label = bundle.getString("NewHostContainer.MACAddr");
-				String binding = bindingPrefix + "_MACAddr.item";
-				logger.fine("Using binding " + binding);
-				org.sblim.wbemsmt.bl.adapter.DataContainer parent = this;
-				org.sblim.wbemsmt.tools.converter.Converter converter = new org.sblim.wbemsmt.tools.converter.test.DummyConverter();
-				boolean readOnly = false;
-    			ic_MACAddr = new org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputFieldComponent(parent,label,binding,converter, readOnly);
-								ic_MACAddr.setRequired(true);
-				;
-    		}
-			
-						
-    		return ic_MACAddr;
-    	}
-			/**
-		* 
-		* DataType STRING
-		* UIType TEXTFIELD
-		* ReadOnly false
-		*/
-
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_IPAddr() {
-    		if (ic_IPAddr == null)
-    		{
-				String label = bundle.getString("NewHostContainer.IPAddr");
-				String binding = bindingPrefix + "_IPAddr.item";
-				logger.fine("Using binding " + binding);
-				org.sblim.wbemsmt.bl.adapter.DataContainer parent = this;
-				org.sblim.wbemsmt.tools.converter.Converter converter = new org.sblim.wbemsmt.tools.converter.test.DummyConverter();
-				boolean readOnly = false;
-    			ic_IPAddr = new org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputFieldComponent(parent,label,binding,converter, readOnly);
-				;
-    		}
-			
-						
-    		return ic_IPAddr;
-    	}
 		
 	
 		
@@ -139,14 +88,6 @@ public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.Wiz
 	    		if (ic_Name != null)
     		{
 				ic_Name.setLabelText(bundle.getString("NewHostContainer.Name"));
-    		}
-	    		if (ic_MACAddr != null)
-    		{
-				ic_MACAddr.setLabelText(bundle.getString("NewHostContainer.MACAddr"));
-    		}
-	    		if (ic_IPAddr != null)
-    		{
-				ic_IPAddr.setLabelText(bundle.getString("NewHostContainer.IPAddr"));
     		}
 		}
 
@@ -183,8 +124,6 @@ public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.Wiz
 	{
 		List fields = new ArrayList();
     				fields.add(get_Name());
-    				fields.add(get_MACAddr());
-    				fields.add(get_IPAddr());
     			return fields;
 	}
 
@@ -204,8 +143,6 @@ public class NewHostContainerImpl extends org.sblim.wbemsmt.tools.wizard.jsf.Wiz
 		NewHostContainerImpl source = (NewHostContainerImpl)sourceContainer;
 	
     	    		get_Name().setValue(source.get_Name().getValue());
-		    		get_MACAddr().setValue(source.get_MACAddr().getValue());
-		    		get_IPAddr().setValue(source.get_IPAddr().getValue());
 				
     	    		}
 	

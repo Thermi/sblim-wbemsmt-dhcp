@@ -1,7 +1,7 @@
 /** 
  * Linux_DHCPHostHelper.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp. 2005
  *
  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
@@ -13,7 +13,7 @@
  * @author:	ECCG 0.9.7 generated 
  * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
  *
- * Contributors: Prashanth Karnam <prkarnam@in.ibm.com>
+ * Contributors:
  *
  *
  * Description: 
@@ -33,7 +33,8 @@ import java.lang.reflect.Constructor;
 import org.sblim.wbem.cim.*;
 import org.sblim.wbem.client.*;
 
-//model.package
+import org.sblim.wbemsmt.schema.cim29.*;
+
 
 public final class Linux_DHCPHostHelper {
 
@@ -199,15 +200,36 @@ public final class Linux_DHCPHostHelper {
 		CIMInstance cimInstance = cimClient.getInstance(cimObjectPath);
 		
 		Linux_DHCPHost dataInstance = null;
+		Class clazz = Linux_DHCPHostHelper.findClass(cimClient, cimInstance);
+
+		if (clazz == null) {
+			System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of class Linux_DHCPHost.");
+		}
+		else
+		{
+			Class[] constParams = new Class[2];
+			constParams[0] = CIMObjectPath.class;
+			constParams[1] = CIMInstance.class;
+			try {
+				Constructor cons = clazz.getConstructor(constParams);
+				Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+				dataInstance = (Linux_DHCPHost)cons.newInstance(actargs);
+			} catch (Exception e) {
+				System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of class Linux_DHCPHost.");
+			}
+		}
+
 		try {
-			dataInstance = new Linux_DHCPHost(cimObjectPath, cimInstance);
+			if (dataInstance == null)
+			{
+				dataInstance = new Linux_DHCPHost(cimObjectPath, cimInstance);
+			}
 		} catch (Exception e) {
 			// This error should normally not happen, because the instance was received by the server with a valid CIMObjectPath
 			System.err.println("The received CIMInstance object was not valid.\nReceived values are:\n" + cimObjectPath + "\n" + cimInstance);
-			dataInstance = null;
 		}
-		
 		return dataInstance;
+					
 	}
 	
 		/**
@@ -436,12 +458,4 @@ public final class Linux_DHCPHostHelper {
 		return result;
 	}
 	
-	public static boolean isValid_IPAddr(String IPAddr) {
-		return true;
-	}
-
-	public static boolean isValid_MACAddr(String MACAddr) {
-		return true;
-	}
-
 }

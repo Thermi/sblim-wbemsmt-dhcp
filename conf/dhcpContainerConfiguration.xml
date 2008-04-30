@@ -71,12 +71,6 @@
             <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
                 <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
             </dcg:field>
-            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="false" required="true">
-                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
-            </dcg:field>
-            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr">
-                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER"/>
-            </dcg:field>
         </dcg:container>
         <dcg:container implPackageId="editImpl" name="DHCPParamsContainer" packageId="editContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="true" canDelete="true" isWizard="false" customLayouter="false" dynamic="false">
             <dcg:fcoRelation fcoName="Linux_DHCPParams" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
@@ -207,23 +201,11 @@
             <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="false" required="true">
                 <cmd:option long="name" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
             </dcg:field>
-            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="false" required="true">
-                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
-            </dcg:field>
-            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr">
-                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER"/>
-            </dcg:field>
         </dcg:container>
         <dcg:container implPackageId="wizardContainerImpl" name="NewHostSummaryContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="true" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">
             <dcg:fcoRelation fcoName="Linux_DHCPHost" fcoPackageId="org.sblim.wbemsmt.dhcp.bl.fco"/>
             <dcg:field name="Name" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_Name" description="" orientation="LEFT" readOnly="true" required="false">
                 <cmd:option long="name" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment=""/>
-            </dcg:field>
-            <dcg:field name="MACAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_MACAddr" description="" orientation="LEFT" readOnly="true" required="false">
-                <cmd:option long="mACAddr" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
-            </dcg:field>
-            <dcg:field name="IPAddr" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPHost.get_IPAddr" description="" orientation="LEFT" readOnly="true" required="false">
-                <cmd:option long="iPAddr" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
             </dcg:field>
         </dcg:container>
         <dcg:container implPackageId="wizardContainerImpl" name="NewPoolContainer" packageId="wizardContainerIf" adapterId="DhcpCimAdapter" description="" canCreate="false" canModify="false" canDelete="false" isWizard="true" customLayouter="false" dynamic="false">

@@ -1,7 +1,7 @@
 /** 
  * Linux_DHCPHost.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp. 2005
  *
  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
@@ -13,7 +13,7 @@
  * @author:	ECCG 0.9.7 generated 
  * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
  *
- * Contributors: Prashanth Karnam <prkarnam@in.ibm.com>
+ * Contributors:
  *
  *
  * Description:  Entity to represent the Hosts in the dhcp.conf file.
@@ -33,7 +33,9 @@ import java.util.Enumeration;
 import java.lang.reflect.Constructor;
 import org.sblim.wbem.client.*;
 
-//model.package
+
+import org.sblim.wbemsmt.schema.cim29.*;
+
 
 /**
  *  Entity to represent the Hosts in the dhcp.conf file.
@@ -48,14 +50,6 @@ public class Linux_DHCPHost extends Linux_DHCPEntity  {
 	public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY = "Linux_DHCPHostsForEntity"; //$NON-NLS-1$
 	
 	
-	/**
-	*	 The static IP Address that is to be assigneds to a specific host. The unique host is identifeid 	by 	the MAC address of that network device.
-	*/
-	public final static String CIM_PROPERTY_IPADDR = "IPAddr"; //$NON-NLS-1$
-	/**
-	*	 The MAC Address is the Hardware address of the Network Device Controller.
-	*/
-	public final static String CIM_PROPERTY_MACADDR = "MACAddr"; //$NON-NLS-1$
 	
 	
 	
@@ -65,26 +59,14 @@ public class Linux_DHCPHost extends Linux_DHCPEntity  {
 	private static Set Java_Package_List 		= new HashSet();
 	
 	static {
-		CIM_PropertyNameList.add(CIM_PROPERTY_IPADDR);
-		CIM_PropertyNameList.add(CIM_PROPERTY_MACADDR);
 				
 		for (int i = 0; i < Linux_DHCPEntity.CIM_PropertyNameList.size(); i++) {
-			if (((String)Linux_DHCPEntity.CIM_PropertyNameList.elementAt(i)).equals(CIM_PROPERTY_IPADDR)||
-				((String)Linux_DHCPEntity.CIM_PropertyNameList.elementAt(i)).equals(CIM_PROPERTY_MACADDR)){
-				continue;
-			}
 			
 			Linux_DHCPHost.CIM_PropertyNameList.add(Linux_DHCPEntity.CIM_PropertyNameList.elementAt(i));
 		}
 		
-		CIM_PropertyList.add(new CIMProperty(CIM_PROPERTY_IPADDR, new CIMValue(null, new CIMDataType(CIMDataType.STRING))));
-		CIM_PropertyList.add(new CIMProperty(CIM_PROPERTY_MACADDR, new CIMValue(null, new CIMDataType(CIMDataType.STRING))));
 				
 		for (int i = 0; i < Linux_DHCPEntity.CIM_PropertyList.size(); i++) {
-			if (((CIMProperty)Linux_DHCPEntity.CIM_PropertyList.get(i)).getName().equals(CIM_PROPERTY_IPADDR)||
-				((CIMProperty)Linux_DHCPEntity.CIM_PropertyList.get(i)).getName().equals(CIM_PROPERTY_MACADDR)){
-				continue;
-			}
 			
 			Linux_DHCPHost.CIM_PropertyList.add(Linux_DHCPEntity.CIM_PropertyList.elementAt(i));
 		}
@@ -352,9 +334,10 @@ public class Linux_DHCPHost extends Linux_DHCPEntity  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
-					Linux_DHCPEntity.CIM_CLASS_NAME, 
-					"PartComponent", //$NON-NLS-1$
-					"GroupComponent", //$NON-NLS-1$
+					Linux_DHCPEntity.CIM_CLASS_NAME,
+					null,null, 
+					//"PartComponent", //$NON-NLS-1$
+					//"GroupComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -425,8 +408,119 @@ public class Linux_DHCPHost extends Linux_DHCPEntity  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
 					Linux_DHCPEntity.CIM_CLASS_NAME, 
-					"PartComponent", //$NON-NLS-1$
-					"GroupComponent"); //$NON-NLS-1$
+					null,null);
+					//"PartComponent", //$NON-NLS-1$
+					//"GroupComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPEntity.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPHostsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPHostHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPEntity(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPEntity(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPEntity(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPHostsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -457,88 +551,6 @@ public class Linux_DHCPHost extends Linux_DHCPEntity  {
 	// Attribute methods
 	//*****************************************************
 	
-	// Attribute IPAddr
-	
-	public String get_IPAddr() {
-		
-		CIMProperty currentProperty = this.cimInstance.getProperty(Linux_DHCPHost.CIM_PROPERTY_IPADDR);
-        
-		if (currentProperty == null) {
-			throw new CIMException(CIMException.CIM_ERR_NO_SUCH_PROPERTY, "The property " + Linux_DHCPHost.CIM_PROPERTY_IPADDR + " could not be found");
-    		
-		} else if (currentProperty.getType() == null || currentProperty.getType().getType() != CIMDataType.STRING) {
-			throw new CIMException(CIMException.CIM_ERR_TYPE_MISMATCH, "The property " + Linux_DHCPHost.CIM_PROPERTY_IPADDR + " is not of expected type " + CIMDataType.getPredefinedType(CIMDataType.STRING) + ".");
-		}
-        
-		if (currentProperty.getValue() == null) {
-			return null;
-		}
-        
-		return (String)currentProperty.getValue().getValue();
-	}
-	    
-			
-	public void set_IPAddr(String newValue) {
-		
-		CIMProperty currentProperty = this.cimInstance.getProperty(Linux_DHCPHost.CIM_PROPERTY_IPADDR);
-    	
-		if (currentProperty == null) {
-			throw new CIMException(CIMException.CIM_ERR_NO_SUCH_PROPERTY, "The property " + Linux_DHCPHost.CIM_PROPERTY_IPADDR + " could not be found");
-    		
-		} else if (!Linux_DHCPHostHelper.isValid_IPAddr(newValue)) {
-			throw new InvalidParameterException("The value " + newValue + " is not valid for property " + Linux_DHCPHost.CIM_PROPERTY_IPADDR);
-    		
-		} else if (currentProperty.getType() == null || currentProperty.getType().getType() != CIMDataType.STRING) {
-			throw new CIMException(CIMException.CIM_ERR_TYPE_MISMATCH, "The property " + Linux_DHCPHost.CIM_PROPERTY_IPADDR + " is not of expected type " + CIMDataType.getPredefinedType(CIMDataType.STRING) + ".");
-		}
-    	
-		CIMValue updatedValue = new CIMValue(newValue, new CIMDataType(CIMDataType.STRING));
-		currentProperty.setValue(updatedValue);
-	}	
-	    
-	
-
-	// Attribute MACAddr
-	
-	public String get_MACAddr() {
-		
-		CIMProperty currentProperty = this.cimInstance.getProperty(Linux_DHCPHost.CIM_PROPERTY_MACADDR);
-        
-		if (currentProperty == null) {
-			throw new CIMException(CIMException.CIM_ERR_NO_SUCH_PROPERTY, "The property " + Linux_DHCPHost.CIM_PROPERTY_MACADDR + " could not be found");
-    		
-		} else if (currentProperty.getType() == null || currentProperty.getType().getType() != CIMDataType.STRING) {
-			throw new CIMException(CIMException.CIM_ERR_TYPE_MISMATCH, "The property " + Linux_DHCPHost.CIM_PROPERTY_MACADDR + " is not of expected type " + CIMDataType.getPredefinedType(CIMDataType.STRING) + ".");
-		}
-        
-		if (currentProperty.getValue() == null) {
-			return null;
-		}
-        
-		return (String)currentProperty.getValue().getValue();
-	}
-	    
-			
-	public void set_MACAddr(String newValue) {
-		
-		CIMProperty currentProperty = this.cimInstance.getProperty(Linux_DHCPHost.CIM_PROPERTY_MACADDR);
-    	
-		if (currentProperty == null) {
-			throw new CIMException(CIMException.CIM_ERR_NO_SUCH_PROPERTY, "The property " + Linux_DHCPHost.CIM_PROPERTY_MACADDR + " could not be found");
-    		
-		} else if (!Linux_DHCPHostHelper.isValid_MACAddr(newValue)) {
-			throw new InvalidParameterException("The value " + newValue + " is not valid for property " + Linux_DHCPHost.CIM_PROPERTY_MACADDR);
-    		
-		} else if (currentProperty.getType() == null || currentProperty.getType().getType() != CIMDataType.STRING) {
-			throw new CIMException(CIMException.CIM_ERR_TYPE_MISMATCH, "The property " + Linux_DHCPHost.CIM_PROPERTY_MACADDR + " is not of expected type " + CIMDataType.getPredefinedType(CIMDataType.STRING) + ".");
-		}
-    	
-		CIMValue updatedValue = new CIMValue(newValue, new CIMDataType(CIMDataType.STRING));
-		currentProperty.setValue(updatedValue);
-	}	
-	    
-	
-
 	
 	
 	//*****************************************************

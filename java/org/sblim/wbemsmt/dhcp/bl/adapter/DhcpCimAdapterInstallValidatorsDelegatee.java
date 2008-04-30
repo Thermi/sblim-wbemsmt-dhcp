@@ -168,9 +168,9 @@ public class DhcpCimAdapterInstallValidatorsDelegatee implements DhcpCimAdapterI
 		adapter.addValidator ( container, new RequiredFieldValidator(container.get_Name (),adapter) );
 //		adapter.addValidator ( container, new RequiredFieldValidator(container.get_MACAddr (),adapter) );
 //		adapter.addValidator ( container, new RequiredFieldValidator(container.get_IPAddr (),adapter) );
-		DhcpValidator dhcpvalidator = new DhcpValidator(container.get_IPAddr (),adapter);
-		dhcpvalidator.setFlags ( DhcpValidator.CHECK_IPFORMAT );
-		adapter.addValidator ( container, dhcpvalidator );
+//		DhcpValidator dhcpvalidator = new DhcpValidator(container.get_IPAddr (),adapter);
+//		dhcpvalidator.setFlags ( DhcpValidator.CHECK_IPFORMAT );
+//		adapter.addValidator ( container, dhcpvalidator );
 	}
 
 	public void installValidatorsImpl ( DHCPOptionsContainer container ) {
@@ -279,13 +279,13 @@ public class DhcpCimAdapterInstallValidatorsDelegatee implements DhcpCimAdapterI
 //		adapter.addValidator ( container, new RequiredFieldValidator(container.get_MACAddr (),adapter) );
 		adapter.addValidator ( container, new RequiredFieldValidator(container.get_Name (),adapter) );
 	
-		DhcpValidator dhcpvalidator = new DhcpValidator(container.get_MACAddr (),adapter);
-		dhcpvalidator.setFlags ( DhcpValidator.CHECK_MACFORMAT);
-		adapter.addValidator ( container, dhcpvalidator );
-		
-		DhcpValidator dhcpvalidator1 = new DhcpValidator(container.get_IPAddr (),adapter);
-		dhcpvalidator1.setFlags ( DhcpValidator.CHECK_IPFORMAT);
-		adapter.addValidator ( container, dhcpvalidator1 );
+//		DhcpValidator dhcpvalidator = new DhcpValidator(container.get_MACAddr (),adapter);
+//		dhcpvalidator.setFlags ( DhcpValidator.CHECK_MACFORMAT);
+//		adapter.addValidator ( container, dhcpvalidator );
+//		
+//		DhcpValidator dhcpvalidator1 = new DhcpValidator(container.get_IPAddr (),adapter);
+//		dhcpvalidator1.setFlags ( DhcpValidator.CHECK_IPFORMAT);
+//		adapter.addValidator ( container, dhcpvalidator1 );
 		
 	}
 

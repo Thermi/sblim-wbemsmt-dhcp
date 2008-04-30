@@ -37,8 +37,6 @@ import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
 public class NewHostSummaryContainerImpl extends BaseDataContainer implements org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostSummaryContainer
 	{
 			private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_Name;
-    		private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_MACAddr;
-    		private org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf ic_IPAddr;
     	
 		
 	public NewHostSummaryContainerImpl(AbstractBaseCimAdapter adapter) throws InitContainerException {
@@ -63,38 +61,6 @@ public class NewHostSummaryContainerImpl extends BaseDataContainer implements or
     		}
     		return ic_Name;
     	}
-			/**
-		* 
-		* DataType STRING
-		* UIType TEXTFIELD
-		* ReadOnly true
-		*/
-
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_MACAddr() {
-    		if (ic_MACAddr == null)
-    		{
-				String label = getAdapter().getBundle().getString("NewHostSummaryContainer.MACAddr");
-				org.sblim.wbemsmt.tools.converter.Converter converter = new org.sblim.wbemsmt.tools.converter.test.DummyConverter();
-    			ic_MACAddr = new org.sblim.wbemsmt.tools.input.test.LabeledTestInputComponent(this,label,"",converter);
-    		}
-    		return ic_MACAddr;
-    	}
-			/**
-		* 
-		* DataType STRING
-		* UIType TEXTFIELD
-		* ReadOnly true
-		*/
-
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_IPAddr() {
-    		if (ic_IPAddr == null)
-    		{
-				String label = getAdapter().getBundle().getString("NewHostSummaryContainer.IPAddr");
-				org.sblim.wbemsmt.tools.converter.Converter converter = new org.sblim.wbemsmt.tools.converter.test.DummyConverter();
-    			ic_IPAddr = new org.sblim.wbemsmt.tools.input.test.LabeledTestInputComponent(this,label,"",converter);
-    		}
-    		return ic_IPAddr;
-    	}
 		
 	
 		
@@ -117,16 +83,6 @@ public class NewHostSummaryContainerImpl extends BaseDataContainer implements or
    			{
         				Object value = ((org.sblim.wbemsmt.tools.input.test.TestInputComponentIf)get_Name()).getValue();
         				printStream.println(get_Name().getLabelText() + ": " + value);
-   			}
-   			   			   			if (get_MACAddr().isVisible())
-   			{
-        				Object value = ((org.sblim.wbemsmt.tools.input.test.TestInputComponentIf)get_MACAddr()).getValue();
-        				printStream.println(get_MACAddr().getLabelText() + ": " + value);
-   			}
-   			   			   			if (get_IPAddr().isVisible())
-   			{
-        				Object value = ((org.sblim.wbemsmt.tools.input.test.TestInputComponentIf)get_IPAddr()).getValue();
-        				printStream.println(get_IPAddr().getLabelText() + ": " + value);
    			}
    					}
 
@@ -152,8 +108,6 @@ public class NewHostSummaryContainerImpl extends BaseDataContainer implements or
 	{
 		List fields = new ArrayList();
     				fields.add(get_Name());
-    				fields.add(get_MACAddr());
-    				fields.add(get_IPAddr());
     			return fields;
 	}
 
@@ -173,8 +127,6 @@ public class NewHostSummaryContainerImpl extends BaseDataContainer implements or
 		NewHostSummaryContainerImpl source = (NewHostSummaryContainerImpl)sourceContainer;
 	
     	    		get_Name().setValue(source.get_Name().getValue());
-		    		get_MACAddr().setValue(source.get_MACAddr().getValue());
-		    		get_IPAddr().setValue(source.get_IPAddr().getValue());
 				
     	    		}
 	

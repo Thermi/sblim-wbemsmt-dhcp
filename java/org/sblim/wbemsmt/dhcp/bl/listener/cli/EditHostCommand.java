@@ -40,14 +40,6 @@ public class EditHostCommand extends CimCommand {
    		 * required,  --name
 		 */
 		public static final OptionDefinition KEY_name = new OptionDefinition(null,"name",null,"DHCPHostsContainer.Name.argValue",true,false,"DHCPHostsContainer.Name.argDescription");
-			/**
-   		 * required,  --mACAddr
-		 */
-		public static final OptionDefinition KEY_mACAddr = new OptionDefinition(null,"mACAddr",null,"DHCPHostsContainer.MACAddr.argValue",true,false,"DHCPHostsContainer.MACAddr.argDescription");
-			/**
-   		 *  --iPAddr
-		 */
-		public static final OptionDefinition KEY_iPAddr = new OptionDefinition(null,"iPAddr",null,"DHCPHostsContainer.IPAddr.argValue",false,false,"DHCPHostsContainer.IPAddr.argDescription");
 		
 	//All Options that are global and task-related
 			/**
@@ -106,8 +98,6 @@ public class EditHostCommand extends CimCommand {
 	private static final OptionDefinition[] LOCAL_OPTIONS = new OptionDefinition []
 	{
     	    	KEY_name,
-    	    	KEY_mACAddr,
-    	    	KEY_iPAddr,
     		};
 
 	private static final OptionDefinition[] GLOBAL_TASK_OPTIONS = new OptionDefinition []
@@ -271,18 +261,16 @@ public class EditHostCommand extends CimCommand {
 	 * Set all Values that are needed for selecting the right objects. This fields are used even if they are read-only
 	 **/
 	private void setKeyValues(CommandLine cmd,AbstractBaseCimAdapter adapter, org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostsContainer dc) throws WbemSmtException {
-    	    				    				    					}	
+    	    					}	
 	
 	/**
 	 * Set all Values that are not read-Only
 	 **/
 	private void setValues(CommandLine cmd,AbstractBaseCimAdapter adapter, org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostsContainer dc) throws WbemSmtException {
     										setValue(cmd,dc.get_Name(),KEY_name);
-																						setValue(cmd,dc.get_MACAddr(),KEY_mACAddr);
-																						setValue(cmd,dc.get_IPAddr(),KEY_iPAddr);
 															
 		//The Buttons
-    																													}	
+    											}	
 	
 	
  

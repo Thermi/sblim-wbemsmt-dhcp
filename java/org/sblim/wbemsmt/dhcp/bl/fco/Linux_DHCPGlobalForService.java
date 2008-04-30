@@ -1,7 +1,7 @@
 /** 
  * Linux_DHCPGlobalForService.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp. 2005
  *
  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
@@ -13,7 +13,7 @@
  * @author:	ECCG 0.9.7 generated 
  * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
  *
- * Contributors: Prashanth Karnam <prkarnam@in.ibm.com>
+ * Contributors:
  *
  *
  * Description:  This Class is a bridge between the classes in the global scope and the service
@@ -31,8 +31,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
 import org.sblim.wbem.cim.*;
+
 import org.sblim.wbemsmt.schema.cim29.*;
-//model.package
+
 
 /**
  *  This Class is a bridge between the classes in the global scope and the service

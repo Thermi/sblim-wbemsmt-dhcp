@@ -46,14 +46,6 @@ public class CreateHostCommand extends CimCommand implements ContainerUpdater {
    		 * required,  --name
 		 */
 		public static final OptionDefinition KEY_name = new OptionDefinition(null,"name",null,"NewHostContainer.Name.argValue",true,false,"NewHostContainer.Name.argDescription");
-			/**
-   		 * required,  --mACAddr
-		 */
-		public static final OptionDefinition KEY_mACAddr = new OptionDefinition(null,"mACAddr",null,"NewHostContainer.MACAddr.argValue",true,false,"NewHostContainer.MACAddr.argDescription");
-			/**
-   		 *  --iPAddr
-		 */
-		public static final OptionDefinition KEY_iPAddr = new OptionDefinition(null,"iPAddr",null,"NewHostContainer.IPAddr.argValue",false,false,"NewHostContainer.IPAddr.argDescription");
 		
 	//All Options that are global and task-related
 			/**
@@ -113,8 +105,6 @@ public class CreateHostCommand extends CimCommand implements ContainerUpdater {
 	{
     	    	KEY_CreateIn,
     	    	KEY_name,
-    	    	KEY_mACAddr,
-    	    	KEY_iPAddr,
     		};
 
 	private static final OptionDefinition[] GLOBAL_TASK_OPTIONS = new OptionDefinition []
@@ -325,11 +315,9 @@ public class CreateHostCommand extends CimCommand implements ContainerUpdater {
 	private void setCommandLineValues(CommandLine cmd,AbstractBaseCimAdapter adapter, org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostContainer dc) throws WbemSmtException {
 		//set the values
 											setValue(cmd,dc.get_Name(),KEY_name);
-																						setValue(cmd,dc.get_MACAddr(),KEY_mACAddr);
-																						setValue(cmd,dc.get_IPAddr(),KEY_iPAddr);
 															
 		//The Buttons
-    																														
+    												
 	}	
 
 			

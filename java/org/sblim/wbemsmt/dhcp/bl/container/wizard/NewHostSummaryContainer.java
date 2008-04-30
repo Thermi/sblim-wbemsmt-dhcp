@@ -30,8 +30,6 @@ public interface NewHostSummaryContainer extends org.sblim.wbemsmt.bl.adapter.Da
 	 * Constants for Fields and Roles
 	 **/
 			public static final String FIELD_NAME = "Name" ;
-			public static final String FIELD_MACADDR = "MACAddr" ;
-			public static final String FIELD_IPADDR = "IPAddr" ;
 		
 	
 	/** 
@@ -45,22 +43,6 @@ public interface NewHostSummaryContainer extends org.sblim.wbemsmt.bl.adapter.Da
 		* Relation to FCO: Linux_DHCPHost.get_Name<br>
 		*/
 		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_Name();
-			
-		/**
-		* <br>
-		* DataType STRING<br>
-		* UIType TEXTFIELD<br>
-		* Relation to FCO: Linux_DHCPHost.get_MACAddr<br>
-		*/
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_MACAddr();
-			
-		/**
-		* <br>
-		* DataType STRING<br>
-		* UIType TEXTFIELD<br>
-		* Relation to FCO: Linux_DHCPHost.get_IPAddr<br>
-		*/
-		public org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf get_IPAddr();
 	
 	
 	/** 

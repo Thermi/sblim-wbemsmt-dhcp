@@ -1,7 +1,7 @@
 @REM ##############################################################################
 @REM sblim-wbemsmt-dhcp-cli.bat
 @REM
-@REM (C) Copyright IBM Corp. 2006
+@REM © Copyright IBM Corp. 2006
 @REM
 @REM THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
 @REM ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE

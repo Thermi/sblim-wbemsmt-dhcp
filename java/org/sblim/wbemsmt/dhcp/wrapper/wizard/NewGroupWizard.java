@@ -21,10 +21,12 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.wizard;
 
+import org.sblim.wbem.cim.CIMInstance;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewGroupContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroupsForEntity;
+import org.sblim.wbemsmt.dhcp.indications.DHCPCustomEventForIndication;
 import org.sblim.wbemsmt.exception.ObjectCreationException;
 
 public class NewGroupWizard {
@@ -66,5 +68,5 @@ public class NewGroupWizard {
 		
 	}
 
-	
 }
+

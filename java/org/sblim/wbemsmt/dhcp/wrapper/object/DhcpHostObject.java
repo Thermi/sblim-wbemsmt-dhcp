@@ -88,8 +88,8 @@ public class DhcpHostObject extends DhcpEntityObject {
 	
 		Linux_DHCPHost fco = (Linux_DHCPHost) this.fco;
 		
-		fco.set_IPAddr ( (String) container.get_IPAddr ().getConvertedControlValue () );
-		fco.set_MACAddr ( (String) container.get_MACAddr ().getConvertedControlValue () );
+//		fco.set_IPAddr ( (String) container.get_IPAddr ().getConvertedControlValue () );
+//		fco.set_MACAddr ( (String) container.get_MACAddr ().getConvertedControlValue () );
 		fco.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 		
@@ -220,8 +220,8 @@ public class DhcpHostObject extends DhcpEntityObject {
 	
 		Linux_DHCPHost fco = (Linux_DHCPHost) this.fco;
 		
-		container.get_IPAddr ().setControlValue ( fco.get_IPAddr () );
-		container.get_MACAddr ().setControlValue ( fco.get_MACAddr () );
+//		container.get_IPAddr ().setControlValue ( fco.get_IPAddr () );
+//		container.get_MACAddr ().setControlValue ( fco.get_MACAddr () );
 		container.get_Name ().setControlValue ( fco.get_Name () );
 		
 //		super.updateControls ( container );

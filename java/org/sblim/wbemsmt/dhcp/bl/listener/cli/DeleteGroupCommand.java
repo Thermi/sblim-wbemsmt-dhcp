@@ -42,6 +42,8 @@ public class DeleteGroupCommand extends CimCommand {
    		 * used for selection:  --serviceName, default: dhcpd
 		 */
 		public static final OptionDefinition KEY_GLOBAL_serviceName = new OptionDefinition(null,"serviceName","dhcpd","serviceName.argValue",false,false,"serviceName.argDescription");
+	
+		
 		public static final OptionDefinition KEY_GLOBAL_listEntities = new OptionDefinition(null,"listEntities",null,"listEntities.argValue",false,false,"listEntities.argDescription");
 	// Global Communication Options
 			/**

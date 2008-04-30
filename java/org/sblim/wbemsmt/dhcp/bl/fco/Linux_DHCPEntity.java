@@ -1,7 +1,7 @@
 /** 
  * Linux_DHCPEntity.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp. 2005
  *
  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
@@ -13,7 +13,7 @@
  * @author:	ECCG 0.9.7 generated 
  * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
  *
- * Contributors: Prashanth Karnam <prkarnam@in.ibm.com>
+ * Contributors:
  *
  *
  * Description:  An Entity is the base class which represents an individual entity in the DHCP
@@ -39,9 +39,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.lang.reflect.Constructor;
 import org.sblim.wbem.client.*;
+
+
 import org.sblim.wbemsmt.schema.cim29.*;
 
-//model.package
 
 /**
  *  An Entity is the base class which represents an individual entity in the DHCP
@@ -373,9 +374,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGROUPSFORENTITY, 
-					Linux_DHCPGroup.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPGroup.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -446,8 +448,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGROUPSFORENTITY, 
 					Linux_DHCPGroup.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPGroup.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPGroupsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGROUPSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPGroup(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPGroup(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPGroup(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPGroupsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGROUPSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -486,9 +599,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
-					Linux_DHCPHost.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPHost.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -559,8 +673,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
 					Linux_DHCPHost.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPHost.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPHostsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPHost(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPHost(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPHost(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPHostsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPHOSTSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -599,9 +824,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPOPTIONSFORENTITY, 
-					Linux_DHCPOptions.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPOptions.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -672,8 +898,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPOPTIONSFORENTITY, 
 					Linux_DHCPOptions.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPOptions.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPOptionsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPOPTIONSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPOptions(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPOptions(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPOptions(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPOptionsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPOPTIONSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -712,9 +1049,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPARAMSFORENTITY, 
-					Linux_DHCPParams.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPParams.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -785,8 +1123,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPARAMSFORENTITY, 
 					Linux_DHCPParams.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPParams.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPParamsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPARAMSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPParams(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPParams(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPParams(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPParamsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPARAMSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -825,9 +1274,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPOOLSFORENTITY, 
-					Linux_DHCPPool.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPPool.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -898,8 +1348,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPOOLSFORENTITY, 
 					Linux_DHCPPool.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPPool.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPPoolsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPOOLSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPPool(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPPool(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPPool(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPPoolsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPPOOLSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -938,9 +1499,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSHAREDNETSFORENTITY, 
-					Linux_DHCPSharednet.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPSharednet.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -1011,8 +1573,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSHAREDNETSFORENTITY, 
 					Linux_DHCPSharednet.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPSharednet.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPSharednetsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSHAREDNETSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSharednet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSharednet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSharednet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPSharednetsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSHAREDNETSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {
@@ -1051,9 +1724,10 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 			enumeration = cimClient.associators(
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSUBNETSFORENTITY, 
-					Linux_DHCPSubnet.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent", //$NON-NLS-1$
+					Linux_DHCPSubnet.CIM_CLASS_NAME,
+					null,null, 
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent", //$NON-NLS-1$
 					includeQualifiers,
 					includeClassOrigin,
 					propertyList);
@@ -1124,8 +1798,119 @@ public class Linux_DHCPEntity extends CIM_SettingData  {
 					this.getCimObjectPath(),
 					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSUBNETSFORENTITY, 
 					Linux_DHCPSubnet.CIM_CLASS_NAME, 
-					"GroupComponent", //$NON-NLS-1$
-					"PartComponent"); //$NON-NLS-1$
+					null,null);
+					//"GroupComponent", //$NON-NLS-1$
+					//"PartComponent"); //$NON-NLS-1$
+		
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+			
+				if (obj instanceof CIMObjectPath) {
+					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPSubnet.CIM_CLASS_NAME)) {
+						resultArrayList.add(obj);
+					}
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+
+	
+	public ArrayList getAssociations_Linux_DHCPSubnetsForEntity(CIMClient cimClient,
+	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		ArrayList resultArrayList = new ArrayList();
+		Enumeration enumeration = null;
+		
+		try {
+			enumeration = cimClient.references(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSUBNETSFORENTITY, 
+					role, //$NON-NLS-1$
+					includeQualifiers,
+					includeClassOrigin,
+					propertyList);
+		
+			while (enumeration.hasMoreElements()) {
+				Object obj = enumeration.nextElement();
+				if (obj instanceof CIMInstance) {
+					CIMInstance cimInstance = (CIMInstance)obj;
+                    Class clazz = Linux_DHCPEntityHelper.findClass(cimClient, cimInstance);
+                    
+					if (clazz == null) {
+						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSubnet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+					
+					Class[] constParams = new Class[2];
+					constParams[0] = CIMObjectPath.class;
+					constParams[1] = CIMInstance.class;
+					Constructor cons = null;
+					try {
+						cons = clazz.getConstructor(constParams);
+						
+					} catch(NoSuchMethodException e) {
+						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSubnet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+				
+					try {
+						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
+					
+						Object dataObj = cons.newInstance(actargs);
+					
+						resultArrayList.add(dataObj);
+					} catch (Exception e) {
+						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
+						resultArrayList.add(new Linux_DHCPSubnet(cimInstance.getObjectPath(), cimInstance));
+						continue;
+					}
+
+				}
+			}
+		} finally {
+			try {
+				if (enumeration != null) {
+					((CIMEnumeration)enumeration).close();
+				}
+			} catch(Exception e) {
+				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
+			}
+		}
+			
+		return resultArrayList;
+	}
+	
+	public ArrayList getAssociationNames_Linux_DHCPSubnetsForEntity(CIMClient cimClient, String role, boolean deep) {
+
+		if (cimClient == null) {
+			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
+		}
+		
+		Enumeration enumeration = null;
+		ArrayList resultArrayList = new ArrayList();
+
+		try {		
+			enumeration = cimClient.referenceNames(
+					this.getCimObjectPath(),
+					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSUBNETSFORENTITY, 
+					role); //$NON-NLS-1$
 		
 		
 			while (enumeration.hasMoreElements()) {

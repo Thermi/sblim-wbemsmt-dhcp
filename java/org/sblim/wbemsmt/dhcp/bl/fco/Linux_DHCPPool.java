@@ -1,7 +1,7 @@
 /** 
  * Linux_DHCPPool.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp. 2005
  *
  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
@@ -13,7 +13,7 @@
  * @author:	ECCG 0.9.7 generated 
  * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
  *
- * Contributors: Prashanth Karnam <prkarnam@in.ibm.com>
+ * Contributors:
  *
  *
  * Description:  Entity to represent the Pool specified in the dhcp.conf file.
@@ -34,6 +34,7 @@ import java.lang.reflect.Constructor;
 import org.sblim.wbem.client.*;
 
 
+import org.sblim.wbemsmt.schema.cim29.*;
 
 
 /**

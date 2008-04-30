@@ -44,16 +44,16 @@ public class NewHostWizard {
 	
 	public void updateControls(NewHostSummaryContainer container){
 		
-		container.get_IPAddr ().setControlValue ( newHost.get_IPAddr ().getConvertedControlValue () );
-		container.get_MACAddr ().setControlValue ( newHost.get_MACAddr ().getConvertedControlValue () );
+//		container.get_IPAddr ().setControlValue ( newHost.get_IPAddr ().getConvertedControlValue () );
+//		container.get_MACAddr ().setControlValue ( newHost.get_MACAddr ().getConvertedControlValue () );
 		container.get_Name ().setControlValue ( newHost.get_Name ().getConvertedControlValue () );
 	}
 
 	public void create(NewHostSummaryContainer container) throws ObjectCreationException{
 	
 		Linux_DHCPHost host = new Linux_DHCPHost();
-		host.set_IPAddr ( (String) container.get_IPAddr ().getConvertedControlValue () );
-		host.set_MACAddr ( (String) container.get_MACAddr ().getConvertedControlValue () );
+//		host.set_IPAddr ( (String) container.get_IPAddr ().getConvertedControlValue () );
+//		host.set_MACAddr ( (String) container.get_MACAddr ().getConvertedControlValue () );
 		host.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		if(DhcpCimAdapter.isDummyMode ())
 			host.set_InstanceID ( "WBEM_SMT:LinuxDHCPHost::dhcp::" +adapter.getSelectedEntity ().get_Name ()+ "::"+  container.get_Name ().getConvertedControlValue ());

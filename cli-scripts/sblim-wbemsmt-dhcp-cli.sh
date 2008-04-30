@@ -2,7 +2,7 @@
 ###############################################################################
 # sblim-wbemsmt-dhcp-cli.sh
 #
-# (C) Copyright IBM Corp. 2006
+# © Copyright IBM Corp. 2006
 #
 # THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
 # ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE

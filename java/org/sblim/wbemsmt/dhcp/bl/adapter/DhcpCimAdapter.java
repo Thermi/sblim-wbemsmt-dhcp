@@ -20,6 +20,7 @@
 
 package org.sblim.wbemsmt.dhcp.bl.adapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,24 +29,37 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.sblim.wbem.cim.CIMClass;
+import org.sblim.wbem.cim.CIMDataType;
+import org.sblim.wbem.cim.CIMInstance;
 import org.sblim.wbem.cim.CIMObjectPath;
+import org.sblim.wbem.cim.CIMValue;
+import org.sblim.wbem.cim.UnsignedInt16;
 import org.sblim.wbem.client.CIMClient;
+import org.sblim.wbem.client.indications.CIMListener;
+import org.sblim.wbemsmt.bl.MessageNumber;
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.adapter.CountDelegatee;
 import org.sblim.wbemsmt.bl.adapter.CreateDelegatee;
+import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DeleteDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InitContainerDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InitWizardDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InstallValidatorsDelegatee;
+import org.sblim.wbemsmt.bl.adapter.Message;
+import org.sblim.wbemsmt.bl.adapter.MessageInputHandler;
 import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.adapter.MessageUtil;
 import org.sblim.wbemsmt.bl.adapter.RevertDelegatee;
 import org.sblim.wbemsmt.bl.adapter.SaveDelegatee;
 import org.sblim.wbemsmt.bl.adapter.SelectionHierarchy;
 import org.sblim.wbemsmt.bl.adapter.UpdateControlsDelegatee;
 import org.sblim.wbemsmt.bl.adapter.UpdateModelDelegatee;
+import org.sblim.wbemsmt.bl.fco.FcoHelperIf;
 import org.sblim.wbemsmt.bl.tree.ICIMInstanceNode;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
+import org.sblim.wbemsmt.dhcp.bl.DhcpErrorCodes;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListItemContainer;
@@ -85,10 +99,13 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPHost;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPOptions;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool;
+import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPRegisteredProfileHelper;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPService;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPServiceConfiguration;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
+import org.sblim.wbemsmt.dhcp.indications.DHCPChangeIndicationListener;
+import org.sblim.wbemsmt.dhcp.indications.DHCPCustomEventForIndication;
 import org.sblim.wbemsmt.dhcp.wizard.NewGroupWizardContainer;
 import org.sblim.wbemsmt.dhcp.wizard.NewHostWizardContainer;
 import org.sblim.wbemsmt.dhcp.wizard.NewPoolWizardContainer;
@@ -114,20 +131,37 @@ import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewPoolWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSharednetWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSubnetWizard;
 import org.sblim.wbemsmt.exception.CountException;
+import org.sblim.wbemsmt.exception.IndicationPreparationException;
 import org.sblim.wbemsmt.exception.InitContainerException;
 import org.sblim.wbemsmt.exception.InitWizardException;
+import org.sblim.wbemsmt.exception.LoginException;
 import org.sblim.wbemsmt.exception.ModelLoadException;
 import org.sblim.wbemsmt.exception.ModelUpdateException;
+import org.sblim.wbemsmt.exception.ObjectCreationException;
 import org.sblim.wbemsmt.exception.ObjectDeletionException;
 import org.sblim.wbemsmt.exception.ObjectNotFoundException;
 import org.sblim.wbemsmt.exception.ObjectRevertException;
 import org.sblim.wbemsmt.exception.ObjectSaveException;
 import org.sblim.wbemsmt.exception.UpdateControlsException;
 import org.sblim.wbemsmt.exception.WbemSmtException;
+import org.sblim.wbemsmt.schema.cim29.CIM_Collection;
+import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilter;
+import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilterHelper;
+import org.sblim.wbemsmt.schema.cim29.CIM_IndicationSubscription;
+import org.sblim.wbemsmt.schema.cim29.CIM_IndicationSubscriptionHelper;
+import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestination;
+import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationCIMXML;
+import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationHelper;
+import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
+import org.sblim.wbemsmt.schema.cim29.CIM_RegisteredProfile;
 import org.sblim.wbemsmt.schema.cim29.tools.FcoHelper;
+import org.sblim.wbemsmt.session.WbemsmtSession;
 import org.sblim.wbemsmt.tools.resources.ResourceBundleManager;
+import org.sblim.wbemsmt.cim.indication.*;
 
-public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAdapterIf {
+import sun.security.action.GetLongAction;
+
+public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	private static final String[] BUNDLES = { "messages", "messagesDhcp" };
 
@@ -139,25 +173,25 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 
 	DhcpSelectionHeirarchy selectionHierarchy = null;
 
-//	private CountDelegatee countDelegatee;
+	private CountDelegatee countDelegatee;
 
 	private CreateDelegatee createDelegatee;
 
 	private DeleteDelegatee deleteDelegatee;
 
-//	private InitContainerDelegatee initContainerDelegatee;
+	private InitContainerDelegatee initContainerDelegatee;
 
-//	private InitWizardDelegatee initWizardDelegatee;
+	private InitWizardDelegatee initWizardDelegatee;
 
 	private InstallValidatorsDelegatee installValidatorsDelegatee;
 
-//	private RevertDelegatee revertDelegatee;
+	private RevertDelegatee revertDelegatee;
 
 	private SaveDelegatee saveDelegatee;
 
 	private UpdateControlsDelegatee updateControlsDelegatee;
 
-//	private UpdateModelDelegatee updateModelDelegatee;
+	private UpdateModelDelegatee updateModelDelegatee;
 
 	private DhcpServiceObject DhcpServiceObj;
 
@@ -184,7 +218,14 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 	
 	private Linux_DHCPEntity selectedEntity = null;
 	
-
+	private CIMClient slpNamespaceCimClient = null;
+	private CIM_ListenerDestinationCIMXML dest = null;
+	
+	private boolean indcOccurred = false;
+	private boolean subscribed = false;
+	IndicationDestination indcDest = null;
+	private int indcPort = 0;
+	
 	public static class DhcpSelectionHeirarchy extends SelectionHierarchy {
 
 		private final DhcpCimAdapter adapter;
@@ -283,7 +324,12 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		deleteDelegatee = new DhcpCimAdpaterDeleteDelegatee ( this);
 		createDelegatee = new DhcpCimAdapterCreateDelegatee ( this );
 		installValidatorsDelegatee = new DhcpCimAdapterInstallValidatorsDelegatee( this);
-//		initWizardDelegatee = new DhcpCimAdapterInitWizardDelegatee ( this);
+		initWizardDelegatee = new DhcpCimAdapterInitWizardDelegatee ( this);
+		initContainerDelegatee = new DhcpCimAdapterInitContainerDelegatee (this);
+		updateModelDelegatee = new DhcpCimAdapterUpdateModelDelegatee(this);
+		countDelegatee = new DhcpCimAdpaterCountDelegatee (this);
+		revertDelegatee = new DhcpCimAdapterRevertDelegatee (this);
+		
 		booleanOps.add("ip-forwarding");
 		booleanOps.add("non-local-source-routing");
 		booleanOps.add("trailer-encapsulation");
@@ -295,6 +341,27 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		newgroupwizard = new NewGroupWizard(this);
 		newsubnetwizard = new NewSubnetWizard(this);
 		newsharednetwizard = new NewSharednetWizard(this);
+
+		DHCPChangeIndicationListener indcListener = new DHCPChangeIndicationListener(this);
+//		IndicationDestination indcDest =  null;
+
+		
+		IndicationDestinationManager indcmanager = IndicationDestinationManager.getCurrent ();
+		try {
+			indcDest = indcmanager.getIndicationDestination ( "preset1" );
+			HttpServerConnectionManager.getInstance ().addListener ( indcListener,  indcDest.getPort ());
+			indcPort = indcDest.getPort ();
+		} catch (IndicationPreparationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			try {
+				throw new WbemSmtException("Cannot add CIMListener",e);
+			} catch (WbemSmtException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+
 	}
 
 	public String[] getResourceBundleNames () {
@@ -309,87 +376,18 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 
 			this.dhcpserviceobjlist = new DhcpServiceObjectList ();
 
-//			List listWithServiceNodes = rootNode.findInstanceNodes ( Linux_DHCPService.CIM_CLASS_NAME );
-//			for (Iterator iterServiceNodes = listWithServiceNodes.iterator (); iterServiceNodes.hasNext ();) {
-//				ICIMInstanceNode serviceNode = (ICIMInstanceNode) iterServiceNodes.next ();
-//
-//				// set the service object
-//				Linux_DHCPService aFco = new Linux_DHCPService ( serviceNode.getCimInstance ().getObjectPath (),
-//						serviceNode.getCimInstance () );
-//
-//				DhcpServiceObject dhcpServiceObject = new DhcpServiceObject ( aFco, this );
-
-//				setDhcpServiceObj ( dhcpServiceObject );
-//				dhcpserviceobjlist.addDhcpServiceObject ( dhcpServiceObject );
-
 			setDhcpServiceObj ( getDhcpServiceObj () );
 			dhcpserviceobjlist.addDhcpServiceObject ( getDhcpServiceObj () );
 		
-			// set the service configuration object
-//				DhcpServiceConfigurationObject serviceconfobj = null;
-
-//				ArrayList serviceconfArrayList = aFco
-//						.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices (
-//								cimClient, false, false, null );
-//
-//				for (Iterator iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
-//					Linux_DHCPServiceConfiguration settingFco = (Linux_DHCPServiceConfiguration) iter.next ();
-//					serviceconfobj = new DhcpServiceConfigurationObject ( settingFco, this );
-//				}
-//				dhcpServiceObject.setServiceconf ( serviceconfobj );
-//				setDhcpServiceConfigurationObj ( serviceconfobj );
 
 			getDhcpServiceObj ().setServiceconf ( getDhcpServiceConfigurationObj () );
 			setDhcpServiceConfigurationObj ( getDhcpServiceConfigurationObj () );
 
-			// set the global options List
-//				DhcpOptionsList globalopslist = null;
-//				Linux_DHCPOptions globalopsFco = null;
-//				Linux_DHCPGlobal globalFco = null;
-//
-//				ArrayList globalEntityArrayList = aFco.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
-//						cimClient, false, false, null );
-//				for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//					globalFco = (Linux_DHCPGlobal) iter.next ();
-//				}
-
-//				if (globalFco != null) {
-//					setDhcpEntityObj ( new DhcpEntityObject(globalFco,this) );
-//					ArrayList globalOpsArrayList = globalFco
-//							.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys ( cimClient, false, false,
-//									null );
-//					if (globalOpsArrayList.size () > 0) {
-//						globalopslist = new DhcpOptionsList ();
-//						for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
-//							globalopsFco = (Linux_DHCPOptions) iter.next ();
-//							globalopslist
-//									.addDhcpOptionsObject ( new DhcpOptionsObject ( globalopsFco, this ) );
-//						}
-//						setDhcpglobalopslist ( globalopslist );
-//					}
+			setDhcpglobalopslist ( getDhcpglobalopslist () );
 				
-				setDhcpglobalopslist ( getDhcpglobalopslist () );
+			setDhcpglobalparamslist ( getDhcpglobalparamslist () );
 				
-				// set the global Params List
-//					DhcpParamsList globalparamslist = null;
-//					Linux_DHCPParams globalparamsFco = null;
-//
-//					ArrayList globalParamsArrayList = globalFco
-//							.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys ( cimClient, false, false, null );
-//					if (globalParamsArrayList.size () > 0) {
-//						globalparamslist = new DhcpParamsList ();
-//						for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
-//							globalparamsFco = (Linux_DHCPParams) iter.next ();
-//							globalparamslist.addDhcpParamsObject ( new DhcpParamsObject ( globalparamsFco,
-//									this ) );
-//						}
-//						setDhcpglobalparamslist ( globalparamslist );
-//					}
-
-				setDhcpglobalparamslist ( getDhcpglobalparamslist () );
-				
-//					DhcpEntityObj = new DhcpEntityObject(globalFco,this);
-				setDhcpEntityObj ( getDhcpEntityObj () );
+			setDhcpEntityObj ( getDhcpEntityObj () );
 		
 	}
 
@@ -402,89 +400,58 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 
 		this.dhcpserviceobjlist = new DhcpServiceObjectList ();
 
-//			List listWithServiceNodes = rootNode.findInstanceNodes ( Linux_DHCPService.CIM_CLASS_NAME );
-//			for (Iterator iterServiceNodes = listWithServiceNodes.iterator (); iterServiceNodes.hasNext ();) {
-//				ICIMInstanceNode serviceNode = (ICIMInstanceNode) iterServiceNodes.next ();
-//
-//				// set the service object
-//				Linux_DHCPService aFco = new Linux_DHCPService ( serviceNode.getCimInstance ().getObjectPath (),
-//						serviceNode.getCimInstance () );
-//
-//				DhcpServiceObject dhcpServiceObject = new DhcpServiceObject ( aFco, this );
+		// Subscribe for Indications
 
-//				setDhcpServiceObj ( dhcpServiceObject );
-//				dhcpserviceobjlist.addDhcpServiceObject ( dhcpServiceObject );
+		CIM_ListenerDestinationCIMXML ourDest;
+		
+//		IndicationDestinationManager indcmanager = IndicationDestinationManager.getCurrent ();
+
+		try {
+//			IndicationDestination indcDest = indcmanager.getIndicationDestination ( "preset1" );
+			ourDest = getDestination ( this.getFcoHelper (), getCimClient(), null, indcDest );
+			createSubscriptions ( ourDest);
+			setSubscribed ( true );
+		} catch (WbemSmtException e) {
+			e.printStackTrace();
+		}
+		
+		// ----
 
 			setDhcpServiceObj ( getDhcpServiceObj () );
 			dhcpserviceobjlist.addDhcpServiceObject ( getDhcpServiceObj () );
 		
-			// set the service configuration object
-//				DhcpServiceConfigurationObject serviceconfobj = null;
-
-//				ArrayList serviceconfArrayList = aFco
-//						.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices (
-//								cimClient, false, false, null );
-//
-//				for (Iterator iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
-//					Linux_DHCPServiceConfiguration settingFco = (Linux_DHCPServiceConfiguration) iter.next ();
-//					serviceconfobj = new DhcpServiceConfigurationObject ( settingFco, this );
-//				}
-//				dhcpServiceObject.setServiceconf ( serviceconfobj );
-//				setDhcpServiceConfigurationObj ( serviceconfobj );
 
 			getDhcpServiceObj ().setServiceconf ( getDhcpServiceConfigurationObj () );
 			setDhcpServiceConfigurationObj ( getDhcpServiceConfigurationObj () );
 
-			// set the global options List
-//				DhcpOptionsList globalopslist = null;
-//				Linux_DHCPOptions globalopsFco = null;
-//				Linux_DHCPGlobal globalFco = null;
-//
-//				ArrayList globalEntityArrayList = aFco.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
-//						cimClient, false, false, null );
-//				for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//					globalFco = (Linux_DHCPGlobal) iter.next ();
-//				}
-
-//				if (globalFco != null) {
-//					setDhcpEntityObj ( new DhcpEntityObject(globalFco,this) );
-//					ArrayList globalOpsArrayList = globalFco
-//							.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys ( cimClient, false, false,
-//									null );
-//					if (globalOpsArrayList.size () > 0) {
-//						globalopslist = new DhcpOptionsList ();
-//						for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
-//							globalopsFco = (Linux_DHCPOptions) iter.next ();
-//							globalopslist
-//									.addDhcpOptionsObject ( new DhcpOptionsObject ( globalopsFco, this ) );
-//						}
-//						setDhcpglobalopslist ( globalopslist );
-//					}
+			setDhcpglobalopslist ( getDhcpglobalopslist () );
 				
-				setDhcpglobalopslist ( getDhcpglobalopslist () );
+			setDhcpglobalparamslist ( getDhcpglobalparamslist () );
 				
-				// set the global Params List
-//					DhcpParamsList globalparamslist = null;
-//					Linux_DHCPParams globalparamsFco = null;
-//
-//					ArrayList globalParamsArrayList = globalFco
-//							.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys ( cimClient, false, false, null );
-//					if (globalParamsArrayList.size () > 0) {
-//						globalparamslist = new DhcpParamsList ();
-//						for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
-//							globalparamsFco = (Linux_DHCPParams) iter.next ();
-//							globalparamslist.addDhcpParamsObject ( new DhcpParamsObject ( globalparamsFco,
-//									this ) );
-//						}
-//						setDhcpglobalparamslist ( globalparamslist );
-//					}
-
-				setDhcpglobalparamslist ( getDhcpglobalparamslist () );
-				
-//					DhcpEntityObj = new DhcpEntityObject(globalFco,this);
-				setDhcpEntityObj ( getDhcpEntityObj () );
+			setDhcpEntityObj ( getDhcpEntityObj () );
 
 	}
+
+//	private CIM_RegisteredProfile getRegProfile () {
+//		
+//		CIM_RegisteredProfile regProfile = null;
+//		
+//		List regProfilesList = Linux_DHCPRegisteredProfileHelper.enumerateInstances(getCimClientForInteropNamespace (),true); 
+//			
+////			getDhcpServiceObj ().getFco ().getAssociated_CIM_RegisteredProfile_CIM_ElementConformsToProfiles ( cimClient, true, true, null);
+//
+//		if (regProfilesList.isEmpty ())
+//			try {
+//				throw new WbemSmtException("No Registered Profile found for the Service.");
+//			} catch (WbemSmtException e) {
+//				e.printStackTrace();
+//			}
+//		
+//		for (Iterator iterator2 = regProfilesList.iterator(); iterator2.hasNext();)
+//			regProfile = (CIM_RegisteredProfile) iterator2.next();
+//		
+//		return regProfile;
+//	}
 
 	public void loadInitial ( CIMClient cimClient ) throws ModelLoadException {
 		// TODO Auto-generated method stub
@@ -502,243 +469,9 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 
 	}
 
-	public void createImpl ( DHCPGroupsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPHostsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPPoolsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPSharednetsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void createImpl ( DHCPSubnetsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPGroupsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPHostsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPOptionsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPParamsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPPoolsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPSharednetsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DHCPSubnetsContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void installValidatorsImpl ( DhcpServiceConfContainer container ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public MessageList revertImpl ( DHCPGroupsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPHostsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPOptionsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPParamsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPPoolsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPSharednetsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DHCPSubnetsContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList revertImpl ( DhcpServiceConfContainer container ) throws ObjectRevertException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPGroupsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPHostsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPPoolsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSharednetsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSubnetsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DhcpServiceConfContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void updateControlsImpl ( DHCPGroupsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPHostsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPPoolsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPSharednetsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DHCPSubnetsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void updateControlsImpl ( DhcpServiceConfContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPGroupsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPHostsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPPoolsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPSharednetsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DHCPSubnetsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void initContainerImpl ( DhcpServiceConfContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-
-	}
 
 	public CountDelegatee getCountDelegatee () {
-		return this;
+		return countDelegatee;
 	}
 
 	public CreateDelegatee getCreateDelegatee () {
@@ -750,11 +483,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 	}
 
 	public InitContainerDelegatee getInitContainerDelegatee () {
-		return this;
+		return initContainerDelegatee;
 	}
 
 	public InitWizardDelegatee getInitWizardDelegatee () {
-		return this;
+		return initWizardDelegatee;
 	}
 
 	public InstallValidatorsDelegatee getInstallValidatorsDelegatee () {
@@ -762,7 +495,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 	}
 
 	public RevertDelegatee getRevertDelegatee () {
-		return this;
+		return revertDelegatee;
 	}
 
 	public SaveDelegatee getSaveDelegatee () {
@@ -774,7 +507,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 	}
 
 	public UpdateModelDelegatee getUpdateModelDelegatee () {
-		return this;
+		return updateModelDelegatee;
 	}
 
 	/**
@@ -944,8 +677,6 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		if (dhcpserviceobjlist != null && dhcpserviceobjlist.getDhcpServiceObject ( key ) != null) {
 			service = dhcpserviceobjlist.getDhcpServiceObject ( key );
 			serviceconfobj = service.getServiceconf ();
-//			globalopslistobj = service.getGlobalopslist ();
-//			globalparamslistobj = service.getGlobalparamslist ();
 		} else{
 			dhcpserviceobjlist = new DhcpServiceObjectList ();
 			dhcpglobalopslist = new DhcpOptionsList();
@@ -955,128 +686,25 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		if (service == null) {
 			
 				// service obj
-//				Linux_DHCPService fco = Linux_DHCPServiceHelper.getInstance ( cimClient, key.getObjectPath () );
 				setDhcpServiceObj ( getDhcpServiceObj () );
-				// serviceconf obj
-//				ArrayList serviceconfArrayList = fco
-//						.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices (
-//								cimClient, false, false, null );
-//
-//				for (Iterator iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
-//					serviceconfFco = (Linux_DHCPServiceConfiguration) iter.next ();
-//					serviceconfobj = new DhcpServiceConfigurationObject ( serviceconfFco, this );
-//				}
 				DhcpServiceObj.setServiceconf ( serviceconfobj );
 				setDhcpServiceConfigurationObj ( serviceconfobj );
-				// globaloptions obj
-//				ArrayList globalEntityArrayList = fco.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
-//						cimClient, false, false, null );
-//				for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//					globalFco = (Linux_DHCPGlobal) iter.next ();
-//				}
-//
-//				ArrayList globalOpsArrayList = globalFco.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
-//						cimClient, false, false, null );
-//				if (globalFco != null){
-//					if (globalOpsArrayList.size () > 0) {
-//						globalopslistobj = new DhcpOptionsList ();
-//						for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
-//							globalopsFco = (Linux_DHCPOptions) iter.next ();
-//							globalopslistobj.addDhcpOptionsObject ( new DhcpOptionsObject ( globalopsFco,
-//									this ) );
-//						}
-//						setDhcpglobalopslist ( globalopslistobj );
-//					}
-
-				// globalparams obj
-//				ArrayList globalParamsArrayList = globalFco.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
-//						cimClient, false, false, null );
-//					if (globalParamsArrayList.size () > 0) {
-//						globalparamslistobj = new DhcpParamsList ();
-//						for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
-//							globalparamsFco = (Linux_DHCPParams) iter.next ();
-//							globalparamslistobj.addDhcpParamsObject ( new DhcpParamsObject ( globalparamsFco,
-//									this ) );
-//						}
-//						setDhcpglobalparamslist ( globalparamslistobj );
-//					}
-
 				setDhcpEntityObj ( getDhcpEntityObj () );// sets the globalobject.
-//				}
 				// --
 
 				if (getDhcpServiceObj ().getFco () != null) {
 
-//					DhcpServiceObject serviceobj = new DhcpServiceObject ( (getDhcpServiceObj ().getFco (), this );
 					dhcpserviceobjlist.addDhcpServiceObject ( getDhcpServiceObj () );
 					selectionHierarchy.addService (getDhcpServiceObj () );
 					selectionHierarchy.addServiceConfiguration ( getDhcpServiceConfigurationObj () );
 					selectionHierarchy.addEntity (getDhcpEntityObj ());
 					selectionHierarchy.addGlobalOptionsList ( getDhcpglobalopslist () );
 					selectionHierarchy.addGlobalParamsList ( getDhcpglobalparamslist () );
-//					selectionHierarchy.addServiceConfiguration ( serviceconfobj );
-//					selectionHierarchy.addEntity (new DhcpEntityObject(globalFco,this));
-//					selectionHierarchy.addGlobalOptionsList ( globalopslistobj );
-//					selectionHierarchy.addGlobalParamsList ( globalparamslistobj );
 					return true;
 				}
 			return false;
 		} else {
-//			if (getDhcpServiceConfigurationObj () == null) {
-//				ArrayList settingArrayList = service.getFco ()
-//						.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices (
-//								cimClient, false, false, null );
-//
-//				for (Iterator iter = settingArrayList.iterator (); iter.hasNext ();) {
-//					serviceconfFco = (Linux_DHCPServiceConfiguration) iter.next ();
-//					serviceconfobj = new DhcpServiceConfigurationObject ( serviceconfFco, this );
-//					DhcpServiceObj.setServiceconf ( serviceconfobj );
-//				}
-//			}
-//
-//			if (getDhcpglobalopslist () == null || globalopslistobj == null) {
-//				ArrayList globalEntityArrayList = service.getFco ()
-//						.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices ( cimClient, false, false, null );
-//				for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//					globalFco = (Linux_DHCPGlobal) iter.next ();
-//				}
-//
-//				ArrayList globalOpsArrayList = globalFco.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
-//						cimClient, false, false, null );
-//				if (globalFco != null)
-//					if (globalOpsArrayList.size () > 0) {
-//						globalopslistobj = new DhcpOptionsList ();
-//						for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
-//							globalopsFco = (Linux_DHCPOptions) iter.next ();
-//							globalopslistobj.addDhcpOptionsObject ( new DhcpOptionsObject ( globalopsFco,
-//									this ) );
-//						}
-//						setDhcpglobalopslist ( globalopslistobj );
-//					}
-//			}
-//
-//			if (getDhcpglobalparamslist () == null || globalparamslistobj == null) {
-//				ArrayList globalEntityArrayList = service.getFco ()
-//						.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices ( cimClient, false, false, null );
-//				for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//					globalFco = (Linux_DHCPGlobal) iter.next ();
-//				}
-//
-//				ArrayList globalParamsArrayList = globalFco.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
-//						cimClient, false, false, null );
-//				if (globalFco != null)
-//					if (globalParamsArrayList.size () > 0) {
-//						globalparamslistobj = new DhcpParamsList ();
-//						for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
-//							globalparamsFco = (Linux_DHCPParams) iter.next ();
-//							globalparamslistobj.addDhcpParamsObject ( new DhcpParamsObject ( globalparamsFco,
-//									this ) );
-//						}
-//						setDhcpglobalparamslist ( globalparamslistobj );
-//					}
-//			}
 			selectionHierarchy.addService ( service );
-//			setDhcpEntityObj ( new DhcpEntityObject(globalFco,this) );
 			selectionHierarchy.addServiceConfiguration ( getDhcpServiceConfigurationObj () );
 			selectionHierarchy.addEntity ( getDhcpEntityObj () );
 			selectionHierarchy.addGlobalOptionsList ( getDhcpglobalopslist () );
@@ -1403,130 +1031,6 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		DhcpSubnetObj = dhcpSubnetObj;
 	}
 
-	public void createImpl ( NewGroupContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void createImpl ( NewHostSummaryContainer container ) throws ObjectSaveException {
-		System.out.println("testing");
-		
-	}
-
-	public void createImpl ( NewPoolSummaryContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void createImpl ( NewSharednetSummaryContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void createImpl ( NewSubnetSummaryContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPGroupOptionsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPGroupParamsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPHostOptionsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPHostParamsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPPoolOptionsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPPoolParamsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPSharednerOptionsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPSharednetParamsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPSubnetOptionsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( DHCPSubnetParamsContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewGroupContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewHostContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewHostSummaryContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewPoolContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewPoolSummaryContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewSharednetContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewSharednetSummaryContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewSubnetContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( NewSubnetSummaryContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void installValidatorsImpl ( WelcomeContainer container ) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public MessageList revertImpl ( DHCPGroupOptionsContainer container ) throws ObjectRevertException {
 		// TODO Auto-generated method stub
@@ -1586,316 +1090,6 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 	public MessageList saveImpl ( DHCPGroupParamsContainer container ) throws ObjectSaveException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	public MessageList saveImpl ( DHCPHostOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPHostParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPPoolOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPPoolParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSharednerOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSharednetParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSubnetOptionsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public MessageList saveImpl ( DHCPSubnetParamsContainer container ) throws ObjectSaveException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void updateControlsImpl ( DHCPGroupOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPGroupParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPHostOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPHostParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPPoolOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPPoolParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPSharednerOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPSharednetParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPSubnetOptionsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( DHCPSubnetParamsContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewGroupContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewHostContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewHostSummaryContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewPoolContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewPoolSummaryContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewSharednetContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewSharednetSummaryContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewSubnetContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( NewSubnetSummaryContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateControlsImpl ( WelcomeContainer container ) throws UpdateControlsException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateModelImpl ( NewHostContainer container ) throws ModelUpdateException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateModelImpl ( NewPoolContainer container ) throws ModelUpdateException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateModelImpl ( NewSharednetContainer container ) throws ModelUpdateException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void updateModelImpl ( NewSubnetContainer container ) throws ModelUpdateException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewGroupContainer container, WizardContainer1 wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewHostContainer container, WizardContainer1 wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewPoolContainer container, WizardContainer1 wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewSharednetContainer container, WizardContainer1 wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewSubnetContainer container, WizardContainer1 wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPGroupOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPGroupParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPHostOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPHostParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPPoolOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPPoolParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPSharednerOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPSharednetParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPSubnetOptionsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( DHCPSubnetParamsContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewGroupContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewHostContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewHostSummaryContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewPoolContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewPoolSummaryContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewSharednetContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewSharednetSummaryContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewSubnetContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( NewSubnetSummaryContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initContainerImpl ( WelcomeContainer container ) throws InitContainerException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewGroupContainer container, NewGroupWizardContainer wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewHostContainer container, NewHostWizardContainer wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewPoolContainer container, NewPoolWizardContainer wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewSharednetContainer container, NewSharednetWizardContainer wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void initWizardImpl ( NewSubnetContainer container, NewSubnetWizardContainer wizardContainer, String currentPagename ) throws InitWizardException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public NewHostWizard getNewhostwizard () {
@@ -1958,21 +1152,266 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter implements DhcpCimAda
 		getDhcpServiceConfigurationObj ().updateModel ( container );
 	}
 
-//	public DhcpEntityObject getDhcpGlobalObj(){
+	/**
+	 * get the Destination
+	 * @param fcoHelper
+	 * @param cimClient
+	 * @param interOpNamespace
+	 * @param indicationDestination the destination which contains the URL to search for
+	 * @return
+	 * @throws WbemsmtException
+	 */
+	public CIM_ListenerDestinationCIMXML getDestination(FcoHelperIf fcoHelper, CIMClient cimClient, String interOpNamespace, IndicationDestination indicationDestination) throws WbemSmtException {
+		//create the subscriptions
+		
+		if(dest != null)
+			return dest;
+		
+		CIM_ListenerDestinationCIMXML ourDestination = null;
+        
+        List destinations = CIM_ListenerDestinationHelper.enumerateInstances(cimClient,true);
+        for (Iterator iterator = destinations.iterator(); iterator.hasNext() && ourDestination == null;) {
+        	CIM_ListenerDestination destination = (CIM_ListenerDestination) iterator.next();
+        	if (destination instanceof CIM_ListenerDestinationCIMXML) {
+        		CIM_ListenerDestinationCIMXML xmlDestination = (CIM_ListenerDestinationCIMXML) destination;
+        		if (xmlDestination.get_Destination().equals(indicationDestination.getCalculatedUrlString()))
+        		{
+        			dest =  xmlDestination;
+        		}
+        		
+        	}
+        }
+        if (dest == null)
+        {
+        	dest = new CIM_ListenerDestinationCIMXML();
+        	dest.set_Name("DHCP Indication Handler for " + indicationDestination.getCalculatedUrlString () );
+        	dest.set_PersistenceType(new UnsignedInt16(CIM_ListenerDestinationCIMXML.PERSISTENCETYPE_TRANSIENT));
+        	dest.set_Destination(indicationDestination.getCalculatedUrlString());
+        	dest = (CIM_ListenerDestinationCIMXML) fcoHelper.create(dest, cimClient);
+        }
+        
+        return dest;
+	}
+	
+	
+	/**
+	 * Create Subscriptions
+	 * @param ourDestination 
+	 * @param profile the registered profile to which the indications belonging
+	 * @throws WbemsmtException
+	 */
+	protected void createSubscriptions ( CIM_ListenerDestinationCIMXML ourDestination)
+			throws WbemSmtException {
+
+		if(this.isSubscribed ())
+			return;
+			
+		boolean subscribed = false;
+		
+		CIM_IndicationFilter filter = null;
+		CIM_IndicationSubscription sub = null;
+		CIMValue host,filt = null;
+
+
+		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), true );
+		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
+			filter = (CIM_IndicationFilter) iterator.next ();
+			if(filter.get_Name ().equals("HostIndication") || filter.get_Name ().equals("SubnetIndication") || filter.get_Name ().equals("SharednetIndication") || filter.get_Name ().equals("GroupIndication") || filter.get_Name ().equals("PoolIndication") || filter.get_Name ().equals("OptionsIndication") || filter.get_Name ().equals("ParamsIndication")){
+
+				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),true);
+				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
+					sub = (CIM_IndicationSubscription) iterator1.next ();
+					if(sub.get_CIM_ListenerDestination () != null && sub.get_CIM_IndicationFilter () != null){
+						host = sub.get_CIM_ListenerDestination ().getKey("Name").getValue ();
+						filt = sub.get_CIM_IndicationFilter ().getKey("Name").getValue ();
+						}
+					else
+						continue;
+					
+					if(((String)host.getValue()).equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && ((String)filt.getValue ()).equalsIgnoreCase ( filter.get_Name () )){
+							subscribed = true;
+							logger.info ( "Subsriptions already exist ..!" );
+							break;
+					}
+				}
+
+				if(!subscribed){
+				CIMClass cimindcsub = getCimClient().getClass ( new CIMObjectPath ( "CIM_IndicationSubscription" ), true,
+						true, true, null );
+				CIMInstance ci = cimindcsub.newInstance ();
+				ci.setProperty ( "Filter", new CIMValue ( filter.getCimObjectPath () ) );
+				ci.setProperty ( "Handler", new CIMValue ( ourDestination.getCimObjectPath () ) );
+				ci.setProperty ("SubscriptionState", new CIMValue(new UnsignedInt16(2)));
+
+				CIMObjectPath indcsub = getCimClient ().createInstance ( new CIMObjectPath (), ci );
+
+				logger.info ( "Subsription Created Succesfully ..!" );
+				}
+				else
+					logger.info ( "No suitable Subsriptions exist ..!" );
+
+			}
+			else
+				logger.severe ( "No suitable Filters found for Subsription." );
+		}
+	}
+	
+	public CIMClient getCimClientForInteropNamespace()
+	{
+		
+		if(slpNamespaceCimClient == null){
+		try {
+			slpNamespaceCimClient = WbemsmtSession.getSession().getCIMClientPool(cimClient.getNameSpace().getHost()).getCIMClient("root/pg_interop");
+		} catch (LoginException e) {
+			e.printStackTrace();
+		} 
+		}
+		return slpNamespaceCimClient;
+	}
+
+	/**
+	 * @return the indcOccurred
+	 */
+	public boolean isIndcOccurred () {
+		return indcOccurred;
+	}
+
+	/**
+	 * @param indcOccurred the indcOccurred to set
+	 */
+	public void setIndcOccurred ( boolean indcOccurred ) {
+		this.indcOccurred = indcOccurred;
+	}
+
+	public void save(DataContainer dataContainer) throws ObjectSaveException{
+		if(isIndcOccurred ()){
+			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
+//			this.setMarkedForReload ();
+			this.setIndcOccurred ( false );
+		} else{
+				super.save(dataContainer);
+				for(int i=0;i<20;i++);
+				this.setIndcOccurred ( false );}
+	}
+	
+	public void updateControls(DataContainer dataContainer) throws UpdateControlsException{
+		
+		if(isIndcOccurred ()){
+			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
+//			this.setMarkedForReload ();
+			this.setIndcOccurred ( false );
+		} else{
+				super.updateControls(dataContainer);
+				for(int i=0;i<20;i++);
+				this.setIndcOccurred ( false );}
+	}
+	
+	public void create(DataContainer dataContainer) throws ObjectCreationException{
+		
+		if(isIndcOccurred ()){
+			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
+//			this.setMarkedForReload ();
+			this.setIndcOccurred ( false );
+		} else{
+				super.create(dataContainer);
+				for(int i=0;i<20;i++);
+				this.setIndcOccurred ( false );}
+	}
+	
+	public void delete() throws ObjectDeletionException{
+
+		if(isIndcOccurred ()){
+			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
+//			this.setMarkedForReload ();
+			this.setIndcOccurred ( false );
+		} else{
+				super.delete();
+				for(int i=0;i<20;i++);
+				this.setIndcOccurred ( false );}
+	}
+	
+	
+//	class tempThread extends Thread{
 //
-//		Linux_DHCPGlobal globalFco = null;
+//		private DhcpCimAdapter adapter;
 //		
-//		if(DhcpEntityObj == null){
-//		ArrayList globalEntityArrayList = getDhcpServiceObj ().getFco ().getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
-//				cimClient, false, false, null );
-//		for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
-//			globalFco = (Linux_DHCPGlobal) iter.next ();
+//		public tempThread ( DhcpCimAdapter adapter ) {
+//			super ();
+//			this.adapter = adapter;
 //		}
 //
-//		this.DhcpEntityObj = new DhcpEntityObject(globalFco,this);
+//		public void run () {
+//			try {
+//				this.sleep(20000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			DHCPCustomEventForIndication listener = new DHCPCustomEventForIndication(new CIMInstance());
+//			adapter.getIndcListener ().indicationOccured ( listener );
+//			}
 //		}
-//		
-//		return DhcpEntityObj;
+
+	/**
+	 * @return the subscribed
+	 */
+	public boolean isSubscribed () {
+		return subscribed;
+	}
+
+	/**
+	 * @param subscribed the subscribed to set
+	 */
+	public void setSubscribed ( boolean subscribed ) {
+		this.subscribed = subscribed;
+	}
+
+//	public void cleanup(){
+//		try {
+//			removeSubscriptions ( getDestination ( this.getFcoHelper (), getCimClient(), null, indcDest ));
+//		} catch (WbemSmtException e) {
+//			e.printStackTrace();
+//		}
+//		indcDest.getPresets ().freePort(indcPort);
+//		logger.info("Port " + indcPort + " freed ...!");
+//		indcDest = null;
+//		dest = null;
 //	}
+	
+	protected void removeSubscriptions(CIM_ListenerDestinationCIMXML ourDestination){
+
+		CIM_IndicationFilter filter = null;
+		CIM_IndicationSubscription sub = null;
+		CIMValue host,filt = null;
+
+
+		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), true );
+		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
+			filter = (CIM_IndicationFilter) iterator.next ();
+			if(filter.get_Name ().equals("HostIndication") || filter.get_Name ().equals("SubnetIndication") || filter.get_Name ().equals("SharednetIndication") || filter.get_Name ().equals("GroupIndication") || filter.get_Name ().equals("PoolIndication") || filter.get_Name ().equals("OptionsIndication") || filter.get_Name ().equals("ParamsIndication")){
+
+				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),true);
+				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
+					sub = (CIM_IndicationSubscription) iterator1.next ();
+					if(sub.get_CIM_ListenerDestination () != null && sub.get_CIM_IndicationFilter () != null){
+						host = sub.get_CIM_ListenerDestination ().getKey("Name").getValue ();
+						filt = sub.get_CIM_IndicationFilter ().getKey("Name").getValue ();
+						}
+					else
+						continue;
+					
+					if(((String)host.getValue()).equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && ((String)filt.getValue ()).equalsIgnoreCase ( filter.get_Name () )){
+							getCimClient().deleteInstance ( sub.getCimObjectPath () );
+							break;
+					}
+				}
+			}
+
+		}
+
+		logger.info("Subscriptions and Handlers for the host " + ourDestination.get_Destination () + " deleted ...!");
+		
+		getCimClient().deleteInstance ( ourDestination.getCimObjectPath () );
+
+	}
 	
 }
