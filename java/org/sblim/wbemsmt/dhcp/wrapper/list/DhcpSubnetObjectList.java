@@ -21,10 +21,12 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.list;
 
-import org.sblim.wbem.cim.CIMObjectPath;
+import javax.cim.CIMObjectPath;
+
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.wrapper.ObjectList;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpSubnetObject;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
 
 public class DhcpSubnetObjectList extends ObjectList {
@@ -42,15 +44,15 @@ public class DhcpSubnetObjectList extends ObjectList {
 				.getCimObjectPath()));
 	}
 
-	public void addDhcpSubnetObject(DhcpSubnetObject obj) {
+	public void addDhcpSubnetObject(DhcpSubnetObject obj) throws WbemsmtException {
 		put(obj);
 	}
 
-	public DhcpSubnetObject getDhcpSubnetObject(int i) {
+	public DhcpSubnetObject getDhcpSubnetObject(int i) throws WbemsmtException {
 		return (DhcpSubnetObject) getList().get(i);
 	}
 
-	public DhcpSubnetObject getDhcpSubnetObjectByListName(String listName) {
+	public DhcpSubnetObject getDhcpSubnetObjectByListName(String listName) throws WbemsmtException {
 		return (DhcpSubnetObject) getObjectsByName().get(listName);
 	}
 
@@ -61,7 +63,7 @@ public class DhcpSubnetObjectList extends ObjectList {
 
 	protected Object getKey(Object value) {
 		DhcpSubnetObject obj = (DhcpSubnetObject) value;
-		return obj.getFco().get_ElementName();
+		return obj.getFco().get_Name();
 	}
 
 }

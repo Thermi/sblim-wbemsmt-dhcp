@@ -26,7 +26,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednetsForEntity;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class NewSharednetWizard {
 
@@ -47,23 +47,23 @@ public class NewSharednetWizard {
 		container.get_Name ().setControlValue ( newSharednet.get_Name ().getConvertedControlValue () );
 	}
 
-	public void create(NewSharednetSummaryContainer container) throws ObjectCreationException{
+	public void create(NewSharednetSummaryContainer container) throws WbemsmtException{
 	
-		Linux_DHCPSharednet Sharednet = new Linux_DHCPSharednet();
+		Linux_DHCPSharednet Sharednet = new Linux_DHCPSharednet(adapter.getCimClient (),adapter.getNamespace ());
 		Sharednet.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		if(DhcpCimAdapter.isDummyMode ())
-			Sharednet.set_InstanceID ( "WBEM_SMT:LinuxDHCPSharednet::dhcp::" +  adapter.getSelectedEntity ().get_Name ()+ "::" + container.get_Name ().getConvertedControlValue ());
+			Sharednet.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPSharednet::dhcp::" +  adapter.getSelectedEntity ().get_Name ()+ "::" + container.get_Name ().getConvertedControlValue ());
 		else
-			Sharednet.set_InstanceID ("");
-		Sharednet.set_ParentID ( adapter.getSelectedEntity ().get_InstanceID () );
+			Sharednet.set_key_InstanceID ("");
+		Sharednet.set_ParentID ( adapter.getSelectedEntity ().get_key_InstanceID() );
 		Sharednet = (Linux_DHCPSharednet) adapter.getFcoHelper ().create ( Sharednet, adapter.getCimClient () );
 		
 		
 		if(DhcpCimAdapter.isDummyMode ()){
-		Linux_DHCPSharednetsForEntity assoc = new Linux_DHCPSharednetsForEntity();
+		Linux_DHCPSharednetsForEntity assoc = new Linux_DHCPSharednetsForEntity(adapter.getCimClient (),adapter.getNamespace ());
 		
-		assoc.set_Linux_DHCPSharednet ( Sharednet );
-		assoc.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+		assoc.set_PartComponent_Linux_DHCPSharednet ( Sharednet );
+		assoc.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
 		
 		assoc = (Linux_DHCPSharednetsForEntity) adapter.getFcoHelper ().create ( assoc, adapter.getCimClient () );
 		}

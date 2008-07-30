@@ -24,15 +24,14 @@
 
 package org.sblim.wbemsmt.dhcp.bl.container.edit.cli;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.sblim.wbemsmt.bl.adapter.*;
-import org.sblim.wbemsmt.exception.*;
-
-
-
+import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
+import org.sblim.wbemsmt.bl.adapter.BaseDataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 
 public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implements org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListContainer {
@@ -40,7 +39,7 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 				private java.util.List icItems = new java.util.ArrayList();
 	
 		
-	public DHCPGlobalOptionsListContainerImpl(AbstractBaseCimAdapter adapter) throws InitContainerException {
+	public DHCPGlobalOptionsListContainerImpl(AbstractBaseCimAdapter adapter) throws WbemsmtException {
 		super();
 		setAdapter(adapter);
     			adapter.initContainer(this);
@@ -121,7 +120,7 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 	
 	}
 	
-	public void copyFrom(DataContainer sourceContainer)
+	public void copyFrom(DataContainer sourceContainer) throws WbemsmtException
 	{
 		DHCPGlobalOptionsListContainerImpl source = (DHCPGlobalOptionsListContainerImpl)sourceContainer;
 	

@@ -22,14 +22,12 @@
 package org.sblim.wbemsmt.dhcp.bl.validator;
 
 
-import org.sblim.wbemsmt.bl.MessageNumber;
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.bl.adapter.Message;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
-import org.sblim.wbemsmt.exception.ValidationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 import org.sblim.wbemsmt.tools.validator.Validator;
+import org.sblim.wbemsmt.bl.messages.*;
 
 public class DhcpValidator extends Validator {
 
@@ -49,7 +47,7 @@ public class DhcpValidator extends Validator {
 		return new LabeledBaseInputComponentIf[] { field };
 	}
 
-	public void validateElement ( MessageList result ) throws ValidationException {
+	public void validateElement ( MessageList result ) throws WbemsmtException {
 
 		String value = (String) field.getConvertedControlValue ();
 

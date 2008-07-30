@@ -24,16 +24,14 @@
 
 package org.sblim.wbemsmt.dhcp.bl.container.edit.jsf;
 
-import org.sblim.wbemsmt.exception.*;
-import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
-
-import java.util.*;
-
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
+import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
 public class DHCPGlobalOptionsListItemContainerImpl extends org.sblim.wbemsmt.tools.jsf.EditBasePanel implements org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListItemContainer {
 
@@ -45,7 +43,7 @@ public class DHCPGlobalOptionsListItemContainerImpl extends org.sblim.wbemsmt.to
     	
 		
 	
-	public DHCPGlobalOptionsListItemContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix) throws InitContainerException  {
+	public DHCPGlobalOptionsListItemContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix) throws WbemsmtException  {
 
 			
 				super(adapter,bindingPrefix, "DHCPGlobalOptionsListItemContainer.caption",false);
@@ -212,22 +210,22 @@ public class DHCPGlobalOptionsListItemContainerImpl extends org.sblim.wbemsmt.to
 		return new String[]{"messages","messagesDhcp"};
 	}
 
-	public void countAndCreateChildren() throws InitContainerException {
+	public void countAndCreateChildren() throws WbemsmtException {
 	
     		}
 
 
 	/**
 	 * count and create childrens
-	 * @throws UpdateControlsException
+	 * @throws WbemsmtException
 	 */
-	public void updateControls() throws UpdateControlsException {
+	public void updateControls() throws WbemsmtException {
 		try {
 			countAndCreateChildren();
 			adapter.updateControls(this);
 		
-					} catch (InitContainerException e) {
-			throw new UpdateControlsException(e);
+					} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),e);
 		}
 	}
 

@@ -30,7 +30,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetSummaryContainer;
-import org.sblim.wbemsmt.exception.InitContainerException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterInitContainerDelegatee implements DhcpCimAdapterInitContainerIf {
 
@@ -40,140 +40,140 @@ public class DhcpCimAdapterInitContainerDelegatee implements DhcpCimAdapterInitC
 		this.adapter = adapter;
 	}
 
-	public void initContainerImpl ( DHCPGlobalOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPGlobalParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPGroupOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPGroupParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPGroupsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGroupsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPHostOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPHostOptionsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPHostParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPHostParamsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPHostsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPHostsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPOptionsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPParamsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPPoolOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPPoolOptionsContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( DHCPPoolParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPPoolParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPPoolsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPPoolsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSharednerOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSharednerOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSharednetParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSharednetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSharednetsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSharednetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSubnetOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSubnetParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSubnetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPSubnetsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPSubnetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DhcpServiceConfContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewGroupContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewGroupContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewHostContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewHostContainer container ) throws WbemsmtException {
 
 	}
 
-	public void initContainerImpl ( NewHostSummaryContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewHostSummaryContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewPoolContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewPoolContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewPoolSummaryContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewPoolSummaryContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewSharednetContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewSharednetContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewSharednetSummaryContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewSharednetSummaryContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewSubnetContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewSubnetContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( NewSubnetSummaryContainer container ) throws InitContainerException {
+	public void initContainerImpl ( NewSubnetSummaryContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( WelcomeContainer container ) throws InitContainerException {
+	public void initContainerImpl ( WelcomeContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}

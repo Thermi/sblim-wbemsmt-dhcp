@@ -22,8 +22,12 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
-import org.sblim.wbem.cim.CIMObjectPath;
+import javax.cim.CIMObjectPath;
+import javax.cim.CIMValuedElement;
+import javax.wbem.WBEMException;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
@@ -39,7 +43,8 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednetHelper;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnetHelper;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.cli.CimCommandValues;
 import org.sblim.wbemsmt.tools.cli.CliUtil;
 import org.sblim.wbemsmt.tools.cli.OptionDefinition;
@@ -58,18 +63,23 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 	}
 
 	public void load ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, CimCommandValues cmd )
-			throws ObjectNotFoundException {
+			throws WbemsmtException {
 		this.cmd = cmd;
 		if (getEntityType ().equals (Linux_DHCPService.CIM_CLASS_NAME )) {
 			String serviceName = CliUtil.getOption ( cmd, getServiceNameKey () );
 			selectService ( bundle, adapter, serviceName );
 			return;
 		}
-		selectEntity ( bundle, adapter, getEntityType () );
+		try {
+			selectEntity ( bundle, adapter, getEntityType () );
+		} catch (WBEMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	protected void selectEntity ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, String entityName )
-			throws ObjectNotFoundException {
+			throws WbemsmtException, WBEMException {
 		try {
 			CIMObjectPath pathEntity = getPathOfEntity ( adapter, entityName );
 			if (pathEntity != null) {
@@ -78,22 +88,22 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 				return;
 			} else {
 				if (CliUtil.getOption ( cmd.getCommandLine (), getServiceNameKey () ) == null)
-					throw new ObjectNotFoundException ( bundle.getString ( "Entity.not.found",
+					throw new WbemsmtException ( null, bundle.getString ( "Entity.not.found",
 							new Object[] { entityName } ) );
 				if (CliUtil.getOption ( cmd.getCommandLine (), getServiceNameKey () ).equals ( "True" ))
 					return;
 			}
-		} catch (ObjectNotFoundException e) {
-			throw new ObjectNotFoundException ( bundle.getString ( "Entity.not.found", new Object[] { entityName } ), e );
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException ((ErrorCode)e.getErrorCode (), bundle.getString ( "Entity.not.found", new Object[] { entityName } ), e );
 		}
 
 	}
 
-	private CIMObjectPath getPathOfEntity ( AbstractBaseCimAdapter adapter, String entityName ) {
+	private CIMObjectPath getPathOfEntity ( AbstractBaseCimAdapter adapter, String entityName ) throws WbemsmtException {
 
 		Reader in = cmd.getIn ();
 		PrintWriter out = cmd.getOut ();
-		ArrayList list = null;
+		List list = null;
 		CIMObjectPath paths[] = null;
 		String msg= new String("Listing Entities ...");
 		int option = 0;
@@ -105,19 +115,19 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 		}
 
 		if (entityName.equals ( HOST ))
-			list = Linux_DHCPHostHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+			list = Linux_DHCPHostHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 
 		if (entityName.equals ( POOL ))
-			list = Linux_DHCPPoolHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+			list = Linux_DHCPPoolHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 
 		if (entityName.equals ( SUBNET ))
-			list = Linux_DHCPSubnetHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+			list = Linux_DHCPSubnetHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 
 		if (entityName.equals ( SHAREDNET ))
-			list = Linux_DHCPSharednetHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+			list = Linux_DHCPSharednetHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 
 		if (entityName.equals ( GROUP ))
-			list = Linux_DHCPGroupHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+			list = Linux_DHCPGroupHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 
 		int i = 0;
 		paths = new CIMObjectPath[list.size ()];
@@ -196,7 +206,7 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 	protected abstract String getEntityType ();
 
 	protected void selectService ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, String serviceName )
-			throws ObjectNotFoundException {
+			throws WbemsmtException {
 		try {
 			CIMObjectPath pathService = getPathOfService ( adapter, serviceName );
 			if (pathService != null) {
@@ -204,22 +214,22 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 				adapter.select ( key );
 				return;
 			} else {
-				throw new ObjectNotFoundException ( bundle.getString ( "service.not.found",
+				throw new WbemsmtException ( null, bundle.getString ( "service.not.found",
 						new Object[] { serviceName } ) );
 			}
-		} catch (ObjectNotFoundException e) {
-			throw new ObjectNotFoundException ( bundle.getString ( "service.not.found", new Object[] { serviceName } ),
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException ( (ErrorCode)e.getErrorCode (),bundle.getString ( "service.not.found", new Object[] { serviceName } ),
 					e );
 		}
 	}
 
-	protected CIMObjectPath getPathOfService ( AbstractBaseCimAdapter adapter, String serviceName ) {
-		ArrayList list = Linux_DHCPServiceHelper.enumerateInstanceNames ( adapter.getCimClient (), false );
+	protected CIMObjectPath getPathOfService ( AbstractBaseCimAdapter adapter, String serviceName ) throws WbemsmtException {
+		List list = Linux_DHCPServiceHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 		CIMObjectPath pathService = null;
 		for (Iterator iter = list.iterator (); iter.hasNext ();) {
 			Object o = iter.next ();
 			CIMObjectPath path = (CIMObjectPath) o;
-			if (path.getKey ( "Name" ).getValue ().getValue ().equals ( serviceName )) {
+			if (((CIMValuedElement) path.getKey ( "Name" ).getValue ()).getValue ().equals ( serviceName )) {
 				pathService = path;
 			}
 		}

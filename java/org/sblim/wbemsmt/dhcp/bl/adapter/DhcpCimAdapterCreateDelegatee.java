@@ -32,7 +32,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewPoolSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetSummaryContainer;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterCreateDelegatee implements DhcpCimAdapterCreateIf {
 
@@ -43,58 +43,58 @@ public class DhcpCimAdapterCreateDelegatee implements DhcpCimAdapterCreateIf {
 		this.adapter = adapter;
 	}
 
-	public void createImpl ( DHCPGroupsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPGroupsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPHostsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPHostsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPOptionsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPParamsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPPoolsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPPoolsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPSharednetsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPSharednetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( DHCPSubnetsContainer container ) throws ObjectSaveException {
+	public void createImpl ( DHCPSubnetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void createImpl ( NewGroupContainer container ) throws ObjectSaveException {
+	public void createImpl ( NewGroupContainer container ) throws WbemsmtException {
 		adapter.getNewgroupwizard ().create ( container );
 	}
 
-	public void createImpl ( NewHostSummaryContainer container ) throws ObjectSaveException {
+	public void createImpl ( NewHostSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewhostwizard ().create ( container );
 	}
 
-	public void createImpl ( NewPoolSummaryContainer container ) throws ObjectSaveException {
+	public void createImpl ( NewPoolSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewpoolwizard ().create ( container );
 	}
 
-	public void createImpl ( NewSharednetSummaryContainer container ) throws ObjectSaveException {
+	public void createImpl ( NewSharednetSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewsharednetwizard ().create ( container );
 	}
 
-	public void createImpl ( NewSubnetSummaryContainer container ) throws ObjectSaveException {
+	public void createImpl ( NewSubnetSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewsubnetwizard ().create ( container );
 	}
 

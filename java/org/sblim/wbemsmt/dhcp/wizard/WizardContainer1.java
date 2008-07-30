@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.wizard.WizardStepList;
 import org.sblim.wbemsmt.tools.wizard.container.AbstractWizardContainerBase;
 import org.sblim.wbemsmt.tools.wizard.container.IWizardContainer;
-import org.sblim.wbemsmt.exception.WbemSmtException;
-import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 	
 	public class WizardContainer1 extends AbstractWizardContainerBase implements IWizardContainer {
 
@@ -50,7 +50,7 @@ import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 		stepList = new WizardStepList();
 	}
 	
-	public void initWizardContainer() throws WbemSmtException {
+	public void initWizardContainer() throws WbemsmtException {
 		logger.fine("initWizardContainer");
 		
     	    		hmPages.put(WIZARD_PANEL_NEWGROUP,panels.getNewGroup()); 
@@ -101,14 +101,14 @@ import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 		
 	}
 
-	public Object getPage(String actualPanelName) throws WbemSmtException {
+	public Object getPage(String actualPanelName) throws WbemsmtException {
 
     				if (WIZARD_PANEL_NEWGROUP.equals(actualPanelName))
 			{
 				return panels.getNewGroup();
 			}
         		
-		throw new WbemSmtException("For WizardPage " + actualPanelName + " no Implementation was found");
+		throw new WbemsmtException(null,"For WizardPage " + actualPanelName + " no Implementation was found");
 	}
 	
 }

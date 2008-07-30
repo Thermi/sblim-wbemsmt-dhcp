@@ -27,7 +27,7 @@ import java.util.Properties;
 
 import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEvent;
 import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEventListener;
-import org.sblim.wbemsmt.exception.WbemSmtException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class EditAppContainerListener implements TaskLauncherTreeNodeEventListener {
 
@@ -46,7 +46,7 @@ public class EditAppContainerListener implements TaskLauncherTreeNodeEventListen
 		return false;
 	}
 
-	public String processEvent ( TaskLauncherTreeNodeEvent event ) throws WbemSmtException {
+	public String processEvent ( TaskLauncherTreeNodeEvent event ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,6 +1,6 @@
 package org.sblim.wbemsmt.dhcp.bl.adapter;
 
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageList;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupOptionsContainer;
@@ -21,7 +21,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DhcpServiceConfContainer;
-import org.sblim.wbemsmt.exception.ObjectRevertException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterRevertDelegatee implements DhcpCimAdapterRevertIf {
 
@@ -31,102 +31,102 @@ public class DhcpCimAdapterRevertDelegatee implements DhcpCimAdapterRevertIf {
 		this.adapter = adapter;
 	}
 
-	public MessageList revertImpl ( DHCPGlobalOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGlobalParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGroupOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGroupParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGroupsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGroupsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPHostOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPHostOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPHostParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPHostParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPHostsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPHostsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPPoolOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPPoolOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPPoolParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPPoolParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPPoolsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPPoolsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSharednerOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSharednerOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSharednetParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSharednetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSharednetsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSharednetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSubnetOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSubnetParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSubnetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSubnetsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSubnetsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DhcpServiceConfContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}

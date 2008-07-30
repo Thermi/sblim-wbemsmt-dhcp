@@ -17,9 +17,12 @@
 
 package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 
+import javax.wbem.WBEMException;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.cli.CliDataLoader;
 import org.sblim.wbemsmt.tools.cli.CliUtil;
 import org.sblim.wbemsmt.tools.cli.OptionDefinition;
@@ -27,11 +30,14 @@ import org.sblim.wbemsmt.tools.resources.WbemSmtResourceBundle;
 
 public class CreateSharednetCommandLoader extends DhcpServiceLoader implements CliDataLoader {
 
-	public void loadTracingObject ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, NewSharednetSummaryContainer container ) throws ObjectNotFoundException {
+	public void loadTracingObject ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, NewSharednetSummaryContainer container ) throws WbemsmtException {
 		try {
 			selectEntity ( adapter.getBundle (), adapter, getEntityType ());
-		} catch (ObjectNotFoundException e) {
-			throw new ObjectNotFoundException(bundle.getString("Entity.not.found",new Object[]{getEntityType ()}),e);
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),bundle.getString("Entity.not.found",new Object[]{getEntityType ()}),e);
+		} catch (WBEMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

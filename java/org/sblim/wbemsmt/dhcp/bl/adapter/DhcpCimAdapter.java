@@ -29,15 +29,16 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.sblim.wbem.cim.CIMClass;
-import org.sblim.wbem.cim.CIMDataType;
-import org.sblim.wbem.cim.CIMInstance;
-import org.sblim.wbem.cim.CIMObjectPath;
-import org.sblim.wbem.cim.CIMValue;
-import org.sblim.wbem.cim.UnsignedInt16;
-import org.sblim.wbem.client.CIMClient;
-import org.sblim.wbem.client.indications.CIMListener;
-import org.sblim.wbemsmt.bl.MessageNumber;
+import javax.cim.CIMClass;
+import javax.cim.CIMDataType;
+import javax.cim.CIMInstance;
+import javax.cim.CIMObjectPath;
+import javax.cim.CIMProperty;
+import javax.cim.CIMValuedElement;
+import javax.cim.UnsignedInteger16;
+import javax.wbem.WBEMException;
+import javax.wbem.client.WBEMClient;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.adapter.CountDelegatee;
@@ -47,16 +48,13 @@ import org.sblim.wbemsmt.bl.adapter.DeleteDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InitContainerDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InitWizardDelegatee;
 import org.sblim.wbemsmt.bl.adapter.InstallValidatorsDelegatee;
-import org.sblim.wbemsmt.bl.adapter.Message;
-import org.sblim.wbemsmt.bl.adapter.MessageInputHandler;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
-import org.sblim.wbemsmt.bl.adapter.MessageUtil;
 import org.sblim.wbemsmt.bl.adapter.RevertDelegatee;
 import org.sblim.wbemsmt.bl.adapter.SaveDelegatee;
 import org.sblim.wbemsmt.bl.adapter.SelectionHierarchy;
 import org.sblim.wbemsmt.bl.adapter.UpdateControlsDelegatee;
 import org.sblim.wbemsmt.bl.adapter.UpdateModelDelegatee;
-import org.sblim.wbemsmt.bl.fco.FcoHelperIf;
+import org.sblim.wbemsmt.bl.fco.FcoHelper;
+import org.sblim.wbemsmt.bl.messages.*;
 import org.sblim.wbemsmt.bl.tree.ICIMInstanceNode;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
 import org.sblim.wbemsmt.dhcp.bl.DhcpErrorCodes;
@@ -130,20 +128,8 @@ import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewHostWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewPoolWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSharednetWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSubnetWizard;
-import org.sblim.wbemsmt.exception.CountException;
-import org.sblim.wbemsmt.exception.IndicationPreparationException;
-import org.sblim.wbemsmt.exception.InitContainerException;
-import org.sblim.wbemsmt.exception.InitWizardException;
-import org.sblim.wbemsmt.exception.LoginException;
-import org.sblim.wbemsmt.exception.ModelLoadException;
-import org.sblim.wbemsmt.exception.ModelUpdateException;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
-import org.sblim.wbemsmt.exception.ObjectDeletionException;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
-import org.sblim.wbemsmt.exception.ObjectRevertException;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
-import org.sblim.wbemsmt.exception.UpdateControlsException;
-import org.sblim.wbemsmt.exception.WbemSmtException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_Collection;
 import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilter;
 import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilterHelper;
@@ -154,7 +140,6 @@ import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationCIMXML;
 import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationHelper;
 import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
 import org.sblim.wbemsmt.schema.cim29.CIM_RegisteredProfile;
-import org.sblim.wbemsmt.schema.cim29.tools.FcoHelper;
 import org.sblim.wbemsmt.session.WbemsmtSession;
 import org.sblim.wbemsmt.tools.resources.ResourceBundleManager;
 import org.sblim.wbemsmt.cim.indication.*;
@@ -218,7 +203,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	
 	private Linux_DHCPEntity selectedEntity = null;
 	
-	private CIMClient slpNamespaceCimClient = null;
+	private WBEMClient slpNamespaceCimClient = null;
 	private CIM_ListenerDestinationCIMXML dest = null;
 	
 	private boolean indcOccurred = false;
@@ -315,7 +300,6 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	}
 
 	public DhcpCimAdapter ( Locale locale ) {
-		super ( locale );
 		selectionHierarchy = new DhcpSelectionHeirarchy ( this );
 		init ( ResourceBundleManager.getResourceBundle ( BUNDLES, locale ), selectionHierarchy, new FcoHelper () );
 
@@ -349,14 +333,14 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		IndicationDestinationManager indcmanager = IndicationDestinationManager.getCurrent ();
 		try {
 			indcDest = indcmanager.getIndicationDestination ( "preset1" );
-			HttpServerConnectionManager.getInstance ().addListener ( indcListener,  indcDest.getPort ());
-			indcPort = indcDest.getPort ();
-		} catch (IndicationPreparationException e) {
+			HttpServerConnectionManager.getInstance ().addListener ( indcListener,  indcDest);
+			indcPort = indcDest.getPort ().intValue ();
+		} catch (WbemsmtException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			try {
-				throw new WbemSmtException("Cannot add CIMListener",e);
-			} catch (WbemSmtException e1) {
+				throw new WbemsmtException(null,"Cannot add CIMListener",e);
+			} catch (WbemsmtException e1) {
 				e1.printStackTrace();
 			}
 			e.printStackTrace();
@@ -368,7 +352,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		return BUNDLES;
 	}
 
-	public void load ( CIMClient cimClient ) throws ModelLoadException {
+	public void load ( WBEMClient cimClient ) throws WbemsmtException {
 		
 			if (loaded == true)
 				return;
@@ -391,7 +375,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		
 	}
 
-	public void load ( ITaskLauncherTreeNode rootNode ) throws ModelLoadException {
+	public void load ( ITaskLauncherTreeNode rootNode ) throws WbemsmtException {
 		if (loaded == true)
 			return;
 		this.cimClient = rootNode.getCimClient ();
@@ -408,10 +392,13 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 		try {
 //			IndicationDestination indcDest = indcmanager.getIndicationDestination ( "preset1" );
-			ourDest = getDestination ( this.getFcoHelper (), getCimClient(), null, indcDest );
+			ourDest = getDestination ( getCimClient(), null, indcDest );
 			createSubscriptions ( ourDest);
 			setSubscribed ( true );
-		} catch (WbemSmtException e) {
+		} catch (WbemsmtException e) {
+			e.printStackTrace();
+		} catch (WBEMException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -442,8 +429,8 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 //
 //		if (regProfilesList.isEmpty ())
 //			try {
-//				throw new WbemSmtException("No Registered Profile found for the Service.");
-//			} catch (WbemSmtException e) {
+//				throw new WbemsmtException("No Registered Profile found for the Service.");
+//			} catch (WbemsmtException e) {
 //				e.printStackTrace();
 //			}
 //		
@@ -453,17 +440,17 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 //		return regProfile;
 //	}
 
-	public void loadInitial ( CIMClient cimClient ) throws ModelLoadException {
+	public void loadInitial ( WBEMClient cimClient ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void reLoad ( CIMClient cimClient ) throws ModelLoadException {
+	public void reLoad ( WBEMClient cimClient ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void reLoad ( ITaskLauncherTreeNode rootNode ) throws ModelLoadException {
+	public void reLoad ( ITaskLauncherTreeNode rootNode ) throws WbemsmtException {
 		loaded = false;
 		load ( rootNode );
 
@@ -522,18 +509,17 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 				ICIMInstanceNode serviceNode = (ICIMInstanceNode) iterServiceNodes.next ();
 
 				// set the service object
-				Linux_DHCPService aFco = new Linux_DHCPService ( serviceNode.getCimInstance ().getObjectPath (),
-						serviceNode.getCimInstance () );
+				Linux_DHCPService aFco = new Linux_DHCPService ( serviceNode.getCimInstance () );
 
 				DhcpServiceObject dhcpServiceObject = new DhcpServiceObject ( aFco, this );
 
 				setDhcpServiceObj ( dhcpServiceObject);
 		}
 		}	
-		} catch (WbemSmtException e) {
+		} catch (WbemsmtException e) {
 			try {
-				throw new ModelLoadException ( e );
-			} catch (ModelLoadException e1) {
+				throw new WbemsmtException ( (ErrorCode)e.getErrorCode (),e );
+			} catch (WbemsmtException e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -551,18 +537,20 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	/**
 	 * @return the dhcpServiceConfigurationObj
+	 * @throws WbemsmtException 
 	 */
-	public DhcpServiceConfigurationObject getDhcpServiceConfigurationObj (){
+	public DhcpServiceConfigurationObject getDhcpServiceConfigurationObj () throws WbemsmtException{
 
 		DhcpServiceConfigurationObject serviceconfobj = null;
 		
 		if(DhcpServiceConfigurationObj == null){
-				ArrayList serviceconfArrayList = getDhcpServiceObj ().getFco ()
-				.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices (
-						cimClient, false, false, null );
+				List serviceconfArrayList = getDhcpServiceObj ().getFco ()
+				.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames (
+						cimClient);
 	
 		for (Iterator iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
-			Linux_DHCPServiceConfiguration settingFco = (Linux_DHCPServiceConfiguration) iter.next ();
+			CIMObjectPath obj = (CIMObjectPath) iter.next ();
+			Linux_DHCPServiceConfiguration settingFco = new Linux_DHCPServiceConfiguration(new CIMInstance(obj,null));
 			serviceconfobj = new DhcpServiceConfigurationObject ( settingFco, this );
 		}
 
@@ -580,7 +568,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		DhcpServiceConfigurationObj = dhcpServiceConfigurationObj;
 	}
 
-	public CimObjectKey getKeyByTreeNode ( ITaskLauncherTreeNode treeNode ) throws ObjectNotFoundException {
+	public CimObjectKey getKeyByTreeNode ( ITaskLauncherTreeNode treeNode ) throws WbemsmtException {
 
 		List nodes = new ArrayList();
 		ITaskLauncherTreeNode Node = treeNode;
@@ -629,32 +617,32 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		return key; 
 	}
 
-	public void selectByKey ( CimObjectKey key ) throws ObjectNotFoundException {
+	public void selectByKey ( CimObjectKey key ) throws WbemsmtException, WBEMException {
 	
 		String fconame = key.getObjectPath ().getObjectName ();
 
 		if(fconame.equals (Linux_DHCPHost.CIM_CLASS_NAME)){
-			Linux_DHCPHost fco = new Linux_DHCPHost(key.getObjectPath (), getCimClient ().getInstance ( key.getObjectPath () ));
+			Linux_DHCPHost fco = new Linux_DHCPHost( getCimClient ().getInstance ( key.getObjectPath (),false,false,null ));
 			selectionHierarchy.addHost ( new DhcpHostObject(fco,this) );
 			setSelectedEntity ( fco );
 		}
 		else if(fconame.equals (Linux_DHCPGroup.CIM_CLASS_NAME)){
-			Linux_DHCPGroup fco = new Linux_DHCPGroup(key.getObjectPath (), getCimClient ().getInstance ( key.getObjectPath () ));
+			Linux_DHCPGroup fco = new Linux_DHCPGroup( getCimClient ().getInstance ( key.getObjectPath () ,false,false,null));
 			selectionHierarchy.addGroup ( new DhcpGroupObject(fco,this) );
 			setSelectedEntity ( fco );
 		}
 		else if(fconame.equals (Linux_DHCPSubnet.CIM_CLASS_NAME)){
-			Linux_DHCPSubnet fco = new Linux_DHCPSubnet(key.getObjectPath (), getCimClient ().getInstance ( key.getObjectPath () ));
+			Linux_DHCPSubnet fco = new Linux_DHCPSubnet(getCimClient ().getInstance ( key.getObjectPath (),false,false,null ));
 			selectionHierarchy.addSubnet ( new DhcpSubnetObject(fco,this) );
 			setSelectedEntity ( fco );
 		}
 		else if(fconame.equals (Linux_DHCPSharednet.CIM_CLASS_NAME)){
-			Linux_DHCPSharednet fco = new Linux_DHCPSharednet(key.getObjectPath (), getCimClient ().getInstance ( key.getObjectPath () ));
+			Linux_DHCPSharednet fco = new Linux_DHCPSharednet(getCimClient ().getInstance ( key.getObjectPath () ,false,false,null));
 			selectionHierarchy.addSharednet ( new DhcpSharednetObject(fco,this) );
 			setSelectedEntity ( fco );
 		}
 		else if(fconame.equals (Linux_DHCPPool.CIM_CLASS_NAME)){
-			Linux_DHCPPool fco = new Linux_DHCPPool(key.getObjectPath (), getCimClient ().getInstance ( key.getObjectPath () ));
+			Linux_DHCPPool fco = new Linux_DHCPPool(getCimClient ().getInstance ( key.getObjectPath () ,false,false,null));
 			selectionHierarchy.addPool ( new DhcpPoolObject(fco,this) );
 			setSelectedEntity ( fco );
 		}
@@ -665,11 +653,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 			selectByKey ( key.getNextKey () );
 		else
 		{
-			throw new ObjectNotFoundException("Cannot select with key " + key.toString());
+			throw new WbemsmtException(new ErrorCode(null,100),"Cannot select with key " + key.toString());
 		}
 	}
 	
-	public boolean select_0_Linux_DHCPService ( CimObjectKey key ) {
+	public boolean select_0_Linux_DHCPService ( CimObjectKey key ) throws WbemsmtException {
 
 		DhcpServiceConfigurationObject serviceconfobj = null;
 		DhcpServiceObject service = null;
@@ -715,37 +703,37 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		return true;
 	}
 
-	public int countImpl_DHCPGlobalOptionsListContainer () throws CountException {
+	public int countImpl_DHCPGlobalOptionsListContainer () throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void deleteImpl ( Linux_DHCPHost fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPHost fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteImpl ( Linux_DHCPOptions fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPOptions fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteImpl ( Linux_DHCPParams fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPParams fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteImpl ( Linux_DHCPPool fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPPool fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteImpl ( Linux_DHCPSharednet fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPSharednet fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void deleteImpl ( Linux_DHCPSubnet fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPSubnet fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
@@ -760,28 +748,28 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container, Linux_DHCPOptions fco )
-			throws UpdateControlsException {
+			throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPGlobalOptionsListContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalOptionsListContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPGlobalOptionsListItemContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalOptionsListItemContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
@@ -801,7 +789,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		DummyMode = dummyMode;
 	}
 
-	public int countImpl_DHCPGlobalOptionsListItemContainer () throws CountException {
+	public int countImpl_DHCPGlobalOptionsListItemContainer () throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -816,65 +804,65 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	}
 
-	public MessageList revertImpl ( DHCPGlobalOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGlobalParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPGlobalOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPGlobalParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateControlsImpl ( DHCPGlobalParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
 	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container, Linux_DHCPOptions fco )
-			throws UpdateControlsException {
+			throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPGlobalOptionsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void initContainerImpl ( DHCPGlobalParamsContainer container ) throws InitContainerException {
+	public void initContainerImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
 	/**
 	 * @return the dhcpglobalopslist
+	 * @throws WbemsmtException 
 	 */
-	public DhcpOptionsList getDhcpglobalopslist () {
+	public DhcpOptionsList getDhcpglobalopslist () throws WbemsmtException {
 		
 		if(dhcpglobalopslist == null){
 			
 			DhcpOptionsList globalopslist = null;
 			Linux_DHCPOptions globalopsFco = null;
 			
-				ArrayList globalOpsArrayList = getDhcpEntityObj ().getFco ()
-						.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys ( cimClient, false, false,
-								null );
+				List globalOpsArrayList = getDhcpEntityObj ().getFco ()
+						.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys ( cimClient);
 				if (globalOpsArrayList.size () > 0) {
 					globalopslist = new DhcpOptionsList ();
 					for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
@@ -903,16 +891,17 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	/**
 	 * @return the dhcpglobalparamslist
+	 * @throws WbemsmtException 
 	 */
-	public DhcpParamsList getDhcpglobalparamslist ()  {
+	public DhcpParamsList getDhcpglobalparamslist () throws WbemsmtException  {
 		
 		if(dhcpglobalparamslist == null){
 			
 			DhcpParamsList globalparamslist = null;
 			Linux_DHCPParams globalparamsFco = null;
 
-			ArrayList globalParamsArrayList = getDhcpEntityObj ().getFco ()
-					.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys ( cimClient, false, false, null );
+			List globalParamsArrayList = getDhcpEntityObj ().getFco ()
+					.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys ( cimClient);
 			if (globalParamsArrayList.size () > 0) {
 				globalparamslist = new DhcpParamsList ();
 				for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
@@ -936,14 +925,15 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	/**
 	 * @return the dhcpEntityObj
+	 * @throws WbemsmtException 
 	 */
-	public DhcpEntityObject getDhcpEntityObj ()  {
+	public DhcpEntityObject getDhcpEntityObj () throws WbemsmtException  {
 		
 		Linux_DHCPGlobal globalFco = null;
 		
 		if(DhcpEntityObj == null){
-		ArrayList globalEntityArrayList = getDhcpServiceObj ().getFco ().getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
-				cimClient, false, false, null );
+		List globalEntityArrayList = getDhcpServiceObj ().getFco ().getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
+				cimClient);
 		for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
 			globalFco = (Linux_DHCPGlobal) iter.next ();
 		}
@@ -1032,62 +1022,62 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	}
 
 
-	public MessageList revertImpl ( DHCPGroupOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPGroupParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPHostOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPHostOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPHostParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPHostParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPPoolOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPPoolOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPPoolParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPPoolParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSharednerOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSharednerOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSharednetParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSharednetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSubnetOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList revertImpl ( DHCPSubnetParamsContainer container ) throws ObjectRevertException {
+	public MessageList revertImpl ( DHCPSubnetParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPGroupOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPGroupParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -1140,7 +1130,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		this.newsubnetwizard = newsubnetwizard;
 	}
 
-	public void deleteImpl ( Linux_DHCPGroup fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPGroup fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 	}
 	
@@ -1148,7 +1138,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		
 	}
 
-	public void updateModelImpl ( DhcpServiceConfContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 		getDhcpServiceConfigurationObj ().updateModel ( container );
 	}
 
@@ -1161,7 +1151,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	 * @return
 	 * @throws WbemsmtException
 	 */
-	public CIM_ListenerDestinationCIMXML getDestination(FcoHelperIf fcoHelper, CIMClient cimClient, String interOpNamespace, IndicationDestination indicationDestination) throws WbemSmtException {
+	public CIM_ListenerDestinationCIMXML getDestination( WBEMClient cimClient, String interOpNamespace, IndicationDestination indicationDestination) throws WbemsmtException {
 		//create the subscriptions
 		
 		if(dest != null)
@@ -1169,25 +1159,26 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		
 		CIM_ListenerDestinationCIMXML ourDestination = null;
         
-        List destinations = CIM_ListenerDestinationHelper.enumerateInstances(cimClient,true);
+        List destinations = CIM_ListenerDestinationHelper.enumerateInstances(cimClient,getNamespace (),true);
         for (Iterator iterator = destinations.iterator(); iterator.hasNext() && ourDestination == null;) {
-        	CIM_ListenerDestination destination = (CIM_ListenerDestination) iterator.next();
+        	CIM_ListenerDestinationCIMXML destination = new CIM_ListenerDestinationCIMXML(((CIM_ListenerDestination) iterator.next()).getCimInstance ());
         	if (destination instanceof CIM_ListenerDestinationCIMXML) {
         		CIM_ListenerDestinationCIMXML xmlDestination = (CIM_ListenerDestinationCIMXML) destination;
         		if (xmlDestination.get_Destination().equals(indicationDestination.getCalculatedUrlString()))
         		{
         			dest =  xmlDestination;
+        			return dest;
         		}
         		
         	}
         }
         if (dest == null)
         {
-        	dest = new CIM_ListenerDestinationCIMXML();
-        	dest.set_Name("DHCP Indication Handler for " + indicationDestination.getCalculatedUrlString () );
-        	dest.set_PersistenceType(new UnsignedInt16(CIM_ListenerDestinationCIMXML.PERSISTENCETYPE_TRANSIENT));
+        	dest = new CIM_ListenerDestinationCIMXML(cimClient,getNamespace ());
+        	dest.set_key_Name ( "DHCP Indication Handler for " + indicationDestination.getCalculatedUrlString () );
+        	dest.set_PersistenceType(new UnsignedInteger16(2));
         	dest.set_Destination(indicationDestination.getCalculatedUrlString());
-        	dest = (CIM_ListenerDestinationCIMXML) fcoHelper.create(dest, cimClient);
+        	dest = (CIM_ListenerDestinationCIMXML) this.getFcoHelper ().create(dest, cimClient);
         }
         
         return dest;
@@ -1199,9 +1190,10 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	 * @param ourDestination 
 	 * @param profile the registered profile to which the indications belonging
 	 * @throws WbemsmtException
+	 * @throws WBEMException 
 	 */
 	protected void createSubscriptions ( CIM_ListenerDestinationCIMXML ourDestination)
-			throws WbemSmtException {
+			throws WbemsmtException, WBEMException {
 
 		if(this.isSubscribed ())
 			return;
@@ -1210,25 +1202,26 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		
 		CIM_IndicationFilter filter = null;
 		CIM_IndicationSubscription sub = null;
-		CIMValue host,filt = null;
+		String host;
+		String filt = null;
 
 
-		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), true );
+		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
 		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
 			filter = (CIM_IndicationFilter) iterator.next ();
-			if(filter.get_Name ().equals("HostIndication") || filter.get_Name ().equals("SubnetIndication") || filter.get_Name ().equals("SharednetIndication") || filter.get_Name ().equals("GroupIndication") || filter.get_Name ().equals("PoolIndication") || filter.get_Name ().equals("OptionsIndication") || filter.get_Name ().equals("ParamsIndication")){
+			if(filter.get_key_Name ().equals("HostIndication") || filter.get_key_Name ().equals("SubnetIndication") || filter.get_key_Name ().equals("SharednetIndication") || filter.get_key_Name ().equals("GroupIndication") || filter.get_key_Name ().equals("PoolIndication") || filter.get_key_Name ().equals("OptionsIndication") || filter.get_key_Name ().equals("ParamsIndication")){
 
-				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),true);
+				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
 				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
 					sub = (CIM_IndicationSubscription) iterator1.next ();
-					if(sub.get_CIM_ListenerDestination () != null && sub.get_CIM_IndicationFilter () != null){
-						host = sub.get_CIM_ListenerDestination ().getKey("Name").getValue ();
-						filt = sub.get_CIM_IndicationFilter ().getKey("Name").getValue ();
+					if(sub.get_Handler_CIM_ListenerDestination (getCimClient()) != null && sub.get_Filter_CIM_IndicationFilter (getCimClient()) != null){
+						host = sub.get_Handler_CIM_ListenerDestination (getCimClient()).get_key_Name ();
+						filt = sub.get_Filter_CIM_IndicationFilter (getCimClient()).get_key_Name();
 						}
 					else
 						continue;
 					
-					if(((String)host.getValue()).equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && ((String)filt.getValue ()).equalsIgnoreCase ( filter.get_Name () )){
+					if(host.equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && (filt.equalsIgnoreCase ( filter.get_key_Name () ))){
 							subscribed = true;
 							logger.info ( "Subsriptions already exist ..!" );
 							break;
@@ -1236,19 +1229,32 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 				}
 
 				if(!subscribed){
-				CIMClass cimindcsub = getCimClient().getClass ( new CIMObjectPath ( "CIM_IndicationSubscription" ), true,
-						true, true, null );
-				CIMInstance ci = cimindcsub.newInstance ();
-				ci.setProperty ( "Filter", new CIMValue ( filter.getCimObjectPath () ) );
-				ci.setProperty ( "Handler", new CIMValue ( ourDestination.getCimObjectPath () ) );
-				ci.setProperty ("SubscriptionState", new CIMValue(new UnsignedInt16(2)));
+//				CIMClass cimindcsub = getCimClient().getClass ( new CIMObjectPath ( "CIM_IndicationSubscription" ), true, true, true, null );
+				
+				CIM_IndicationSubscription cimindcsub = new CIM_IndicationSubscription(cimClient,getNamespace ());
+				cimindcsub.set_Filter_CIM_IndicationFilter ( filter );
+				cimindcsub.set_Handler_CIM_ListenerDestination ( ourDestination );
+				cimindcsub.set_SubscriptionState ( new UnsignedInteger16(2) );
+				getFcoHelper ().create(cimindcsub,getCimClient ());
+//				CIMInstance ci = cimindcsub.getCimInstance ();
+//				
+//				CIMProperty props[] = new CIMProperty[3];
+//
+//				props[0] = new CIMProperty("Filter", new CIMDataType(CIM_IndicationFilter.CIM_CLASS_NAME),filter);
+//				props[1] = new CIMProperty("Handler", new CIMDataType(CIM_ListenerDestinationCIMXML.CIM_CLASS_NAME),ourDestination);
+//				props[2] = new CIMProperty("SubscriptionState", new CIMDataType(UnsignedInteger16.class.getName ()),new UnsignedInteger16(2));
+				
+//				ci.setProperty ( "Filter", new CIMValue ( filter.getCimObjectPath () ) );
+//				ci.setProperty ( "Handler", new CIMValuedElement ( ourDestination.getCimObjectPath () ) );
+//				ci.setProperty ("SubscriptionState", new CIMValuedElement(new UnsignedInteger16(2)));
 
-				CIMObjectPath indcsub = getCimClient ().createInstance ( new CIMObjectPath (), ci );
+				//	CIMObjectPath indcsub = getCimClient ().createInstance ( ci );
 
+//				ci = ci.deriveInstance(props);
+//				getCimClient ().createInstance ( ci );
+				
 				logger.info ( "Subsription Created Succesfully ..!" );
 				}
-				else
-					logger.info ( "No suitable Subsriptions exist ..!" );
 
 			}
 			else
@@ -1256,18 +1262,18 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		}
 	}
 	
-	public CIMClient getCimClientForInteropNamespace()
-	{
-		
-		if(slpNamespaceCimClient == null){
-		try {
-			slpNamespaceCimClient = WbemsmtSession.getSession().getCIMClientPool(cimClient.getNameSpace().getHost()).getCIMClient("root/pg_interop");
-		} catch (LoginException e) {
-			e.printStackTrace();
-		} 
-		}
-		return slpNamespaceCimClient;
-	}
+//	public WBEMClient getCimClientForInteropNamespace()
+//	{
+//		
+//		if(slpNamespaceCimClient == null){
+//		try {
+//			slpNamespaceCimClient = WbemsmtSession.getSession().getWBEMClientPool(cimClient.getNameSpace().getHost()).getWBEMClient("root/pg_interop");
+//		} catch (WbemsmtException e) {
+//			e.printStackTrace();
+//		} 
+//		}
+//		return slpNamespaceCimClient;
+//	}
 
 	/**
 	 * @return the indcOccurred
@@ -1283,7 +1289,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		this.indcOccurred = indcOccurred;
 	}
 
-	public void save(DataContainer dataContainer) throws ObjectSaveException{
+	public void save(DataContainer dataContainer) throws WbemsmtException{
 		if(isIndcOccurred ()){
 			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
 //			this.setMarkedForReload ();
@@ -1294,7 +1300,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 				this.setIndcOccurred ( false );}
 	}
 	
-	public void updateControls(DataContainer dataContainer) throws UpdateControlsException{
+	public void updateControls(DataContainer dataContainer) throws WbemsmtException{
 		
 		if(isIndcOccurred ()){
 			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
@@ -1306,7 +1312,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 				this.setIndcOccurred ( false );}
 	}
 	
-	public void create(DataContainer dataContainer) throws ObjectCreationException{
+	public void create(DataContainer dataContainer) throws WbemsmtException{
 		
 		if(isIndcOccurred ()){
 			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
@@ -1318,7 +1324,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 				this.setIndcOccurred ( false );}
 	}
 	
-	public void delete() throws ObjectDeletionException{
+	public void delete() throws WbemsmtException{
 
 		if(isIndcOccurred ()){
 			MessageUtil.addMessage(DhcpErrorCodes.MSGDEF_INDICATION_OCCURRED,new DhcpErrorCodes() , this.getResourceBundleNames (),null);
@@ -1368,7 +1374,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 //	public void cleanup(){
 //		try {
 //			removeSubscriptions ( getDestination ( this.getFcoHelper (), getCimClient(), null, indcDest ));
-//		} catch (WbemSmtException e) {
+//		} catch (WbemsmtException e) {
 //			e.printStackTrace();
 //		}
 //		indcDest.getPresets ().freePort(indcPort);
@@ -1377,29 +1383,30 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 //		dest = null;
 //	}
 	
-	protected void removeSubscriptions(CIM_ListenerDestinationCIMXML ourDestination){
+	protected void removeSubscriptions(CIM_ListenerDestinationCIMXML ourDestination) throws WBEMException, WbemsmtException{
 
 		CIM_IndicationFilter filter = null;
 		CIM_IndicationSubscription sub = null;
-		CIMValue host,filt = null;
+		String host;
+		String filt = null;
 
 
-		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), true );
+		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
 		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
 			filter = (CIM_IndicationFilter) iterator.next ();
-			if(filter.get_Name ().equals("HostIndication") || filter.get_Name ().equals("SubnetIndication") || filter.get_Name ().equals("SharednetIndication") || filter.get_Name ().equals("GroupIndication") || filter.get_Name ().equals("PoolIndication") || filter.get_Name ().equals("OptionsIndication") || filter.get_Name ().equals("ParamsIndication")){
+			if(filter.get_key_Name ().equals("HostIndication") || filter.get_key_Name ().equals("SubnetIndication") || filter.get_key_Name ().equals("SharednetIndication") || filter.get_key_Name ().equals("GroupIndication") || filter.get_key_Name ().equals("PoolIndication") || filter.get_key_Name ().equals("OptionsIndication") || filter.get_key_Name ().equals("ParamsIndication")){
 
-				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),true);
+				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
 				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
 					sub = (CIM_IndicationSubscription) iterator1.next ();
-					if(sub.get_CIM_ListenerDestination () != null && sub.get_CIM_IndicationFilter () != null){
-						host = sub.get_CIM_ListenerDestination ().getKey("Name").getValue ();
-						filt = sub.get_CIM_IndicationFilter ().getKey("Name").getValue ();
+					if(sub.get_Handler_CIM_ListenerDestination (getCimClient()) != null && sub.get_Filter_CIM_IndicationFilter (getCimClient()) != null){
+						host = sub.get_Handler_CIM_ListenerDestination (getCimClient()).get_key_Name();
+						filt = sub.get_Filter_CIM_IndicationFilter (getCimClient()).get_key_Name();
 						}
 					else
 						continue;
 					
-					if(((String)host.getValue()).equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && ((String)filt.getValue ()).equalsIgnoreCase ( filter.get_Name () )){
+					if((host.equals ("DHCP Indication Handler for " + indcDest.getCalculatedUrlString ()) && (filt.equalsIgnoreCase ( filter.get_key_Name () )))){
 							getCimClient().deleteInstance ( sub.getCimObjectPath () );
 							break;
 					}
@@ -1408,10 +1415,19 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 		}
 
+		getCimClient().deleteInstance ( ourDestination.getCimObjectPath () );
 		logger.info("Subscriptions and Handlers for the host " + ourDestination.get_Destination () + " deleted ...!");
 		
-		getCimClient().deleteInstance ( ourDestination.getCimObjectPath () );
-
 	}
-	
+
+//	protected void finalize(){
+//		try {
+//			removeSubscriptions ( getDestination ( getCimClient(), null, indcDest ) );
+//		} catch (WBEMException e) {
+//			e.printStackTrace();
+//		} catch (WbemsmtException e) {
+//			e.printStackTrace();
+//		}
+//	}
+
 }

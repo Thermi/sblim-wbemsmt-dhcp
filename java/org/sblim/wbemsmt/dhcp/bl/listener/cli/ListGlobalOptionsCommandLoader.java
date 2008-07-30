@@ -18,14 +18,14 @@
 package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.cli.CimCommandValues;
 import org.sblim.wbemsmt.tools.cli.CliDataLoader;
 import org.sblim.wbemsmt.tools.resources.WbemSmtResourceBundle;
 
 public class ListGlobalOptionsCommandLoader implements CliDataLoader {
 
-	public void load ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, CimCommandValues commandValues ) throws ObjectNotFoundException {
+	public void load ( WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, CimCommandValues commandValues ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}

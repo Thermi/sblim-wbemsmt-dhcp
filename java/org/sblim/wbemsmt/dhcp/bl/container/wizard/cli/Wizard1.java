@@ -24,16 +24,15 @@
 
 package org.sblim.wbemsmt.dhcp.bl.container.wizard.cli;
 
-import java.util.*;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
-
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.resources.ResourceBundleManager;
 import org.sblim.wbemsmt.tools.wizard.adapter.IPageWizardAdapter;
-import org.sblim.wbemsmt.tools.wizard.cli.*;
+import org.sblim.wbemsmt.tools.wizard.cli.CliWizardBase;
 import org.sblim.wbemsmt.tools.wizard.container.IWizardContainer;
-import org.sblim.wbemsmt.exception.WbemSmtException;
 
 public class Wizard1 extends CliWizardBase implements IPageWizardAdapter {
 
@@ -44,7 +43,7 @@ public class Wizard1 extends CliWizardBase implements IPageWizardAdapter {
 		super(adapter,ResourceBundleManager.getResourceBundle(new String[]{"messages","messagesDhcp"},Locale.getDefault()));
 		this.container = new org.sblim.wbemsmt.dhcp.wizard.WizardContainer1 (adapter, new org.sblim.wbemsmt.dhcp.wizard.WizardContainer1Panels()
  			{
-            					public Object getNewGroup()  throws WbemSmtException {
+            					public Object getNewGroup()  throws WbemsmtException {
 					DataContainer dc = new org.sblim.wbemsmt.dhcp.bl.container.wizard.cli.NewGroupContainerImpl(adapter);
 					return dc;
 				}

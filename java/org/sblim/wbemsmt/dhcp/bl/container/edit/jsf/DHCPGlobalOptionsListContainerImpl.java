@@ -24,19 +24,17 @@
 
 package org.sblim.wbemsmt.dhcp.bl.container.edit.jsf;
 
-import org.sblim.wbemsmt.exception.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-//imports for that field of a linked container with occurence = MANY
-import org.sblim.wbemsmt.tools.jsf.MultiLinePanel;
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent;
-import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
-
-
-
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
+import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
+import org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent;
+import org.sblim.wbemsmt.tools.jsf.MultiLinePanel;
 
 public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.jsf.EditBasePanel implements org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListContainer {
 
@@ -55,7 +53,7 @@ public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.
 	
 		
 	
-	public DHCPGlobalOptionsListContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix) throws InitContainerException  {
+	public DHCPGlobalOptionsListContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix) throws WbemsmtException  {
 
 			
 				super(adapter,bindingPrefix, "DHCPGlobalOptionsListContainer.caption",false);
@@ -138,7 +136,7 @@ public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.
 			try {
 				org.sblim.wbemsmt.dhcp.bl.container.edit.jsf.DHCPGlobalOptionsListItemContainer_AsItems_InDHCPGlobalOptionsListContainerImpl item = new org.sblim.wbemsmt.dhcp.bl.container.edit.jsf.DHCPGlobalOptionsListItemContainer_AsItems_InDHCPGlobalOptionsListContainerImpl((org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter)adapter,bindingPrefix, result.size());
 				result.add(item);
-			} catch (InitContainerException e) {
+			} catch (WbemsmtException e) {
 				e.printStackTrace();
 			}
 		}
@@ -294,7 +292,7 @@ public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.
 		return new String[]{"messages","messagesDhcp"};
 	}
 
-	public void countAndCreateChildren() throws InitContainerException {
+	public void countAndCreateChildren() throws WbemsmtException {
 	
     			try
 		{
@@ -308,24 +306,24 @@ public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.
 			   }
 	        }
 			getItemsPanel().setList(getItems());				   
-		} catch (WbemSmtException e) {
-			throw new InitContainerException(e);
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),e);
 		}
     		}
 
 
 	/**
 	 * count and create childrens
-	 * @throws UpdateControlsException
+	 * @throws WbemsmtException
 	 */
-	public void updateControls() throws UpdateControlsException {
+	public void updateControls() throws WbemsmtException {
 		try {
 			countAndCreateChildren();
 			adapter.updateControls(this);
 		
 							getItemsPanel().updateRows();				
-					} catch (InitContainerException e) {
-			throw new UpdateControlsException(e);
+					} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),e);
 		}
 	}
 
@@ -353,7 +351,7 @@ public class DHCPGlobalOptionsListContainerImpl extends org.sblim.wbemsmt.tools.
 	
 	}
 	
-	public void copyFrom(DataContainer sourceContainer)
+	public void copyFrom(DataContainer sourceContainer) throws WbemsmtException
 	{
 		DHCPGlobalOptionsListContainerImpl source = (DHCPGlobalOptionsListContainerImpl)sourceContainer;
 	

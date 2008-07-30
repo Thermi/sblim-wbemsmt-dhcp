@@ -16,24 +16,26 @@
   */
 package org.sblim.wbemsmt.dhcp.bl.listener;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 
-import org.apache.myfaces.custom.buffer.BufferRenderer;
-import org.sblim.wbem.cim.CIMInstance;
-import org.sblim.wbem.cim.CIMObjectPath;
-import org.sblim.wbem.client.CIMClient;
+import javax.cim.CIMInstance;
+import javax.cim.CIMObjectPath;
+import javax.wbem.CloseableIterator;
+import javax.wbem.WBEMException;
+import javax.wbem.client.WBEMClient;
+
+import org.sblim.cimclient.internal.wbem.CloseableIteratorSAX;
+import org.sblim.wbemsmt.bl.fco.FcoHelper;
+import org.sblim.wbemsmt.bl.tree.CIMInstanceNode;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
+import org.sblim.wbemsmt.bl.tree.SimpleTextTreeNode;
+import org.sblim.wbemsmt.bl.tree.TaskLauncherDelegaterTreeNode;
 import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEvent;
 import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEventListener;
 import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEventListenerImpl;
@@ -46,13 +48,9 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
 import org.sblim.wbemsmt.exception.ExceptionUtil;
-import org.sblim.wbemsmt.exception.ModelLoadException;
-import org.sblim.wbemsmt.exception.WbemSmtException;
-import org.sblim.wbemsmt.schema.cim29.tools.FcoHelper;
-import org.sblim.wbemsmt.tasklauncher.CIMInstanceNode;
-import org.sblim.wbemsmt.tasklauncher.SimpleTextTreeNode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
+import org.sblim.wbemsmt.schema.cim29.CIM_Namespace;
 import org.sblim.wbemsmt.tasklauncher.TaskLauncherContextMenu;
-import org.sblim.wbemsmt.tasklauncher.TaskLauncherDelegaterTreeNode;
 import org.sblim.wbemsmt.tasklauncher.customtreeconfig.ContextmenuDocument;
 import org.sblim.wbemsmt.tasklauncher.customtreeconfig.ContextmenuDocument.Contextmenu;
 import org.sblim.wbemsmt.tasklauncher.customtreeconfig.EventListenerDocument.EventListener;
@@ -95,7 +93,8 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 			Class cls;
 			try {
 				cls = Class.forName ( "org.sblim.wbemsmt.dhcp.bl.fco." + EntityTypes[i] );
-				constructors[i] = cls.getConstructor ( new Class[] { CIMObjectPath.class, CIMInstance.class } );
+				constructors[i] = cls.getConstructor ( new Class[] { CIMInstance.class } );
+//				constructors[i] = cls.getConstructor ( new Class[] { CIMObjectPath.class, CIMInstance.class } );
 			} catch (Exception e) {
 				throw new RuntimeException ( e );
 			}
@@ -116,7 +115,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 
 					// if we got the rootNode, get the first subnode as node to
 					// ad the new nodes
-					CIMClient cimClient = treeNode.getCimClient ();
+					WBEMClient cimClient = treeNode.getCimClient ();
 					if (cimClient == null && treeNode.getPlainName ().equals ( "root" )
 							&& treeNode instanceof TaskLauncherDelegaterTreeNode) {
 						treeNode = (ITaskLauncherTreeNode) ((TaskLauncherDelegaterTreeNode) treeNode).getSubnodes ()
@@ -125,7 +124,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 					}
 					
 					// get the Global FCO from whcih the hierarchy starts
-					ArrayList globallist = Linux_DHCPGlobalHelper.enumerateInstances ( treeNode.getCimClient (), true );
+					List globallist = Linux_DHCPGlobalHelper.enumerateInstances ( treeNode.getCimClient (), treeNode.getNamespace (), true );
 
 					for (Iterator iter = globallist.iterator (); iter.hasNext ();) {
 						globalfco = (Linux_DHCPGlobal) iter.next ();
@@ -140,7 +139,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 					throw new IllegalArgumentException ( "Swing is not supported" );
 				}
 			} catch (Exception e) {
-				ModelLoadException modelLoadException = new ModelLoadException ( e );
+				WbemsmtException modelLoadException = new WbemsmtException ( null,e);
 				ExceptionUtil.handleException ( modelLoadException );
 			}
 
@@ -168,7 +167,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
 	 */
-	public boolean addNodesDefault(Linux_DHCPEntity fco , CIMClient cimclient , ITaskLauncherTreeNode treeNode) throws SecurityException, NoSuchMethodException{
+	public boolean addNodesDefault(Linux_DHCPEntity fco , WBEMClient cimclient , ITaskLauncherTreeNode treeNode) throws SecurityException, NoSuchMethodException{
 		
 //		String EntityTypes[] = {"Linux_DHCPSubnet","Linux_DHCPSharednet","Linux_DHCPGroup","Linux_DHCPPool","Linux_DHCPHost"};
 //		String Listeners[] = {"SubneteditActionListener","SharedneteditActionListener","GroupeditActionListener","PooleditActionListener","HosteditActionListener"};
@@ -180,7 +179,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 		boolean exitstatus = false;
 		
 		Class partypes[] = new Class[4];
-        partypes[0] = CIMClient.class;
+        partypes[0] = WBEMClient.class;
         partypes[1] = Boolean.TYPE;
         partypes[2] = Boolean.TYPE;
         partypes[3] = String[].class;
@@ -221,20 +220,20 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 						
 						Linux_DHCPEntity fco1 = (Linux_DHCPEntity) iter.next ();
 						
-						if(fco1.get_ParentID ()!=null  && fco.get_InstanceID ()!=null)
-						if(checkIDAreEqual ( fco1.get_ParentID (), fco.get_InstanceID ()) == false){
+						if(fco1.get_ParentID ()!=null  && fco.get_key_InstanceID()!=null)
+						if(checkIDAreEqual ( fco1.get_ParentID (), fco.get_key_InstanceID()) == false){
 							treeNode.deleteSubnode ( pNode );
 //							pNode=null;
 							continue;
 						}
 
-						CIMInstanceNode instanceNode = new CIMInstanceNode ( cimclient, null, fco1.get_Name (),
+						CIMInstanceNode instanceNode = new CIMInstanceNode ( cimclient, null, fco1.get_ElementName (),
 								fco1.getCimInstance () );
 						
-						if(fco1.getClassDisplayName ().equals(Linux_DHCPGroup.CIM_CLASS_NAME))
+						if(fco1.getObjectName().equals(Linux_DHCPGroup.CIM_CLASS_NAME))
 							instanceNode.setName("Group");
 
-						if(fco1.getClassDisplayName ().equals(Linux_DHCPPool.CIM_CLASS_NAME))
+						if(fco1.getObjectName().equals(Linux_DHCPPool.CIM_CLASS_NAME))
 							instanceNode.setName("Pool");
 						
 						// Create the contextmenu and the the items
@@ -288,11 +287,8 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 						EventListener listener = menuitem1.addNewEventListener();
 						listener.setClassname("org.sblim.wbemsmt.dhcp.bl.listener."+DeleteListeners[i]);//DeleteAppContainerListener.class.getName());
 						
-						try {
-							instanceNode.setCimObject ( new FcoHelper ().getCIM_ObjectCreator ().create ( cimclient ) );
-						} catch (WbemSmtException e) {
-							e.printStackTrace ();
-						}
+						//new FcoHelper ().getCIM_ObjectCreator ().create ( cimclient )
+						instanceNode.setCimObject ( fco1 );
 
 //						// set the properties of the node
 //						pNode.setContextMenu(new	TaskLauncherContextMenu(contextmenu,DhcpCimAdapter.RESOURCE_BUNDLE_NAMES));
@@ -341,14 +337,15 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 	 * @return
 	 * @throws SecurityException
 	 * @throws NoSuchMethodException
+	 * @throws WBEMException 
 	 */
-	public boolean addNodesOpt ( Linux_DHCPEntity fco, CIMClient cimclient, ITaskLauncherTreeNode treeNode )
-			throws SecurityException, NoSuchMethodException {
+	public boolean addNodesOpt ( Linux_DHCPEntity fco, WBEMClient cimclient, ITaskLauncherTreeNode treeNode )
+			throws SecurityException, NoSuchMethodException, WBEMException {
 
 		boolean exitstatus = false;
 
 		Class partypes[] = new Class[4];
-		partypes[0] = CIMClient.class;
+		partypes[0] = WBEMClient.class;
 		partypes[1] = Boolean.TYPE;
 		partypes[2] = Boolean.TYPE;
 		partypes[3] = String[].class;
@@ -366,15 +363,16 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 			results[i] = new ArrayList ();
 		}
 
-		Enumeration allElements = cimclient.associators ( fco.getCimObjectPath (), "CIM_Component",
+		CloseableIteratorSAX allElements = (CloseableIteratorSAX) cimclient.associators ( fco.getCimObjectPath (), "CIM_Component",
 				Linux_DHCPEntity.CIM_CLASS_NAME, "GroupComponent", "PartComponent", false, false, null );
-		while (allElements.hasMoreElements ()) {
-			CIMInstance instance = (CIMInstance) allElements.nextElement ();
+		while (allElements.hasNext ()) {
+			CIMInstance instance = (CIMInstance) allElements.next ();
 			for (int i = 0; i < EntityTypes.length; i++) {
 				if (instance.getClassName ().equals ( EntityTypes[i] )) {
 					try {
-						results[i].add ( constructors[i].newInstance ( new Object[] { instance.getObjectPath (),
-								instance } ) );
+						results[i].add ( constructors[i].newInstance ( new Object[] { instance } ) );
+//						results[i].add ( constructors[i].newInstance ( new Object[] { instance.getObjectPath (),
+//								instance } ) );
 					} catch (Exception e) {
 						e.printStackTrace ();
 					}
@@ -408,8 +406,8 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 
 						Linux_DHCPEntity fco1 = (Linux_DHCPEntity) iter.next ();
 
-						if (fco1.get_ParentID () != null && fco.get_InstanceID () != null)
-							if (checkIDAreEqual ( fco1.get_ParentID (), fco.get_InstanceID () ) == false) {
+						if (fco1.get_ParentID () != null && fco.get_key_InstanceID() != null)
+							if (checkIDAreEqual ( fco1.get_ParentID (), fco.get_key_InstanceID() ) == false) {
 								treeNode.deleteSubnode ( pNode );
 								// pNode=null;
 								continue;
@@ -418,10 +416,10 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 						CIMInstanceNode instanceNode = new CIMInstanceNode ( cimclient, null, fco1.get_Name (), fco1
 								.getCimInstance () );
 
-						if (fco1.getClassDisplayName ().equals ( Linux_DHCPGroup.CIM_CLASS_NAME ))
+						if (fco1.getObjectName().equals ( Linux_DHCPGroup.CIM_CLASS_NAME ))
 							instanceNode.setName ( "Group" );
 
-						if (fco1.getClassDisplayName ().equals ( Linux_DHCPPool.CIM_CLASS_NAME ))
+						if (fco1.getObjectName().equals ( Linux_DHCPPool.CIM_CLASS_NAME ))
 							instanceNode.setName ( "Pool" );
 
 						// Create the contextmenu and the the items
@@ -477,11 +475,8 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 						EventListener listener = menuitem1.addNewEventListener ();
 						listener.setClassname ( "org.sblim.wbemsmt.dhcp.bl.listener." + DeleteListeners[i] );// DeleteAppContainerListener.class.getName());
 
-						try {
-							instanceNode.setCimObject ( new FcoHelper ().getCIM_ObjectCreator ().create ( cimclient ) );
-						} catch (WbemSmtException e) {
-							e.printStackTrace ();
-						}
+						//new FcoHelper ().get.getCIM_ObjectCreator ().create ( cimclient )
+						instanceNode.setCimObject ( fco1 );
 
 						// // set the properties of the node
 						// pNode.setContextMenu(new

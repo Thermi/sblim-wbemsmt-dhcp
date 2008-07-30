@@ -21,8 +21,8 @@
 package org.sblim.wbemsmt.dhcp.wrapper.object;
 
 
-import org.sblim.wbemsmt.bl.WbemsmtBusinessObject;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
+import org.sblim.wbemsmt.bl.wrapper.WbemsmtBusinessObject;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPService;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpOptionsList;

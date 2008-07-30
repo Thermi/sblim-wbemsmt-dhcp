@@ -21,13 +21,11 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.wizard;
 
-import org.sblim.wbem.cim.CIMInstance;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewGroupContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroupsForEntity;
-import org.sblim.wbemsmt.dhcp.indications.DHCPCustomEventForIndication;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class NewGroupWizard {
 
@@ -44,22 +42,22 @@ public class NewGroupWizard {
 //		this.newGroup = container;
 	}
 	
-	public void create(NewGroupContainer container) throws ObjectCreationException{
+	public void create(NewGroupContainer container) throws WbemsmtException{
 	
-		Linux_DHCPGroup Group = new Linux_DHCPGroup();
+		Linux_DHCPGroup Group = new Linux_DHCPGroup(adapter.getCimClient (),adapter.getNamespace ());
 		Group.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		if(DhcpCimAdapter.isDummyMode ())
-			Group.set_InstanceID ( "WBEM_SMT:LinuxDHCPGroup::dhcp::" +  adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ()+System.currentTimeMillis ());
+			Group.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPGroup::dhcp::" +  adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ()+System.currentTimeMillis ());
 		else
-			Group.set_InstanceID ("");
-		Group.set_ParentID ( adapter.getSelectedEntity ().get_InstanceID () );
+			Group.set_key_InstanceID ("");
+		Group.set_ParentID ( adapter.getSelectedEntity ().get_key_InstanceID() );
 		Group = (Linux_DHCPGroup) adapter.getFcoHelper ().create ( Group, adapter.getCimClient () );
 		
 		if(DhcpCimAdapter.isDummyMode ()){
-		Linux_DHCPGroupsForEntity assoc = new Linux_DHCPGroupsForEntity();
+		Linux_DHCPGroupsForEntity assoc = new Linux_DHCPGroupsForEntity(adapter.getCimClient (),adapter.getNamespace ());
 		
-		assoc.set_Linux_DHCPGroup ( Group );
-		assoc.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+		assoc.set_PartComponent_Linux_DHCPGroup ( Group );
+		assoc.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
 		
 		assoc = (Linux_DHCPGroupsForEntity) adapter.getFcoHelper ().create ( assoc, adapter.getCimClient () );
 		}

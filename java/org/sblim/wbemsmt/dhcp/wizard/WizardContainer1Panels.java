@@ -24,10 +24,11 @@
 
 package org.sblim.wbemsmt.dhcp.wizard;
 
-import org.sblim.wbemsmt.exception.WbemSmtException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
+
 
 public interface WizardContainer1Panels {
 
-            					public Object getNewGroup() throws WbemSmtException;
+            					public Object getNewGroup() throws WbemsmtException;
             	
 }

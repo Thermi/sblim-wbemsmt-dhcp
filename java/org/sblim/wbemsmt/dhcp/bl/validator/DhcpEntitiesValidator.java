@@ -24,11 +24,10 @@ package org.sblim.wbemsmt.dhcp.bl.validator;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.sblim.wbem.cim.CIMObjectPath;
-import org.sblim.wbemsmt.bl.MessageNumber;
+import javax.cim.CIMObjectPath;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.bl.adapter.Message;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.messages.*;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroupHelper;
@@ -48,7 +47,7 @@ import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpHostObject;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpPoolObject;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpSharednetObject;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpSubnetObject;
-import org.sblim.wbemsmt.exception.ValidationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 import org.sblim.wbemsmt.tools.validator.Validator;
 import org.sblim.wbemsmt.util.StringTokenizer;
@@ -71,7 +70,7 @@ public class DhcpEntitiesValidator extends Validator {
 		return new LabeledBaseInputComponentIf[] { field };
 	}
 
-	public void validateElement ( MessageList result ) throws ValidationException {
+	public void validateElement ( MessageList result ) throws WbemsmtException {
 		 
 		String value = (String) field.getConvertedControlValue ();
 
@@ -87,14 +86,14 @@ public class DhcpEntitiesValidator extends Validator {
 		
 	}
 
-	private void ValidatePool(String Value , MessageList result){
+	private void ValidatePool(String Value , MessageList result) throws WbemsmtException{
 		
 		DhcpPoolObject pool = (DhcpPoolObject)entity;
 		DhcpSubnetObject parent = (DhcpSubnetObject) createParentObj ( pool );
 		Linux_DHCPSubnet parentfco = (Linux_DHCPSubnet)parent.getFco ();
 		DhcpParamsList poolparamslist = null;		
 		
-		if(parent != null && parent.getFco ().getClassDisplayName ().equals("Linux_DHCPSubnet")){
+		if(parent != null && parent.getFco ().getObjectName().equals("Linux_DHCPSubnet")){
 			
 			poolparamslist = ((DhcpSubnetObject)parent).getSubnetparamslist ();
 	
@@ -103,7 +102,7 @@ public class DhcpEntitiesValidator extends Validator {
 			for(Iterator iter = paramslist.iterator ();iter.hasNext ();){
 				Linux_DHCPParams fco = (Linux_DHCPParams)iter.next ();
 				if(fco.get_Name ().equals ( "range" )){
-					String val = fco.get_Values ();
+					String val = fco.get_values ();
 					if(!val.equals ( "" )){
 						StringTokenizer tk = new StringTokenizer(val," ");
 						String ip1 = tk.nextToken ();String ip2 = tk.nextToken ();String iptocheck = getIPtoCheckFromNetmask (parentfco.get_Netmask () , parentfco.get_Name ()  );
@@ -121,7 +120,7 @@ public class DhcpEntitiesValidator extends Validator {
 		}
 	}
 	
-	private DhcpEntityObject createParentObj(DhcpEntityObject source ){
+	private DhcpEntityObject createParentObj(DhcpEntityObject source ) throws WbemsmtException{
 	
 		String parentID = source.getFco ().get_ParentID ();
 		String parentType = getClass(parentID);
@@ -221,5 +220,6 @@ public class DhcpEntitiesValidator extends Validator {
 	public void setFlag ( int flag ) {
 		this.flag = flag;
 	}
+
 	
 }

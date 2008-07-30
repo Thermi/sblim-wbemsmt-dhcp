@@ -25,8 +25,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.sblim.wbem.cim.CIMObjectPath;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import javax.cim.CIMObjectPath;
+
+import org.sblim.wbemsmt.bl.messages.MessageList;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostParamsContainer;
@@ -41,9 +42,7 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParamsForEntity;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpOptionsList;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpParamsList;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
-import org.sblim.wbemsmt.exception.ObjectDeletionException;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_SettingData;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
@@ -52,7 +51,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 	private DhcpOptionsList hostoptionslist = null;
 	private DhcpParamsList hostparamslist = null;
 	
-	public DhcpHostObject ( Linux_DHCPEntity fco, DhcpCimAdapter adapter ) {
+	public DhcpHostObject ( Linux_DHCPEntity fco, DhcpCimAdapter adapter ) throws WbemsmtException {
 		super ( fco, adapter );
 
 		setHostoptionslist ( new DhcpOptionsList());
@@ -62,16 +61,16 @@ public class DhcpHostObject extends DhcpEntityObject {
 		setHostoptionslist ( new DhcpOptionsList());
 		setHostparamslist ( new DhcpParamsList());
 		
-		ArrayList hostopArrayList = ((Linux_DHCPHost)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
-						adapter.getCimClient (), false, false, null );
+		List hostopArrayList = ((Linux_DHCPHost)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
+						adapter.getCimClient ());
 
 		for (Iterator iter = hostopArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPOptions opsfco = (Linux_DHCPOptions) iter.next ();
 			getHostoptionslist ().addDhcpOptionsObject ( new DhcpOptionsObject ( opsfco, adapter));
 		}
 		
-		ArrayList hostparamArrayList = ((Linux_DHCPHost) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
-				adapter.getCimClient (), false, false, null );
+		List hostparamArrayList = ((Linux_DHCPHost) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
+				adapter.getCimClient () );
 
 		for (Iterator iter = hostparamArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPParams paramsfco = (Linux_DHCPParams) iter.next ();
@@ -84,7 +83,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 		super(fco , adapter , parentfco);
 	}
 	
-	public MessageList saveHost ( DHCPHostsContainer container) throws ObjectSaveException {
+	public MessageList saveHost ( DHCPHostsContainer container) throws WbemsmtException {
 	
 		Linux_DHCPHost fco = (Linux_DHCPHost) this.fco;
 		
@@ -101,7 +100,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 //		return null;
 	}
 
-	public MessageList save ( DHCPHostOptionsContainer container) throws ObjectSaveException {
+	public MessageList save ( DHCPHostOptionsContainer container) throws WbemsmtException {
 
 		DhcpOptionsObject obj = null;
 		boolean objFound = false;
@@ -116,7 +115,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
 						obj.save(container , fld.getConvertedControlValue ());
-						} catch (ObjectSaveException e) {
+						} catch (WbemsmtException e) {
 							e.printStackTrace();
 						}
 						objFound = true;
@@ -125,27 +124,27 @@ public class DhcpHostObject extends DhcpEntityObject {
 				}
 			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
 
-				Linux_DHCPOptions opFco = new Linux_DHCPOptions();
+				Linux_DHCPOptions opFco = new Linux_DHCPOptions(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
-					opFco.set_InstanceID ( "WBEM_SMT:Linux_DHCPOptions::dhcp::" + adapter.getDhcpHostObj ().getFco ().get_Name () + "::" + fld.getLabelText () );
+					opFco.set_key_InstanceID ( "WBEM_SMT:Linux_DHCPOptions::dhcp::" + adapter.getDhcpHostObj ().getFco ().get_Name () + "::" + fld.getLabelText () );
 				else
-					opFco.set_InstanceID ("");
+					opFco.set_key_InstanceID ("");
 				opFco.set_Name ( fld.getLabelText () );
-				opFco.set_ParentID ( getFco().get_InstanceID () );
-				opFco.set_Values ( fld.getConvertedControlValue ().toString () );
+				opFco.set_ParentID ( getFco().get_key_InstanceID() );
+				opFco.set_values ( fld.getConvertedControlValue ().toString () );
 				try{
 				opFco = (Linux_DHCPOptions)adapter.getFcoHelper ().create ( opFco, adapter.getCimClient () );
-				} catch (ObjectCreationException e) {
+				} catch (WbemsmtException e) {
 					e.printStackTrace();
 				}
 				if (DhcpCimAdapter.isDummyMode ()) {
 
-					Linux_DHCPOptionsForEntity Hostopfco = new Linux_DHCPOptionsForEntity ();
-					Hostopfco.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
-					Hostopfco.set_Linux_DHCPOptions ( opFco );
+					Linux_DHCPOptionsForEntity Hostopfco = new Linux_DHCPOptionsForEntity (adapter.getCimClient (),adapter.getNamespace ());
+					Hostopfco.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+					Hostopfco.set_PartComponent_Linux_DHCPOptions ( opFco );
 					try{
 					Hostopfco = (Linux_DHCPOptionsForEntity)adapter.getFcoHelper ().create ( Hostopfco, adapter.getCimClient () );
-					} catch (ObjectCreationException e) {
+					} catch (WbemsmtException e) {
 						e.printStackTrace();
 					}
 //					obj = new DhcpOptionsObject ( opFco, adapter );
@@ -158,7 +157,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 		return null;
 	}
 	
-	public MessageList save ( DHCPHostParamsContainer container ) throws ObjectSaveException {
+	public MessageList save ( DHCPHostParamsContainer container ) throws WbemsmtException {
 		
 		DhcpParamsObject obj = null;
 		boolean objFound = false;
@@ -173,7 +172,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
 						obj.save(container , fld.getConvertedControlValue ());
-						} catch (ObjectSaveException e) {
+						} catch (WbemsmtException e) {
 							e.printStackTrace();
 						}
 						objFound = true;
@@ -182,27 +181,27 @@ public class DhcpHostObject extends DhcpEntityObject {
 				}
 			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
 
-				Linux_DHCPParams opFco = new Linux_DHCPParams();
+				Linux_DHCPParams opFco = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
-					opFco.set_InstanceID ( "WBEM_SMT:Linux_DHCPParams::dhcp::" + adapter.getDhcpHostObj ().getFco ().get_Name () + "::" + fld.getLabelText () );
+					opFco.set_key_InstanceID ( "WBEM_SMT:Linux_DHCPParams::dhcp::" + adapter.getDhcpHostObj ().getFco ().get_Name () + "::" + fld.getLabelText () );
 				else
-					opFco.set_InstanceID ("");
+					opFco.set_key_InstanceID ("");
 				opFco.set_Name ( fld.getLabelText () );
-				opFco.set_ParentID ( getFco().get_InstanceID () );
-				opFco.set_Values ( fld.getConvertedControlValue ().toString () );
+				opFco.set_ParentID ( getFco().get_key_InstanceID() );
+				opFco.set_values ( fld.getConvertedControlValue ().toString () );
 				try{
 				opFco = (Linux_DHCPParams)adapter.getFcoHelper ().create ( opFco, adapter.getCimClient () );
-				} catch (ObjectCreationException e) {
+				} catch (WbemsmtException e) {
 					e.printStackTrace();
 				}
 				if (DhcpCimAdapter.isDummyMode ()) {
 
-					Linux_DHCPParamsForEntity Hostopfco = new Linux_DHCPParamsForEntity ();
-					Hostopfco.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
-					Hostopfco.set_Linux_DHCPParams ( opFco );
+					Linux_DHCPParamsForEntity Hostopfco = new Linux_DHCPParamsForEntity (adapter.getCimClient (),adapter.getNamespace ());
+					Hostopfco.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+					Hostopfco.set_PartComponent_Linux_DHCPParams ( opFco );
 					try{
 					Hostopfco = (Linux_DHCPParamsForEntity)adapter.getFcoHelper ().create ( Hostopfco, adapter.getCimClient () );
-					} catch (ObjectCreationException e) {
+					} catch (WbemsmtException e) {
 						e.printStackTrace();
 					}
 //					obj = new DhcpParamsObject ( opFco, adapter );
@@ -249,17 +248,16 @@ public class DhcpHostObject extends DhcpEntityObject {
 		
 	}
 
-	public void deleteHost () throws ObjectDeletionException {
+	public void deleteHost () throws WbemsmtException {
 		
 		Linux_DHCPHost fco = (Linux_DHCPHost) this.fco;
-		ArrayList list = Linux_DHCPHostsForEntityHelper.enumerateInstanceNames ( adapter.getCimClient (), true );
+		List list = Linux_DHCPHostsForEntityHelper.enumerateInstanceNames ( adapter.getCimClient (),adapter.getNamespace (), true );
 		if(DhcpCimAdapter.isDummyMode ()){
 		for (int i = 0; i < list.size (); i++) {
-			Linux_DHCPHostsForEntity p = new Linux_DHCPHostsForEntity (((CIMObjectPath) list.get ( i )).getKeys ());
-			Linux_DHCPHostsForEntity Hostforentity = new Linux_DHCPHostsForEntity (((CIMObjectPath) list.get ( i )),p.getCimInstance ());
-			String InstanceinAssoc = (String) Hostforentity.get_Linux_DHCPHost ().getKey (
-					CIM_SettingData.CIM_PROPERTY_INSTANCEID ).getValue ().getValue ();
-			String Instanceinfco = fco.get_InstanceID ();
+			Linux_DHCPHostsForEntity p = new Linux_DHCPHostsForEntity (adapter.getCimClient (),adapter.getNamespace ());
+			Linux_DHCPHostsForEntity Hostforentity = new Linux_DHCPHostsForEntity (p.getCimInstance ());
+			String InstanceinAssoc = (String) Hostforentity.get_PartComponent_Linux_DHCPHost (adapter.getCimClient()).get_key_InstanceID ();
+			String Instanceinfco = fco.get_key_InstanceID();
 			if (InstanceinAssoc.equals ( Instanceinfco ))
 				adapter.getFcoHelper ().delete ( Hostforentity, adapter.getCimClient (), true );
 		}

@@ -28,7 +28,7 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
-import org.sblim.wbemsmt.exception.ObjectDeletionException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdpaterDeleteDelegatee implements DhcpCimAdapterDeleteIf {
 
@@ -39,29 +39,29 @@ public class DhcpCimAdpaterDeleteDelegatee implements DhcpCimAdapterDeleteIf {
 		this.adapter = adapter;
 	}
 
-	public void deleteImpl ( Linux_DHCPHost fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPHost fco ) throws WbemsmtException {
 		adapter.getDhcpHostObj ().deleteHost ();
 	}
 
-	public void deleteImpl ( Linux_DHCPOptions fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPOptions fco ) throws WbemsmtException {
 	}
 
-	public void deleteImpl ( Linux_DHCPParams fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPParams fco ) throws WbemsmtException {
 	}
 
-	public void deleteImpl ( Linux_DHCPPool fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPPool fco ) throws WbemsmtException {
 		adapter.getDhcpPoolObj ().deletePool ();
 	}
 
-	public void deleteImpl ( Linux_DHCPSharednet fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPSharednet fco ) throws WbemsmtException {
 		adapter.getDhcpSharednetObj ().deleteSharednet ();
 	}
 
-	public void deleteImpl ( Linux_DHCPSubnet fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPSubnet fco ) throws WbemsmtException {
 		adapter.getDhcpSubnetObj ().deleteSubnet ();
 	}
 
-	public void deleteImpl ( Linux_DHCPGroup fco ) throws ObjectDeletionException {
+	public void deleteImpl ( Linux_DHCPGroup fco ) throws WbemsmtException {
 		adapter.getDhcpGroupObj ().deleteGroup ();
 	}
 

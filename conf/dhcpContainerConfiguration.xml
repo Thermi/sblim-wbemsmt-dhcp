@@ -26,6 +26,27 @@
     <dcg:container-definitions xmlns:dcg="http://sblim.org/wbemsmt/dcg">
         <dcg:environment>
             <dcg:fcoPackage id="fcos" dir="../wbemsmt-dhcp/bin" name="org.sblim.wbemsmt.dhcp"/>
+            <dcg:mofinput description="New Mofinput" generate="true">
+                <dcg:fcoPackage id="fco" name="org.sblim.wbemsmt.dhcp.bl.fco" dir="../wbemsmt-dhcp/java/org/sblim/wbemsmt/dhcp/bl/fco/"/>
+                <dcg:moffile location="../cmpi-dhcp/model/"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Component.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Configuration.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_LogicalElement.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ManagedElement.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Profile.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Service.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_SettingData.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Event/CIM_Indication.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Interop/CIM_ElementConformsToProfile.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Interop/CIM_RegisteredProfile.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_EnabledLogicalElement.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ManagedSystemElement.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Collection.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ElementConfiguration.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ElementSettingData.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ConcreteJob.mof"/>
+                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Job.mof"/>
+            </dcg:mofinput>
             <dcg:containerInterfacePkg id="editContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit"/>
             <dcg:containerInterfacePkg id="wizardContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard"/>
         </dcg:environment>
@@ -34,11 +55,11 @@
             <dcg:field name="ConfigurationFile" dataType="STRING" userDefined="false" uiType="TEXTFIELD" fcoFieldName="Linux_DHCPServiceConfiguration.get_ConfigurationFile" description="" orientation="LEFT" readOnly="false" required="true">
                 <cmd:option long="configurationFile" scope="LOCAL_CONTAINER" required="true" usedForSelection="false" duplicateOK="false" comment=""/>
             </dcg:field>
-            <dcg:field name="startService" dataType="UNSIGNED_INT32" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_startService">
-                <cmd:option long="startService" scope="LOCAL_CONTAINER"/>
+            <dcg:field name="startService" dataType="ACTION" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_startService" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="startService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="false"/>
             </dcg:field>
-            <dcg:field name="stopService" dataType="UNSIGNED_INT32" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_stopService" description="" orientation="LEFT" readOnly="false" required="false">
-                <cmd:option long="stopService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="true"/>
+            <dcg:field name="stopService" dataType="ACTION" userDefined="false" uiType="BUTTON" fcoFieldName="Linux_DHCPService.invoke_stopService" description="" orientation="LEFT" readOnly="false" required="false">
+                <cmd:option long="stopService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="false"/>
             </dcg:field>
             <dcg:field name="restartservice" dataType="ACTION" userDefined="true" uiType="BUTTON" fcoFieldName="userdefined" description="" orientation="LEFT" readOnly="false" required="false">
                 <cmd:option long="restartService" scope="LOCAL_CONTAINER" required="false" usedForSelection="false" duplicateOK="false" comment="" hasArgument="false"/>
@@ -671,6 +692,7 @@
             <cmd:option short="?" required="false" usedForSelection="false" duplicateOK="false" scope="GLOBAL_WBEMSMT_COMMON" defaultValue="none"/>
             <cmd:option long="serviceName" required="false" scope="GLOBAL_TASK" usedForSelection="true" duplicateOK="false" comment="" defaultValue="dhcpd"/>
             <cmd:option long="listEntities" required="false" scope="GLOBAL_TASK" usedForSelection="false" duplicateOK="false" comment=""/>
+            <cmd:option long="httpProtocolType" required="false" scope="GLOBAL_TASK" usedForSelection="true" duplicateOK="false" short="httpProtocolType" comment="" hasArgument="true"/>
         </cmd:commands>
     </pl:presentationLayer>
 </cli:clientConfig>

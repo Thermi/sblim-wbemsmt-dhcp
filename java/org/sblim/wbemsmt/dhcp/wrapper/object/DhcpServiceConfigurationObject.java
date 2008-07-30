@@ -22,15 +22,15 @@
 package org.sblim.wbemsmt.dhcp.wrapper.object;
 
 
-import org.sblim.wbem.client.CIMClient;
+import javax.wbem.client.WBEMClient;
+
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageList;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DhcpServiceConfContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPServiceConfiguration;
-import org.sblim.wbemsmt.exception.ModelLoadException;
-import org.sblim.wbemsmt.exception.ObjectRevertException;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 
 public class DhcpServiceConfigurationObject {
@@ -57,12 +57,12 @@ public class DhcpServiceConfigurationObject {
 
 	public void updateControls(DhcpServiceConfContainer container) {
 		container.get_ConfigurationFile().setControlValue(
-				fco.get_ConfigurationFile());
+				fco.get_configurationFile());
 	}
 
 	public MessageList save(DhcpServiceConfContainer container)
-			throws ObjectSaveException {
-		fco.set_ConfigurationFile((String) container.get_ConfigurationFile()
+			throws WbemsmtException {
+		fco.set_configurationFile((String) container.get_ConfigurationFile()
 				.getConvertedControlValue());
 		adapter.getFcoHelper().save(fco, adapter.getCimClient());
 
@@ -71,29 +71,29 @@ public class DhcpServiceConfigurationObject {
 	}
 
 	public MessageList revert(DhcpServiceConfContainer container)
-			throws ObjectRevertException {
+			throws WbemsmtException {
 		try {
 			adapter.getFcoHelper().reload(fco, adapter.getCimClient());
-		} catch (ModelLoadException e) {
-			throw new ObjectRevertException(e);
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),e);
 		}
 		return null;
 	}
 
-	public void updateModel(DhcpServiceConfContainer container){
-		CIMClient cimclient = adapter.getCimClient ();
+	public void updateModel(DhcpServiceConfContainer container) throws WbemsmtException{
+		WBEMClient cimclient = adapter.getCimClient ();
 		
 		if(adapter.getUpdateTrigger () == container.get_invoke_StartService ()){
-					adapter.getDhcpServiceObj ().getFco ().invoke_startService ( cimclient );
+					adapter.getDhcpServiceObj ().getFco ().invoke_StartService ( cimclient );
 		}
 		
 		if(adapter.getUpdateTrigger () == container.get_invoke_StopService ()){
-			adapter.getDhcpServiceObj ().getFco ().invoke_stopService ( cimclient );
+			adapter.getDhcpServiceObj ().getFco ().invoke_StopService ( cimclient );
 		}
 
 		if(adapter.getUpdateTrigger () == container.get_usr_Restartservice ()){
-			adapter.getDhcpServiceObj ().getFco ().invoke_stopService ( cimclient );
-			adapter.getDhcpServiceObj ().getFco ().invoke_startService ( cimclient );
+			adapter.getDhcpServiceObj ().getFco ().invoke_StopService ( cimclient );
+			adapter.getDhcpServiceObj ().getFco ().invoke_StartService ( cimclient );
 		}
 
 	}

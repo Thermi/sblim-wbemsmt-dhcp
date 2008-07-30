@@ -21,10 +21,12 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.list;
 
-import org.sblim.wbem.cim.CIMObjectPath;
+import javax.cim.CIMObjectPath;
+
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.wrapper.ObjectList;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpSharednetObject;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
 
 public class DhcpSharednetObjectList extends ObjectList {
@@ -42,15 +44,15 @@ public class DhcpSharednetObjectList extends ObjectList {
 				.getCimObjectPath()));
 	}
 
-	public void addDhcpSharednetObject(DhcpSharednetObject obj) {
+	public void addDhcpSharednetObject(DhcpSharednetObject obj) throws WbemsmtException {
 		put(obj);
 	}
 
-	public DhcpSharednetObject getDhcpSharednetObject(int i) {
+	public DhcpSharednetObject getDhcpSharednetObject(int i) throws WbemsmtException {
 		return (DhcpSharednetObject) getList().get(i);
 	}
 
-	public DhcpSharednetObject getDhcpSharednetObjectByListName(String listName) {
+	public DhcpSharednetObject getDhcpSharednetObjectByListName(String listName) throws WbemsmtException {
 		return (DhcpSharednetObject) getObjectsByName().get(listName);
 	}
 
@@ -61,7 +63,7 @@ public class DhcpSharednetObjectList extends ObjectList {
 
 	protected Object getKey(Object value) {
 		DhcpSharednetObject obj = (DhcpSharednetObject) value;
-		return obj.getFco().get_ElementName();
+		return obj.getFco().get_Name();
 	}
 
 }

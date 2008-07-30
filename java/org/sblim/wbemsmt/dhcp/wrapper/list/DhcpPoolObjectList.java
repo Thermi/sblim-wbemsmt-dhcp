@@ -21,10 +21,12 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.list;
 
-import org.sblim.wbem.cim.CIMObjectPath;
+import javax.cim.CIMObjectPath;
+
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.wrapper.ObjectList;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpPoolObject;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
 
 public class DhcpPoolObjectList extends ObjectList {
@@ -42,15 +44,15 @@ public class DhcpPoolObjectList extends ObjectList {
 				.getCimObjectPath()));
 	}
 
-	public void addDhcpPoolObject(DhcpPoolObject obj) {
+	public void addDhcpPoolObject(DhcpPoolObject obj) throws WbemsmtException {
 		put(obj);
 	}
 
-	public DhcpPoolObject getDhcpPoolObject(int i) {
+	public DhcpPoolObject getDhcpPoolObject(int i) throws WbemsmtException {
 		return (DhcpPoolObject) getList().get(i);
 	}
 
-	public DhcpPoolObject getDhcpPoolObjectByListName(String listName) {
+	public DhcpPoolObject getDhcpPoolObjectByListName(String listName) throws WbemsmtException {
 		return (DhcpPoolObject) getObjectsByName().get(listName);
 	}
 
@@ -61,7 +63,7 @@ public class DhcpPoolObjectList extends ObjectList {
 
 	protected Object getKey(Object value) {
 		DhcpPoolObject obj = (DhcpPoolObject) value;
-		return obj.getFco().get_ElementName();
+		return obj.getFco().get_Name();
 	}
 
 }

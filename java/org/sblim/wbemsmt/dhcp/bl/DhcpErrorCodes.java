@@ -23,13 +23,13 @@ package org.sblim.wbemsmt.dhcp.bl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.sblim.wbemsmt.bl.ErrCodes;
-import org.sblim.wbemsmt.bl.MessageNumber;
-import org.sblim.wbemsmt.bl.adapter.Message;
-import org.sblim.wbemsmt.bl.adapter.MessageDefinition;
-import org.sblim.wbemsmt.bl.adapter.MessageInputEvent;
-import org.sblim.wbemsmt.bl.adapter.MessageInputHandler;
-import org.sblim.wbemsmt.bl.adapter.MessageUtil;
+import org.sblim.wbemsmt.bl.messages.ErrCodes;
+import org.sblim.wbemsmt.bl.messages.Message;
+import org.sblim.wbemsmt.bl.messages.MessageDefinition;
+import org.sblim.wbemsmt.bl.messages.MessageInputEvent;
+import org.sblim.wbemsmt.bl.messages.MessageInputHandler;
+import org.sblim.wbemsmt.bl.messages.MessageNumber;
+
 
 public class DhcpErrorCodes implements MessageInputHandler {
 

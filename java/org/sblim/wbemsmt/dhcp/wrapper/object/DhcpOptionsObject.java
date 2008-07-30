@@ -24,9 +24,9 @@ package org.sblim.wbemsmt.dhcp.wrapper.object;
 import java.util.Iterator;
 import java.util.List;
 
-import org.sblim.wbemsmt.bl.WbemsmtBusinessObject;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageList;
+import org.sblim.wbemsmt.bl.wrapper.WbemsmtBusinessObject;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupOptionsContainer;
@@ -35,9 +35,8 @@ import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPPoolOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSharednerOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPOptions;
-import org.sblim.wbemsmt.exception.ModelLoadException;
-import org.sblim.wbemsmt.exception.ObjectRevertException;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
 public class DhcpOptionsObject extends WbemsmtBusinessObject{
@@ -60,72 +59,72 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 		return new CimObjectKey(fco.getCimObjectPath());
 	}
 
-	public MessageList save ( DHCPSubnetOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPSubnetOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
 
 	}
 
-	public MessageList save ( DHCPSharednerOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPSharednerOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
 
 	}
 
-	public MessageList save ( DHCPGroupOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPGroupOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
 
 	}
 
-	public MessageList save ( DHCPHostOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPHostOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
 
 	}
 
-	public MessageList save ( DHCPPoolOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPPoolOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
 
 	}
 
-	public MessageList save ( DHCPGlobalOptionsContainer container, Object object ) throws ObjectSaveException {
+	public MessageList save ( DHCPGlobalOptionsContainer container, Object object ) throws WbemsmtException {
 
 		if (adapter.isBooleanOp ( fco.get_Name () ))
-			fco.set_Values ( object.toString () );
+			fco.set_values ( object.toString () );
 		else
-			fco.set_Values ( (String) object );
+			fco.set_values ( (String) object );
 		adapter.getFcoHelper ().save ( fco, adapter.getCimClient () );
 
 		return null;
@@ -143,9 +142,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -163,9 +162,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -183,9 +182,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -203,9 +202,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -223,9 +222,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -243,9 +242,9 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
 				
 				if( adapter.isBooleanOp ( fco.get_Name() ) )
-					fld.setControlValue ( new Boolean(fco.get_Values ()) );
+					fld.setControlValue ( new Boolean(fco.get_values ()) );
 				else
-					fld.setControlValue ( fco.get_Values ());
+					fld.setControlValue ( fco.get_values ());
 				break;
 				}
 					
@@ -254,11 +253,11 @@ public class DhcpOptionsObject extends WbemsmtBusinessObject{
 	}
 
 	
-	public MessageList revert ( DHCPSubnetOptionsContainer container ) throws ObjectRevertException {
+	public MessageList revert ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		try {
 			adapter.getFcoHelper ().reload ( fco, adapter.getCimClient () );
-		} catch (ModelLoadException e) {
-			throw new ObjectRevertException ( e );
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException ( (ErrorCode)e.getErrorCode (),e );
 		}
 		return null;
 	}

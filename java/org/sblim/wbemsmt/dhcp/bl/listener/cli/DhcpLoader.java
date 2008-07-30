@@ -18,14 +18,17 @@
 package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.cim.CIMObjectPath;
 
 import org.apache.commons.cli.CommandLine;
-import org.sblim.wbem.cim.CIMObjectPath;
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPService;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPServiceConfiguration;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.ErrorCode;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.resources.WbemSmtResourceBundle;
 
 public class DhcpLoader {
@@ -37,7 +40,7 @@ public class DhcpLoader {
 	}
 
 	
-	protected void selectService(WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, String serviceName) throws ObjectNotFoundException {
+	protected void selectService(WbemSmtResourceBundle bundle, AbstractBaseCimAdapter adapter, String serviceName) throws WbemsmtException {
 		try {
 			CIMObjectPath pathService = getPathOfService(adapter, serviceName);
 			if (pathService != null)
@@ -48,21 +51,21 @@ public class DhcpLoader {
 			}
 			else
 			{
-				throw new ObjectNotFoundException(bundle.getString("service.not.found",new Object[]{serviceName}));
+				throw new WbemsmtException(null,bundle.getString("service.not.found",new Object[]{serviceName}));
 			}
-		} catch (ObjectNotFoundException e) {
-			throw new ObjectNotFoundException(bundle.getString("service.not.found",new Object[]{serviceName}),e);
+		} catch (WbemsmtException e) {
+			throw new WbemsmtException((ErrorCode)e.getErrorCode (),bundle.getString("service.not.found",new Object[]{serviceName}),e);
 		}
 	}
 
 	
-	protected CIMObjectPath getPathOfService(AbstractBaseCimAdapter adapter, String serviceName) throws ObjectNotFoundException {
+	protected CIMObjectPath getPathOfService(AbstractBaseCimAdapter adapter, String serviceName) throws WbemsmtException {
 
-		return adapter.getFcoHelper().getPath(Linux_DHCPService.class,"Name",serviceName,adapter.getCimClient());
+		return adapter.getFcoHelper().getPath(Linux_DHCPService.class,adapter.getNamespace (),"Name",serviceName,adapter.getCimClient());
 	}
 
-	protected CIMObjectPath getPathOfServiceConfiguration(AbstractBaseCimAdapter adapter, Linux_DHCPServiceConfiguration serviceConf, String ServiceConfName) throws ObjectNotFoundException {
-		ArrayList ServiceConfNames = serviceConf.getAssociated_Linux_DHCPService_Linux_DHCPServiceConfigurationForService_Names (adapter.getCimClient(),false);
+	protected CIMObjectPath getPathOfServiceConfiguration(AbstractBaseCimAdapter adapter, Linux_DHCPServiceConfiguration serviceConf, String ServiceConfName) throws WbemsmtException {
+		List ServiceConfNames = serviceConf.getAssociated_Linux_DHCPService_Linux_DHCPServiceConfigurationForServiceNames (adapter.getCimClient());
 		return adapter.getFcoHelper().getPath(ServiceConfNames,"Name",ServiceConfName);
 	}
 

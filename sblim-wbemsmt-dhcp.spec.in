@@ -151,6 +151,10 @@ unlink $WBEMSMT_HELPDIR/plugins/org.sblim.wbemsmt.help.dhcp
 
 ###############################################################################
 %changelog
+
+* Wed Jul 30 2008 Prsahanth Karnam <prkarnam@in.ibm.com> 0.5.3-1-CVS
+	- Inclusion of fixes for the following issues:
+  		o 1965985  	  wbemsmt-dhcp: migrate to jsr48
     
 * Tue Nov 27 2007 Sam Kannan  <samkannan{at}us.ibm.com> 0.5.3-1
   - Initial upload of distributed CVS modules

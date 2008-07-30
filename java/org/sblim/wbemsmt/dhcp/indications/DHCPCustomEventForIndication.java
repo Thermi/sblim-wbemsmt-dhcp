@@ -21,9 +21,9 @@
 
 package org.sblim.wbemsmt.dhcp.indications;
 
-import org.sblim.wbem.cim.CIMInstance;
-import org.sblim.wbem.client.indications.CIMEvent;
-import org.sblim.wbemsmt.schema.cim29.CIM_Indication;
+import javax.cim.CIMInstance;
+
+import org.sblim.cimclient.internal.wbem.indications.CIMEvent;
 
 public class DHCPCustomEventForIndication extends CIMEvent {
 
@@ -33,8 +33,8 @@ public class DHCPCustomEventForIndication extends CIMEvent {
 
 	public CIMInstance getIndication(){
 		
-		iIndication.setAlias ( "Custom Indication" );
-		iIndication.setName("Custom Indication");
+//		iIndication.setAlias ( "Custom Indication" );
+//		iIndication.setName("Custom Indication");
 		
 		return iIndication;
 	}

@@ -21,10 +21,12 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.list;
 
-import org.sblim.wbem.cim.CIMObjectPath;
+import javax.cim.CIMObjectPath;
+
 import org.sblim.wbemsmt.bl.adapter.CimObjectKey;
 import org.sblim.wbemsmt.bl.wrapper.ObjectList;
 import org.sblim.wbemsmt.dhcp.wrapper.object.DhcpServiceObject;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
 
 public class DhcpServiceObjectList extends ObjectList {
@@ -42,15 +44,15 @@ public class DhcpServiceObjectList extends ObjectList {
 				.getCimObjectPath()));
 	}
 
-	public void addDhcpServiceObject(DhcpServiceObject obj) {
+	public void addDhcpServiceObject(DhcpServiceObject obj) throws WbemsmtException {
 		put(obj);
 	}
 
-	public DhcpServiceObject getDhcpServiceObject(int i) {
+	public DhcpServiceObject getDhcpServiceObject(int i) throws WbemsmtException {
 		return (DhcpServiceObject) getList().get(i);
 	}
 
-	public DhcpServiceObject getDhcpServiceObjectByListName(String listName) {
+	public DhcpServiceObject getDhcpServiceObjectByListName(String listName) throws WbemsmtException {
 		return (DhcpServiceObject) getObjectsByName().get(listName);
 	}
 

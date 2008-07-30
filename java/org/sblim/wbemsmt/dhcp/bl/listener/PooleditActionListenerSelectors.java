@@ -19,19 +19,26 @@
   */
 package org.sblim.wbemsmt.dhcp.bl.listener;
 
+import javax.wbem.WBEMException;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.bl.adapter.TaskLauncherTreeNodeSelector;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
+import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeSelector;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class PooleditActionListenerSelectors {
 
 	public static class PoolTabPooleditPanelSelector implements TaskLauncherTreeNodeSelector {
 
 		public void select ( ITaskLauncherTreeNode treeNode, AbstractBaseCimAdapter adapter, String editPanelId )
-				throws ObjectNotFoundException {
-			((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+				throws WbemsmtException {
+			try {
+				((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+			} catch (WBEMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -39,8 +46,13 @@ public class PooleditActionListenerSelectors {
 	public static class PoolParamsTabPoolParamseditPanelSelector implements TaskLauncherTreeNodeSelector {
 
 		public void select ( ITaskLauncherTreeNode treeNode, AbstractBaseCimAdapter adapter, String editPanelId )
-				throws ObjectNotFoundException {
-			((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+				throws WbemsmtException {
+			try {
+				((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+			} catch (WBEMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -48,8 +60,13 @@ public class PooleditActionListenerSelectors {
 	public static class PoolOptionsTabPoolOptionseditPanelSelector implements TaskLauncherTreeNodeSelector {
 
 		public void select ( ITaskLauncherTreeNode treeNode, AbstractBaseCimAdapter adapter, String editPanelId )
-				throws ObjectNotFoundException {
-			((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+				throws WbemsmtException {
+			try {
+				((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+			} catch (WBEMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -57,8 +74,13 @@ public class PooleditActionListenerSelectors {
 	public static class FieldTabPooleditPanelSelector implements TaskLauncherTreeNodeSelector {
 
 		public void select ( ITaskLauncherTreeNode treeNode, AbstractBaseCimAdapter adapter, String editPanelId )
-				throws ObjectNotFoundException {
-			((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+				throws WbemsmtException {
+			try {
+				((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode ) );
+			} catch (WBEMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}

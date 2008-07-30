@@ -20,11 +20,13 @@
   */
 package org.sblim.wbemsmt.dhcp.bl.listener;
 
+import javax.wbem.WBEMException;
+
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.bl.adapter.TaskLauncherTreeNodeSelectorForCreate;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
+import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeSelectorForCreate;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
-import org.sblim.wbemsmt.exception.ObjectNotFoundException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class SharednetcreateActionListenerSelector implements TaskLauncherTreeNodeSelectorForCreate {
 
@@ -39,9 +41,14 @@ public class SharednetcreateActionListenerSelector implements TaskLauncherTreeNo
 	}
 
 	public void select ( ITaskLauncherTreeNode treeNode, AbstractBaseCimAdapter adapter, String editPanelId )
-			throws ObjectNotFoundException {
+			throws WbemsmtException {
 		this.adapter =((DhcpCimAdapter)adapter); 
-		((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode));
+		try {
+			((DhcpCimAdapter)adapter).selectByKey ( adapter.getKeyByTreeNode ( treeNode));
+		} catch (WBEMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

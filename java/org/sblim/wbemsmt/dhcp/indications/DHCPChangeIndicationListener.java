@@ -21,17 +21,15 @@
 
 package org.sblim.wbemsmt.dhcp.indications;
 
-import java.util.HashMap;
-import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.sblim.wbem.client.indications.CIMEvent;
-import org.sblim.wbem.client.indications.CIMListener;
-import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
-import org.sblim.wbemsmt.exception.WbemSmtException;
-import org.sblim.wbemsmt.schema.cim29.CIM_ProcessIndication;
+import javax.cim.CIMInstance;
+import javax.wbem.listener.IndicationListener;
 
-public class DHCPChangeIndicationListener implements CIMListener {
+import org.sblim.cimclient.internal.wbem.indications.CIMEvent;
+import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
+
+public class DHCPChangeIndicationListener implements IndicationListener {
 
 	private DhcpCimAdapter adapter;
 	Logger logger = Logger.getLogger ( this.getClass ().getName () );
@@ -43,6 +41,11 @@ public class DHCPChangeIndicationListener implements CIMListener {
 
 	public void indicationOccured ( CIMEvent arg0 ) {
 		logger.info("Indication on class " + (arg0.getIndication ().getProperty ("IndicationIdentifier").getValue().toString ()) + " recieved and processing it.");
+		adapter.setIndcOccurred ( true );
+	}
+
+	public void indicationOccured ( String arg0, CIMInstance arg1 ) {
+		logger.info(arg0);
 		adapter.setIndcOccurred ( true );
 	}
 

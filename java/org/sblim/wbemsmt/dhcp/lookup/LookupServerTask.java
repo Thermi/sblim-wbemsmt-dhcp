@@ -21,12 +21,18 @@
 
 package org.sblim.wbemsmt.dhcp.lookup;
 
-import org.sblim.wbem.client.CIMClient;
+import javax.wbem.client.WBEMClient;
+
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.lookup.Lookup;
 
 public class LookupServerTask implements Lookup {
 
-	public boolean lookup ( CIMClient cimClient ) {
+	public boolean lookup ( WBEMClient cimClient ) {
+		return true;
+	}
+
+	public boolean lookup ( WBEMClient cimClient, String namespace ) throws WbemsmtException {
 		return true;
 	}
 

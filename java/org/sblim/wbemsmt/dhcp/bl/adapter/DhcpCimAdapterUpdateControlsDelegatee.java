@@ -54,7 +54,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPOptions;
-import org.sblim.wbemsmt.exception.UpdateControlsException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterUpdateControlsDelegatee implements DhcpCimAdapterUpdateControlsIf {
 
@@ -64,144 +64,144 @@ public class DhcpCimAdapterUpdateControlsDelegatee implements DhcpCimAdapterUpda
 		this.adapter = adapter;
 	}
 
-	public void updateControlsImpl ( DHCPGroupsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGroupsContainer container ) throws WbemsmtException {
 		adapter.getDhcpGroupObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPHostsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPHostsContainer container ) throws WbemsmtException {
 		adapter.getDhcpHostObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPOptionsContainer container ) throws WbemsmtException {
 		
 	}
 
-	public void updateControlsImpl ( DHCPParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPParamsContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateControlsImpl ( DHCPPoolsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPPoolsContainer container ) throws WbemsmtException {
 		adapter.getDhcpPoolObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSharednetsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSharednetsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSharednetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSubnetsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSubnetsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSubnetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DhcpServiceConfContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 		adapter.getDhcpServiceConfigurationObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container, Linux_DHCPOptions fco ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListContainer container, Linux_DHCPOptions fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpEntityObj ().updateControls(container);
 	}
 
-	public void updateControlsImpl ( DHCPGlobalParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpEntityObj ().updateControls(container);		
 	}
 
-	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container, Linux_DHCPOptions fco ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGlobalOptionsListItemContainer container, Linux_DHCPOptions fco ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void updateControlsImpl ( DHCPGroupOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpGroupObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPGroupParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpGroupObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPHostOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPHostOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpHostObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPHostParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPHostParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpHostObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPPoolOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPPoolOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpPoolObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPPoolParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPPoolParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpPoolObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSharednerOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSharednerOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSharednetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSharednetParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSharednetParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSharednetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSubnetOptionsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSubnetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( DHCPSubnetParamsContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( DHCPSubnetParamsContainer container ) throws WbemsmtException {
 		adapter.getDhcpSubnetObj ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewGroupContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewGroupContainer container ) throws WbemsmtException {
 		adapter.getNewgroupwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewHostContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewHostContainer container ) throws WbemsmtException {
 		adapter.getNewhostwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewHostSummaryContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewHostSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewhostwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewPoolContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewPoolContainer container ) throws WbemsmtException {
 		adapter.getNewpoolwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewPoolSummaryContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewPoolSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewpoolwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewSharednetContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewSharednetContainer container ) throws WbemsmtException {
 		adapter.getNewsharednetwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewSharednetSummaryContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewSharednetSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewsharednetwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewSubnetContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewSubnetContainer container ) throws WbemsmtException {
 		adapter.getNewsubnetwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( NewSubnetSummaryContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( NewSubnetSummaryContainer container ) throws WbemsmtException {
 		adapter.getNewsubnetwizard ().updateControls ( container );
 	}
 
-	public void updateControlsImpl ( WelcomeContainer container ) throws UpdateControlsException {
+	public void updateControlsImpl ( WelcomeContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 		
 	}

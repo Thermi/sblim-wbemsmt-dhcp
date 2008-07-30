@@ -24,16 +24,14 @@
 
 package org.sblim.wbemsmt.dhcp.bl.container.edit.jsf;
 
-import java.util.*;
-
-import org.sblim.wbemsmt.tools.input.jsf.*;
-import org.sblim.wbemsmt.tools.input.*;
-import org.sblim.wbemsmt.exception.*;
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
+import org.sblim.wbemsmt.exception.WbemsmtException;
+import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
+import org.sblim.wbemsmt.tools.input.jsf.LabeledJSFInputComponent;
 
 
 	
@@ -58,7 +56,7 @@ public class DHCPGlobalOptionsListContainer_AsDHCPGlobalOptionsList_InDHCPGlobal
 	
 	
 	
-	public DHCPGlobalOptionsListContainer_AsDHCPGlobalOptionsList_InDHCPGlobalOptionsListItemContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix,int index) throws InitContainerException {
+	public DHCPGlobalOptionsListContainer_AsDHCPGlobalOptionsList_InDHCPGlobalOptionsListItemContainerImpl(org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter adapter,String bindingPrefix,int index) throws WbemsmtException {
 	    super(adapter,bindingPrefix,index);
 		adapter.initContainer(this);
 	}

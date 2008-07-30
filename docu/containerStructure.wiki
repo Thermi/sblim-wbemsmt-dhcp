@@ -181,8 +181,6 @@
 *Fields:*
 | *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
 | Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | --- | -name, Required |
-| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | --- | -mACAddr, Required |
-| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | --- | -iPAddr, Optional,no default |
 
 {panel}
 
@@ -415,8 +413,8 @@
 *Fields:*
 | *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
 | ConfigurationFile | STRING | TEXTFIELD | Linux_DHCPServiceConfiguration.get_ConfigurationFile \\ | --- | -configurationFile, Required |
-| startService | UNSIGNED_INT32 | BUTTON | Linux_DHCPService.invoke_startService \\ | --- | -startService, Optional,no default |
-| stopService | UNSIGNED_INT32 | BUTTON | Linux_DHCPService.invoke_stopService \\ | --- | -stopService, Optional,no default |
+| startService | ACTION | BUTTON | Linux_DHCPService.invoke_startService \\ | --- | -startService, Optional,no default |
+| stopService | ACTION | BUTTON | Linux_DHCPService.invoke_stopService \\ | --- | -stopService, Optional,no default |
 | restartservice | ACTION | BUTTON | userdefined \\ | Userdefined | -restartService, Optional,no default |
 
 {panel}
@@ -469,8 +467,6 @@
 *Fields:*
 | *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
 | Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | --- | -name, Required |
-| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | --- | -mACAddr, Required |
-| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | --- | -iPAddr, Optional,no default |
 
 {panel}
 
@@ -489,8 +485,6 @@
 *Fields:*
 | *Fieldname* | *DataType* | *UIType* | *related FCO Field* | *Constraints* | *Commandline* |
 | Name | STRING | TEXTFIELD | Linux_DHCPHost.get_Name \\ | Readonly | -name, Optional,no default |
-| MACAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_MACAddr \\ | Readonly | -mACAddr, Optional,no default |
-| IPAddr | STRING | TEXTFIELD | Linux_DHCPHost.get_IPAddr \\ | Readonly | -iPAddr, Optional,no default |
 
 {panel}
 

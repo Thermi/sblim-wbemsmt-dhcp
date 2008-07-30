@@ -21,7 +21,7 @@
 
 package org.sblim.wbemsmt.dhcp.bl.adapter;
 
-import org.sblim.wbemsmt.bl.adapter.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageList;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupOptionsContainer;
@@ -42,7 +42,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DhcpServiceConfContainer;
-import org.sblim.wbemsmt.exception.ObjectSaveException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterSaveDelegatee implements DhcpCimAdapterSaveIf {
 
@@ -53,84 +53,84 @@ public class DhcpCimAdapterSaveDelegatee implements DhcpCimAdapterSaveIf {
 		this.adapter = adapter;
 	}
 
-	public MessageList saveImpl ( DHCPGroupsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGroupsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpGroupObj ().saveGroup ( container );
 	}
 
-	public MessageList saveImpl ( DHCPHostsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPHostsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpHostObj ().saveHost ( container );
 	}
 
-	public MessageList saveImpl ( DHCPOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPOptionsContainer container ) throws WbemsmtException {
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPParamsContainer container ) throws WbemsmtException {
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPPoolsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPPoolsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpPoolObj ().savePool ( container );
 	}
 
-	public MessageList saveImpl ( DHCPSharednetsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSharednetsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSharednetObj ().saveSharedNet ( container );
 	}
 
-	public MessageList saveImpl ( DHCPSubnetsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSubnetsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSubnetObj ().saveSubnet ( container );
 	}
 
-	public MessageList saveImpl ( DhcpServiceConfContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 //		return adapter.getDhcpServiceConfigurationObj().save(container);
 		return null;
 	}
 
-	public MessageList saveImpl ( DHCPGlobalOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpEntityObj ().save(container);
 	}
 
-	public MessageList saveImpl ( DHCPGlobalParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGlobalParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpEntityObj ().save(container);
 	}
 
-	public MessageList saveImpl ( DHCPGroupOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGroupOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpGroupObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPGroupParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPGroupParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpGroupObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPHostOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPHostOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpHostObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPHostParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPHostParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpHostObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPPoolOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPPoolOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpPoolObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPPoolParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPPoolParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpPoolObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPSharednerOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSharednerOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSharednetObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPSharednetParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSharednetParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSharednetObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPSubnetOptionsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSubnetOptionsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSubnetObj ().save ( container);
 	}
 
-	public MessageList saveImpl ( DHCPSubnetParamsContainer container ) throws ObjectSaveException {
+	public MessageList saveImpl ( DHCPSubnetParamsContainer container ) throws WbemsmtException {
 		return adapter.getDhcpSubnetObj ().save ( container);
 	}
 

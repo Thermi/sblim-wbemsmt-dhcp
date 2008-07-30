@@ -24,11 +24,11 @@
 
 package org.sblim.wbemsmt.dhcp.bl.listener;
 
+import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEvent;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tasklauncher.event.TaskLauncherContextMenuEventListener;
 import org.sblim.wbemsmt.tasklauncher.event.TaskLauncherContextMenuEventListenerImpl;
-import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeEvent;
 import org.sblim.wbemsmt.tools.runtime.RuntimeUtil;
-import org.sblim.wbemsmt.exception.WbemSmtException;
 
 public class DHCPGlobalOptionsListActionListener extends TaskLauncherContextMenuEventListenerImpl implements org.sblim.wbemsmt.tasklauncher.event.ListListener {
 
@@ -36,9 +36,9 @@ public class DHCPGlobalOptionsListActionListener extends TaskLauncherContextMenu
 	String swingListener = "org.sblim.wbemsmt.dhcp.bl.listener.jswing.DHCPGlobalOptionsListActionListener";
 	//String cmdListener = "org.sblim.wbemsmt.dhcp.bl.listener.cli.DHCPGlobalOptionsListActionListener";
 	
-	public String processEvent(TaskLauncherTreeNodeEvent event) throws WbemSmtException {
+	public String processEvent(TaskLauncherTreeNodeEvent event) throws WbemsmtException {
 		
-		if (event.type == TaskLauncherTreeNodeEvent.TYPE_CLICKED)
+		if (event.getType() == TaskLauncherTreeNodeEvent.TYPE_CLICKED)
 		{
     		String listenerClass = null;
     		try {
@@ -58,10 +58,10 @@ public class DHCPGlobalOptionsListActionListener extends TaskLauncherContextMenu
     			
     			TaskLauncherContextMenuEventListener listener = (TaskLauncherContextMenuEventListener) Class.forName(listenerClass).newInstance();
     			return listener.processEvent(event);
-    		} catch (WbemSmtException  e) {
+    		} catch (WbemsmtException  e) {
     			throw e;
     		} catch (Exception e) {
-    			throw new WbemSmtException("Cannot process Event with listener " + listenerClass,e);
+    			throw new WbemsmtException(null,"Cannot process Event with listener " + listenerClass,e.getCause ());
     		} 
 
 		}

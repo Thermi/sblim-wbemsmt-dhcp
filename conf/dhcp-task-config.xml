@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tas:tasklauncherconfig version="VERSION_2_5" xsi:schemaLocation="http://sblim.org/wbemsmt/tasklauncher/tasklauncherconfig ../../wbemsmt-commons/commons-bl/conf/tasklauncher-config.xsd" xmlns:tas="http://sblim.org/wbemsmt/tasklauncher/tasklauncherconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<tas:tasklauncherconfig version="VERSION_2_6" xsi:schemaLocation="http://sblim.org/wbemsmt/tasklauncher/tasklauncherconfig ../../wbemsmt-commons/commons-bl/conf/tasklauncher-config.xsd" xmlns:tas="http://sblim.org/wbemsmt/tasklauncher/tasklauncherconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <tas:treeconfig namespace="root/cimv2" name="DHCP" filename="dhcpTree.xml" slpServicename="oher:dhcp" classForServerTaskLookup="org.sblim.wbemsmt.dhcp.lookup.LookupServerTask" embeddedFilter="org.sblim.wbemsmt.dhcp.filter.EmbeddedFilter" welcomeListener="org.sblim.wbemsmt.dhcp.bl.listener.WelcomeListener">
-        <tas:fcoPackage name="org.sblim.wbemsmt.dhcp.bl.fco"/>
         <tas:resourceBundle name="messages"/>
         <tas:resourceBundle name="messagesDhcp"/>
         <tas:configurationDefinition name="treeLoadingLogic" defaultValue="0" info="info.treeLoadingLogic"/> 

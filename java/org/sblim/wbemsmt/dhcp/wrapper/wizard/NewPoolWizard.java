@@ -28,7 +28,7 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParamsForEntity;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPoolsForEntity;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class NewPoolWizard {
 
@@ -51,38 +51,39 @@ public class NewPoolWizard {
 		container.get_usr_Range ().setControlValue ( newPool.get_usr_Range ().getConvertedControlValue () );
 	}
 
-	public void create(NewPoolSummaryContainer container) throws ObjectCreationException{
+	public void create(NewPoolSummaryContainer container) throws WbemsmtException{
 	
-		Linux_DHCPPool Pool = new Linux_DHCPPool();
+		Linux_DHCPPool Pool = new Linux_DHCPPool(adapter.getCimClient (),adapter.getNamespace ());
 //		Pool.set_IPAddrEnd ( (String) container.get_IPAddrEnd ().getConvertedControlValue () );
 		Pool.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		if(DhcpCimAdapter.isDummyMode ())
-			Pool.set_InstanceID ( "WBEM_SMT:LinuxDHCPPool::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ());
+			Pool.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPPool::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ());
 		else
-			Pool.set_InstanceID ("");
-		Pool.set_ParentID ( adapter.getSelectedEntity ().get_InstanceID () );
+			Pool.set_key_InstanceID ("");
+		Pool.set_ParentID ( adapter.getSelectedEntity ().get_key_InstanceID() );
 		Pool = (Linux_DHCPPool) adapter.getFcoHelper ().create ( Pool, adapter.getCimClient () );
 		
 		if(DhcpCimAdapter.isDummyMode ()){
-		Linux_DHCPPoolsForEntity assoc = new Linux_DHCPPoolsForEntity();
+		Linux_DHCPPoolsForEntity assoc = new Linux_DHCPPoolsForEntity(adapter.getCimClient (),adapter.getNamespace ());
 		
-		assoc.set_Linux_DHCPPool ( Pool );
-		assoc.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+		assoc.set_PartComponent_Linux_DHCPPool ( Pool );
+		assoc.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
 		
 		assoc = (Linux_DHCPPoolsForEntity) adapter.getFcoHelper ().create ( assoc, adapter.getCimClient () );
 		}
-		Linux_DHCPParams poolop = new Linux_DHCPParams();
-		poolop.set_InstanceID ( "WBEM_SMT:LinuxDHCPParams::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ ":: range" );
+		Linux_DHCPParams poolop = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
+		if (DhcpCimAdapter.isDummyMode ())
+			poolop.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPParams::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ ":: range" );
 		poolop.set_Name ( "range" );
-		poolop.set_ParentID ( Pool.get_InstanceID () );
-		poolop.set_Values ( (String)container.get_usr_Range ().getConvertedControlValue () );
+		poolop.set_ParentID ( Pool.get_key_InstanceID() );
+		poolop.set_values ( (String)container.get_usr_Range ().getConvertedControlValue () );
 		
 		poolop = (Linux_DHCPParams) adapter.getFcoHelper ().create ( poolop, adapter.getCimClient () );
 		
 		if(DhcpCimAdapter.isDummyMode ()){
-		Linux_DHCPParamsForEntity opentity = new Linux_DHCPParamsForEntity();
-		opentity.set_Linux_DHCPEntity ( Pool );
-		opentity.set_Linux_DHCPParams ( poolop );
+		Linux_DHCPParamsForEntity opentity = new Linux_DHCPParamsForEntity(adapter.getCimClient (),adapter.getNamespace ());
+		opentity.set_GroupComponent_Linux_DHCPEntity ( Pool );
+		opentity.set_PartComponent_Linux_DHCPParams ( poolop );
 		
 		opentity = (Linux_DHCPParamsForEntity) adapter.getFcoHelper ().create ( opentity, adapter.getCimClient () );
 		}

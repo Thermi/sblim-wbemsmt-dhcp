@@ -5,7 +5,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewPoolContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetContainer;
-import org.sblim.wbemsmt.exception.ModelUpdateException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterUpdateModelDelegatee implements DhcpCimAdapterUpdateModelIf {
 
@@ -15,27 +15,27 @@ public class DhcpCimAdapterUpdateModelDelegatee implements DhcpCimAdapterUpdateM
 		this.adapter = adapter;
 	}
 
-	public void updateModelImpl ( DhcpServiceConfContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateModelImpl ( NewHostContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( NewHostContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateModelImpl ( NewPoolContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( NewPoolContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateModelImpl ( NewSharednetContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( NewSharednetContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateModelImpl ( NewSubnetContainer container ) throws ModelUpdateException {
+	public void updateModelImpl ( NewSubnetContainer container ) throws WbemsmtException {
 		// TODO Auto-generated method stub
 
 	}

@@ -26,7 +26,7 @@ import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnetsForEntity;
-import org.sblim.wbemsmt.exception.ObjectCreationException;
+import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class NewSubnetWizard {
 
@@ -48,24 +48,24 @@ public class NewSubnetWizard {
 		container.get_Name ().setControlValue ( newSubnet.get_Name ().getConvertedControlValue () );
 	}
 
-	public void create(NewSubnetSummaryContainer container) throws ObjectCreationException{
+	public void create(NewSubnetSummaryContainer container) throws WbemsmtException{
 	
-		Linux_DHCPSubnet Subnet = new Linux_DHCPSubnet();
+		Linux_DHCPSubnet Subnet = new Linux_DHCPSubnet(adapter.getCimClient (),adapter.getNamespace ());
 		Subnet.set_Netmask ( (String) container.get_Netmask ().getConvertedControlValue () );
 		Subnet.set_Name ( (String) container.get_Name ().getConvertedControlValue () );
 		if(DhcpCimAdapter.isDummyMode ())
-			Subnet.set_InstanceID ( "WBEM_SMT:LinuxDHCPSubnet::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ());
+			Subnet.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPSubnet::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ "::"+ container.get_Name ().getConvertedControlValue ());
 		else
-			Subnet.set_InstanceID ("");
-		Subnet.set_ParentID ( adapter.getSelectedEntity ().get_InstanceID () );
+			Subnet.set_key_InstanceID ("");
+		Subnet.set_ParentID ( adapter.getSelectedEntity ().get_key_InstanceID() );
 		
 		Subnet = (Linux_DHCPSubnet) adapter.getFcoHelper ().create ( Subnet, adapter.getCimClient () );
 		
 		if(DhcpCimAdapter.isDummyMode ()){
-		Linux_DHCPSubnetsForEntity assoc = new Linux_DHCPSubnetsForEntity();
+		Linux_DHCPSubnetsForEntity assoc = new Linux_DHCPSubnetsForEntity(adapter.getCimClient (),adapter.getNamespace ());
 		
-		assoc.set_Linux_DHCPSubnet ( Subnet );
-		assoc.set_Linux_DHCPEntity ( adapter.getSelectedEntity () );
+		assoc.set_PartComponent_Linux_DHCPSubnet ( Subnet );
+		assoc.set_GroupComponent_Linux_DHCPEntity ( adapter.getSelectedEntity () );
 		
 		assoc = (Linux_DHCPSubnetsForEntity) adapter.getFcoHelper ().create ( assoc, adapter.getCimClient () );
 		}
