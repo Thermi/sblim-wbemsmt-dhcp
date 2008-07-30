@@ -1,1014 +1,1399 @@
 /** 
  * Linux_DHCPService.java
  *
- * © Copyright IBM Corp. 2005
+ * 
+ * © Copyright IBM Corp. 2006,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
  * You can obtain a current copy of the Common Public License from
  * http://www.opensource.org/licenses/cpl1.0.php
  *
- * @author:	ECCG 0.9.7 generated 
- * 			(author should be changed, e.g. First and Last Name <xxx@cc.ibm.com>)
+ * @author: org.sblim.wbemsmt.dcg.generator.fco.jsr48.FcoGenerator
+ * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm
  *
  * Contributors:
- *
- *
- * Description:  Entity that repsresents the DHCP Service
+ *    TODO add author by using vm argument -Ddcg.author=<email> during startup 
  * 
+ * Description: Entity that repsresents the DHCP Service 
+ * 
+ * generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.fco;
 
-import java.security.InvalidParameterException;
-import java.util.Vector;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Iterator;
-import org.sblim.wbem.cim.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.lang.reflect.Constructor;
-import org.sblim.wbem.client.*;
+import javax.cim.*;
+import javax.wbem.client.*;
 
+import org.sblim.wbemsmt.exception.*;
+import org.sblim.wbemsmt.exception.impl.*;
+import org.sblim.wbemsmt.exception.impl.userobject.*;
 
-import org.sblim.wbemsmt.schema.cim29.*;
+import java.lang.reflect.*;
+import javax.wbem.*;
 
+public class Linux_DHCPService extends CIM_Service {
 
-/**
- *  Entity that repsresents the DHCP Service
- */
-public class Linux_DHCPService extends CIM_Service  {
-	
-	public final static String CIM_CLASS_NAME = "Linux_DHCPService"; //$NON-NLS-1$
-	public final static String CIM_CLASS_DISPLAYNAME = CIM_CLASS_NAME;
+    public final static String CIM_CLASS_NAME = "Linux_DHCPService";
+    public final static String CIM_CLASS_DISPLAYNAME = CIM_CLASS_NAME;
 
-	private boolean validCimInstance = false;
-	
-	public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE = "Linux_DHCPElementConformsToProfile"; //$NON-NLS-1$
-	public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE = "Linux_DHCPGlobalForService"; //$NON-NLS-1$
-	public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE = "Linux_DHCPServiceConfigurationForService"; //$NON-NLS-1$
-	
-	
-	
-	
-	
+    /**
+     * Association between the DHCP Registered Profile and the DHCP Service
+     */
 
-	public static Vector CIM_PropertyNameList	= new Vector();
-	public static Vector CIM_PropertyList 		= new Vector();
-	private static Set Java_Package_List 		= new HashSet();
-	
-	static {
-				
-		for (int i = 0; i < CIM_Service.CIM_PropertyNameList.size(); i++) {
-			
-			Linux_DHCPService.CIM_PropertyNameList.add(CIM_Service.CIM_PropertyNameList.elementAt(i));
-		}
-		
-				
-		for (int i = 0; i < CIM_Service.CIM_PropertyList.size(); i++) {
-			
-			Linux_DHCPService.CIM_PropertyList.add(CIM_Service.CIM_PropertyList.elementAt(i));
-		}
-		
-		addPackage("org.sblim.wbemsmt.dhcp.bl.fco");
-				
-		String[] parentClassPackageList = CIM_Service.getPackages();
-		
-		for (int i = 0; i < parentClassPackageList.length; i++) {
-			Java_Package_List.add(parentClassPackageList[i]);
-		}
-	};
-			
-	
-	
-	
-	
-	//**********************************************************************
-	// Constructors 	
-	//**********************************************************************
+    public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE = "Linux_DHCPElementConformsToProfile";
 
-	/**
-	*	Class constructor
-	*/	
-	public Linux_DHCPService() {
+    /**
+     * This Class is a bridge between the classes in the global scope and the service itself. All the global class entities would be linked through the DHCPGlobal class and they inturn would represent Entities like Subnet , Sharednet ..etc.  and hence the Entities are actually made uniques in terms of Service scope.
+     */
 
-		this.cimInstance	= new CIMInstance();
-		
-		for (int i = 0; i < CIM_PropertyList.size(); i++) {
-			this.cimInstance.addProperty((CIMProperty)((CIMProperty)CIM_PropertyList.get(i)).clone());
-		}
-		
-		this.cimObjectPath 	= new CIMObjectPath(CIM_CLASS_NAME);
-		this.cimInstance.setObjectPath(this.cimObjectPath);
+    public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE = "Linux_DHCPGlobalForService";
 
-		this.original_cimInstance	= (CIMInstance)this.cimInstance.clone();
+    /**
+     *  An Association between the Service and the Configuration data specified in the ServiceConfiguration class
+     */
 
-		setValidCimInstance(false);
-	}
+    public final static String CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE = "Linux_DHCPServiceConfigurationForService";
 
+    static {
+        addPackage("org.sblim.wbemsmt.dhcp.bl.fco");
+        String[] parentClassPackageList = CIM_Service.getPackages();
 
-	/**
-	*	Class constructor
-	*/	
-	public Linux_DHCPService(Vector keyProperties){ 
-		this();
-		
-		if (keyProperties == null) {
-			throw new InvalidParameterException("The keyProperties parameter does not contain a valid reference.");
-		
-		}
-		
-		Iterator iter = keyProperties.iterator();
-		while (iter.hasNext()) {
-			Object property = iter.next();
-			
-			if (property instanceof CIMProperty) {
-				CIMProperty keyProperty = (CIMProperty)property;
-				this.cimObjectPath.addKey(keyProperty);
-				
-				if (this.cimInstance.getProperty(keyProperty.getName()) != null) {
-					this.cimInstance.removeProperty(keyProperty.getName());
-				}
-				this.cimInstance.addProperty(keyProperty);
-				
-			} else {
-				throw new InvalidParameterException("The keyProperties parameter should only contain objects of class CIMProperty.");
-				
-			}
-		}
-		
-		setValidCimInstance(false);
-	}
+        for (int i = 0; i < parentClassPackageList.length; i++) {
+            addPackage(parentClassPackageList[i]);
+        }
 
-	
-	/**
-	*	Class constructor
-	*/	
-	public Linux_DHCPService(CIMObjectPath cimObjectPath, CIMInstance cimInstance){ 
-		
-		if (cimInstance == null) {
-			throw new InvalidParameterException("The cimInstance parameter does not contain a valid reference.");
-		
-		} else if (cimObjectPath == null){
-			throw new InvalidParameterException("The cimObjectPath parameter does not contain a valid reference.");		
-		
-		} else if (!cimObjectPath.getObjectName().equals(cimInstance.getClassName())) {
-			throw new InvalidParameterException("The class name of the instance and the ObjectPath are not the same.");
-		}
-		
-		setCimInstance(cimInstance);
-		this.original_cimInstance = (CIMInstance)cimInstance.clone();
-		this.cimObjectPath        = cimObjectPath;
-		setValidCimInstance(true);
-	}
+    };
 
-	
-	/**
-	*	The method returns the display name of the class
-	*/	
-	public String getClassDisplayName(){
-		return CIM_CLASS_DISPLAYNAME;
-	}
-	
-	public static void addPackage(String packagename) {
-        if (packagename != null) {
-            if (!packagename.endsWith(".")) {
-                packagename = packagename + ".";
-            }
-            Linux_DHCPService.Java_Package_List.add(packagename);
-            
-        } else {
-            throw new NullPointerException();
+    //**********************************************************************
+    // Constructors     
+    //**********************************************************************
+
+    /**
+     *   Class constructor
+     * 
+     *       *   <br>
+     *   Entity that repsresents the DHCP Service 
+     *   @param client the CIM Client
+     *   @param namespace the target namespace
+     */
+
+    public Linux_DHCPService(WBEMClient client, String namespace) throws WbemsmtException {
+        CIMClass cls = getClass(client, namespace);
+        setFromServer(false);
+        init(cls.newInstance(), true);
+    }
+
+    /**
+     *   Class constructor
+     * 
+     *       *   <br>
+     *   Entity that repsresents the DHCP Service 
+     *   @param cimInstance the instance that is used to create the Object
+     */
+
+    public Linux_DHCPService(CIMInstance cimInstance) throws WbemsmtException {
+
+        if (cimInstance == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimInstance parameter does not contain a valid reference.");
+        }
+        setFromServer(true);
+        init(cimInstance, false);
+    }
+
+    /**
+     * Default constructor
+     */
+    protected Linux_DHCPService() {
+    }
+
+    /**
+     * initializes the FCO
+     *
+     *   @param cimInstance the instance that is used to create the Object
+     *   @param overwrite currently the dataType of embeddedObject/Instance properties is not set correct by the cimClient. This flags decides if to overwrite thos properties
+     */
+    protected void init(CIMInstance cimInstance, boolean overwrite) throws WbemsmtException {
+
+        super.init(cimInstance, overwrite);
+
+        //currently the dataType of embeddedObject/Instance properties is not set correct by the cimClient
+        //we overwrite the dataType by setting null for every embeddedObject/Instance property
+        if (overwrite) {
+
         }
     }
 
-    public static String[] getPackages() {
-        return (String[]) Linux_DHCPService.Java_Package_List.toArray(new String[Linux_DHCPService.Java_Package_List.size()]);
+    //**********************************************************************
+    // Properties get/set     
+    //**********************************************************************
+
+    //**********************************************************************
+    // Associators methods     
+    //**********************************************************************
+
+    /**
+     * Get the list with Linux_DHCPRegisteredProfile objects associated by the association Linux_DHCPElementConformsToProfile
+     * 
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(
+            WBEMClient cimClient) throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(
+                cimClient, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE,
+                Linux_DHCPRegisteredProfile.CIM_CLASS_NAME, null, null, false, false, null);
+
     }
-	
-	//**********************************************************************
-	// Instance methods
-	//**********************************************************************
 
-	/**
-	*	no description
-	*/	
-	public boolean isDataValid(Vector invalidProperties) {
-		boolean result = true;
-		
-		if (invalidProperties == null) {
-			invalidProperties = new Vector();
-		} else {
-			invalidProperties.removeAllElements();
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * @return Returns the validCimInstance.
-	 */
-	public boolean isValidCimInstance() {
-		return this.validCimInstance;
-	}
-	
-	/**
-	 * @param validCimInstance The validCimInstance to set.
-	 */
-	private void setValidCimInstance(boolean isValidCimInstance) {
+    /**
+     * Get the list with Linux_DHCPRegisteredProfile objects associated by the association Linux_DHCPElementConformsToProfile
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
 
-		this.validCimInstance = isValidCimInstance;
-	}
-	
-	
-	/**
-	*	The method returns this CIM instance
-	*/
-	public CIMInstance getCimInstance() {
-		
-		return this.cimInstance;
-	}
-	
-	
-	/**
-	*	The method sets this CIM instance
-	*/
-	public void setCimInstance(CIMInstance cimInstance) {
-		
-		this.cimInstance = cimInstance;
-	}
-	
-		
-	/**
-	*	The method returns this CIM object path
-	*/
-	public CIMObjectPath getCimObjectPath() {
-		return this.cimObjectPath;
-	}
-	
-	
-	/**
-	*	The method checks if the cimInstance has been modified
-	*/
-	public boolean isModified() {
-	    
-	    if (!this.original_cimInstance.equals(this.cimInstance)) 
-	        return true;
-	    
-	    return false;
-	}
-	
-	
-	/**
-	*	The method resets the values of the cimInstance
-	*/	
-	public void resetValues() {
-	    this.cimInstance = (CIMInstance)this.original_cimInstance.clone();
-	}
-	
-	
-	/**
-	*	The method checks if the cimInstance equals an other cimInstance
-	*/	
-	public boolean equals(Object object) {
-	    
-	    if (!(object instanceof Linux_DHCPService)) {
-	        return false;
-	    }
-	    
-	    if (this.cimInstance == null && ((Linux_DHCPService)object).cimInstance != null) {
-	    	return false;
-	    	
-	    } else if (this.cimInstance != null && ((Linux_DHCPService)object).cimInstance == null) {
-	    	return false;
-	    	
-	    } else if (this.cimInstance != null && !this.cimInstance.equals(((Linux_DHCPService)object).cimInstance)) {
-	    	return false;
-	    	
-	    } else if (this.original_cimInstance == null && ((Linux_DHCPService)object).original_cimInstance != null) {
-	    	return false;
-	    	
-	    } else if (this.original_cimInstance != null && ((Linux_DHCPService)object).original_cimInstance == null) {
-	    	return false;
-	    	
-	    } else if (this.original_cimInstance != null && !this.original_cimInstance.equals(((Linux_DHCPService)object).original_cimInstance)) {
-	        return false;
-	        
-	    } else if (this.cimObjectPath == null && ((Linux_DHCPService)object).cimObjectPath != null) {
-	    	return false;
-	    	
-	    } else if (this.cimObjectPath != null && ((Linux_DHCPService)object).cimObjectPath == null) {
-	    	return false;
-		    	
-	    } else if (this.cimObjectPath != null && !this.cimObjectPath.equals(((Linux_DHCPService)object).cimObjectPath)) {
-	        return false;
-	        
-	    } 
-	    
-	    return true;
-	}
-	
-	/**
-	*	The method return this method as a string
-	*/	
-	public String toString() {
-		return this.cimInstance.toString();
-	}
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
 
-	//*****************************************************
-	// Associators methods
-	//*****************************************************
-	
-	public ArrayList getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, java.lang.String[] propertyList){
+        return getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(
+                cimClient, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE,
+                resultClass, role, resultRole, false, false, null);
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.associators(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, 
-					Linux_DHCPRegisteredProfile.CIM_CLASS_NAME,
-					null,null, 
-					//"ManagedElement", //$NON-NLS-1$
-					//"ConformantStandard", //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
+    }
+
+    /**
+     * Get the list with Linux_DHCPRegisteredProfile objects associated by the association Linux_DHCPElementConformsToProfile
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param associationClass This string MUST either contain a valid CIM Association class name or be null. It filters the Objects returned to contain only Objects associated to the source Object via this CIM Association class or one of its subclasses.
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfiles(
+            WBEMClient cimClient, String associationClass, String resultClass, String role,
+            String resultRole, boolean includeQualifiers, boolean includeClassOrigin,
+            java.lang.String[] propertyList) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.associators(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole, includeQualifiers, includeClassOrigin,
+                    propertyList);
+        }
+        catch (WBEMException e) {
+            throw new AssociatorException(e, new AssociatorUserObject(this.getCimObjectPath(),
+                    associationClass, resultClass, role, resultRole, includeQualifiers,
+                    includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
                     Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPRegisteredProfile(cimInstance));
+                        continue;
+                    }
 
-	public ArrayList getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfile_Names(CIMClient cimClient, boolean deep) {
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPRegisteredProfile(cimInstance));
+                        continue;
+                    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPRegisteredProfile(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
 
-		try {		
-			enumeration = cimClient.associatorNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, 
-					Linux_DHCPRegisteredProfile.CIM_CLASS_NAME, 
-					null,null);
-					//"ManagedElement", //$NON-NLS-1$
-					//"ConformantStandard"); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPRegisteredProfile.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+        return result;
+    }
 
-	
-	public ArrayList getAssociations_Linux_DHCPElementConformsToProfile(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPElementConformsToProfile
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.references(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, 
-					role, //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfileNames(
+            WBEMClient cimClient) throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfileNames(
+                cimClient, true, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE,
+                Linux_DHCPRegisteredProfile.CIM_CLASS_NAME, null, null);
+    }
+
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPElementConformsToProfile
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfileNames(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfileNames(
+                cimClient, true, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE,
+                resultClass, role, resultRole);
+    }
+
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPElementConformsToProfile
+     * @param cimClient the WBEMClient for the communication
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPRegisteredProfile_Linux_DHCPElementConformsToProfileNames(
+            WBEMClient cimClient, boolean deep, String associationClass, String resultClass,
+            String role, String resultRole) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.associatorNames(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole);
+
+        }
+        catch (WBEMException e) {
+            throw new AssociatorNamesException(e, new AssociatorNamesUserObject(this
+                    .getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE,
+                    Linux_DHCPRegisteredProfile.CIM_CLASS_NAME, null, null));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPRegisteredProfile.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the list with Linux_DHCPElementConformsToProfile associations
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#references(CIMObjectPath, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociations_Linux_DHCPElementConformsToProfile(WBEMClient cimClient,
+            boolean includeQualifiers, boolean includeClassOrigin, String role,
+            java.lang.String[] propertyList) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.references(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, role,
+                    includeQualifiers, includeClassOrigin, propertyList);
+        }
+        catch (WBEMException e) {
+            throw new ReferencesException(e, new ReferencesUserObject(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, role,
+                    includeQualifiers, includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
+                    Class clazz = Linux_DHCPElementConformsToProfileHelper.findClass(cimClient,
+                            cimInstance);
+
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPElementConformsToProfile(cimInstance));
+                        continue;
+                    }
+
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPElementConformsToProfile(cimInstance));
+                        continue;
+                    }
+
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPElementConformsToProfile(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get a list of CIMObjectPath items of the associations Linux_DHCPElementConformsToProfile
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#referenceNames(CIMObjectPath, String, String)
+     **/
+
+    public java.util.List getAssociationNames_Linux_DHCPElementConformsToProfile(
+            WBEMClient cimClient, String role, boolean deep) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.referenceNames(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, role);
+        }
+        catch (WBEMException e) {
+            throw new ReferenceNamesException(e, new ReferenceNamesUserObject(this
+                    .getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, role));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPElementConformsToProfile.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the list with Linux_DHCPGlobal objects associated by the association Linux_DHCPGlobalForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(
+            WBEMClient cimClient) throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(cimClient,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE,
+                Linux_DHCPGlobal.CIM_CLASS_NAME, null, null, false, false, null);
+
+    }
+
+    /**
+     * Get the list with Linux_DHCPGlobal objects associated by the association Linux_DHCPGlobalForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(cimClient,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, resultClass, role,
+                resultRole, false, false, null);
+
+    }
+
+    /**
+     * Get the list with Linux_DHCPGlobal objects associated by the association Linux_DHCPGlobalForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param associationClass This string MUST either contain a valid CIM Association class name or be null. It filters the Objects returned to contain only Objects associated to the source Object via this CIM Association class or one of its subclasses.
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(
+            WBEMClient cimClient, String associationClass, String resultClass, String role,
+            String resultRole, boolean includeQualifiers, boolean includeClassOrigin,
+            java.lang.String[] propertyList) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.associators(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole, includeQualifiers, includeClassOrigin,
+                    propertyList);
+        }
+        catch (WBEMException e) {
+            throw new AssociatorException(e, new AssociatorUserObject(this.getCimObjectPath(),
+                    associationClass, resultClass, role, resultRole, includeQualifiers,
+                    includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
                     Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPRegisteredProfile(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
-	
-	public ArrayList getAssociationNames_Linux_DHCPElementConformsToProfile(CIMClient cimClient, String role, boolean deep) {
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobal(cimInstance));
+                        continue;
+                    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobal(cimInstance));
+                        continue;
+                    }
 
-		try {		
-			enumeration = cimClient.referenceNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPELEMENTCONFORMSTOPROFILE, 
-					role); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPRegisteredProfile.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobal(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
 
-	public ArrayList getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, java.lang.String[] propertyList){
+        return result;
+    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.associators(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, 
-					Linux_DHCPGlobal.CIM_CLASS_NAME,
-					null,null, 
-					//"ManagedElement", //$NON-NLS-1$
-					//"SettingData", //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPGlobalForService
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServiceNames(
+            WBEMClient cimClient) throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServiceNames(cimClient, true,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE,
+                Linux_DHCPGlobal.CIM_CLASS_NAME, null, null);
+    }
+
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPGlobalForService
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServiceNames(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServiceNames(cimClient, true,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, resultClass, role, resultRole);
+    }
+
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPGlobalForService
+     * @param cimClient the WBEMClient for the communication
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServiceNames(
+            WBEMClient cimClient, boolean deep, String associationClass, String resultClass,
+            String role, String resultRole) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.associatorNames(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole);
+
+        }
+        catch (WBEMException e) {
+            throw new AssociatorNamesException(e, new AssociatorNamesUserObject(this
+                    .getCimObjectPath(), CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE,
+                    Linux_DHCPGlobal.CIM_CLASS_NAME, null, null));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPGlobal.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the list with Linux_DHCPGlobalForService associations
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#references(CIMObjectPath, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociations_Linux_DHCPGlobalForService(WBEMClient cimClient,
+            boolean includeQualifiers, boolean includeClassOrigin, String role,
+            java.lang.String[] propertyList) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.references(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, role, includeQualifiers,
+                    includeClassOrigin, propertyList);
+        }
+        catch (WBEMException e) {
+            throw new ReferencesException(e, new ReferencesUserObject(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, role, includeQualifiers,
+                    includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
+                    Class clazz = Linux_DHCPGlobalForServiceHelper
+                            .findClass(cimClient, cimInstance);
+
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobalForService(cimInstance));
+                        continue;
+                    }
+
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobalForService(cimInstance));
+                        continue;
+                    }
+
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPGlobalForService(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get a list of CIMObjectPath items of the associations Linux_DHCPGlobalForService
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#referenceNames(CIMObjectPath, String, String)
+     **/
+
+    public java.util.List getAssociationNames_Linux_DHCPGlobalForService(WBEMClient cimClient,
+            String role, boolean deep) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.referenceNames(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, role);
+        }
+        catch (WBEMException e) {
+            throw new ReferenceNamesException(e,
+                    new ReferenceNamesUserObject(this.getCimObjectPath(),
+                            CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, role));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPGlobalForService.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the list with Linux_DHCPServiceConfiguration objects associated by the association Linux_DHCPServiceConfigurationForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(
+            WBEMClient cimClient) throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(
+                cimClient, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE,
+                Linux_DHCPServiceConfiguration.CIM_CLASS_NAME, null, null, false, false, null);
+
+    }
+
+    /**
+     * Get the list with Linux_DHCPServiceConfiguration objects associated by the association Linux_DHCPServiceConfigurationForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
+
+        return getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(
+                cimClient, CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE,
+                resultClass, role, resultRole, false, false, null);
+
+    }
+
+    /**
+     * Get the list with Linux_DHCPServiceConfiguration objects associated by the association Linux_DHCPServiceConfigurationForService
+     * 
+     * @param cimClient the WBEMClient for the communication
+     * @param associationClass This string MUST either contain a valid CIM Association class name or be null. It filters the Objects returned to contain only Objects associated to the source Object via this CIM Association class or one of its subclasses.
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#associators(CIMObjectPath, String, String, String, String, boolean, boolean, String[])
+     **/
+
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(
+            WBEMClient cimClient, String associationClass, String resultClass, String role,
+            String resultRole, boolean includeQualifiers, boolean includeClassOrigin,
+            java.lang.String[] propertyList) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.associators(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole, includeQualifiers, includeClassOrigin,
+                    propertyList);
+        }
+        catch (WBEMException e) {
+            throw new AssociatorException(e, new AssociatorUserObject(this.getCimObjectPath(),
+                    associationClass, resultClass, role, resultRole, includeQualifiers,
+                    includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
                     Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfiguration(cimInstance));
+                        continue;
+                    }
 
-	public ArrayList getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForService_Names(CIMClient cimClient, boolean deep) {
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfiguration(cimInstance));
+                        continue;
+                    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfiguration(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
 
-		try {		
-			enumeration = cimClient.associatorNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, 
-					Linux_DHCPGlobal.CIM_CLASS_NAME, 
-					null,null);
-					//"ManagedElement", //$NON-NLS-1$
-					//"SettingData"); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPGlobal.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+        return result;
+    }
 
-	
-	public ArrayList getAssociations_Linux_DHCPGlobalForService(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPServiceConfigurationForService
+     * @param cimClient the WBEMClient for the communication
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.references(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, 
-					role, //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
-                    Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPGlobal(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames(
+            WBEMClient cimClient) throws WbemsmtException {
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
-	
-	public ArrayList getAssociationNames_Linux_DHCPGlobalForService(CIMClient cimClient, String role, boolean deep) {
+        return getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames(
+                cimClient, true,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE,
+                Linux_DHCPServiceConfiguration.CIM_CLASS_NAME, null, null);
+    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPServiceConfigurationForService
+     * @param cimClient the WBEMClient for the communication
+     * @param resultClass This string MUST either contain a valid CIM Class name or be null. It filters the Objects returned to contain only the Objects of this Class name or one of its subclasses. The resultClass should be CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE or a subclass 
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the source Object plays the specified role. (i.e. the Property name in the Association class that refers to the source Object matches this value) If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are examined.
+     * @param resultRole This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects associated to the source Object via an Association class in which the Object returned plays the specified role. (i.e. the Property name in the Association class that refers to the Object returned matches this value) If "Dependent" is specified, then only Associations in which the Object returned is the "Dependent" reference are examined. 
+     *
+     * uses CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE as associationClass<br>
+     * uses false for includeQualifiers and includeClassOrigin <br>
+     * uses null for resultClass, role, resultRole<br>
+     * <br>
+     
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
 
-		try {		
-			enumeration = cimClient.referenceNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPGLOBALFORSERVICE, 
-					role); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPGlobal.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames(
+            WBEMClient cimClient, String resultClass, String role, String resultRole)
+            throws WbemsmtException {
 
-	public ArrayList getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServices(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, java.lang.String[] propertyList){
+        return getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames(
+                cimClient, true,
+                CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, resultClass,
+                role, resultRole);
+    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.associators(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, 
-					Linux_DHCPServiceConfiguration.CIM_CLASS_NAME,
-					null,null, 
-					//"Element", //$NON-NLS-1$
-					//"Configuration", //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
-                    Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
+    /**
+     * Get the list of CIMObjectPath items of the objects associated by the association Linux_DHCPServiceConfigurationForService
+     * @param cimClient the WBEMClient for the communication
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#associatorNames(CIMObjectPath, String, String, String, String)
+     **/
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+    public java.util.List getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames(
+            WBEMClient cimClient, boolean deep, String associationClass, String resultClass,
+            String role, String resultRole) throws WbemsmtException {
 
-	public ArrayList getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForService_Names(CIMClient cimClient, boolean deep) {
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
 
-		try {		
-			enumeration = cimClient.associatorNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, 
-					Linux_DHCPServiceConfiguration.CIM_CLASS_NAME, 
-					null,null);
-					//"Element", //$NON-NLS-1$
-					//"Configuration"); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPServiceConfiguration.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+        try {
+            enumeration = cimClient.associatorNames(this.getCimObjectPath(), associationClass,
+                    resultClass, role, resultRole);
 
-	
-	public ArrayList getAssociations_Linux_DHCPServiceConfigurationForService(CIMClient cimClient,
-	boolean includeQualifiers, boolean includeClassOrigin, String role,java.lang.String[] propertyList) {
+        }
+        catch (WBEMException e) {
+            throw new AssociatorNamesException(e, new AssociatorNamesUserObject(this
+                    .getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE,
+                    Linux_DHCPServiceConfiguration.CIM_CLASS_NAME, null, null));
+        }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		ArrayList resultArrayList = new ArrayList();
-		Enumeration enumeration = null;
-		
-		try {
-			enumeration = cimClient.references(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, 
-					role, //$NON-NLS-1$
-					includeQualifiers,
-					includeClassOrigin,
-					propertyList);
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-				if (obj instanceof CIMInstance) {
-					CIMInstance cimInstance = (CIMInstance)obj;
-                    Class clazz = Linux_DHCPServiceHelper.findClass(cimClient, cimInstance);
-                    
-					if (clazz == null) {
-						System.err.println("The class " + cimInstance.getClassName() +" was not found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-					
-					Class[] constParams = new Class[2];
-					constParams[0] = CIMObjectPath.class;
-					constParams[1] = CIMInstance.class;
-					Constructor cons = null;
-					try {
-						cons = clazz.getConstructor(constParams);
-						
-					} catch(NoSuchMethodException e) {
-						System.err.println("The required constructor of class " + cimInstance.getClassName() + " could not be found. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
-				
-					try {
-						Object[] actargs = new Object[] {cimInstance.getObjectPath(), cimInstance};
-					
-						Object dataObj = cons.newInstance(actargs);
-					
-						resultArrayList.add(dataObj);
-					} catch (Exception e) {
-						System.err.println("The instance of class " + cimInstance.getClassName() + " could not be created successful. Constructing instance of the base class.");
-						resultArrayList.add(new Linux_DHCPServiceConfiguration(cimInstance.getObjectPath(), cimInstance));
-						continue;
-					}
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
 
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
-	
-	public ArrayList getAssociationNames_Linux_DHCPServiceConfigurationForService(CIMClient cimClient, String role, boolean deep) {
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPServiceConfiguration.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
 
-		if (cimClient == null) {
-			throw new InvalidParameterException("The cimClient parameter does not contain a valid reference.");
-		}
-		
-		Enumeration enumeration = null;
-		ArrayList resultArrayList = new ArrayList();
+    /**
+     * Get the list with Linux_DHCPServiceConfigurationForService associations
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param includeQualifiers If true, all Qualifiers for each Object (including Qualifiers on the Object and on any returned Properties) MUST be included in the Objects returned. If false, no Qualifiers are present in each Object returned.
+     * @param includeClassOrigin If true, the CLASSORIGIN attribute will be present on all appropriate elements in the Objects returned. If false, no CLASSORIGIN attributes are present in the Objects returned. CLASSORIGIN is attached to an element (properties, methods, references) to indicate the class in which it was first defined.
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param propertyList An array of property names used to filter what is contained in the Objects returned. Each CIMClass or CIMInstance returned only contains elements for the properties of the names specified. Duplicate and invalid property names are ignored and the request is otherwise processed normally. An empty array indicates that no properties should be included in the Objects returned. A null value indicates that all properties should be contained in the Objects returned. NOTE: Properties should not be specified in this parameter unless a non-null value is specified in the resultClass  parameter.
+     *
+     * @see javax.wbem.client.WBEMClient#references(CIMObjectPath, String, String, boolean, boolean, String[])
+     **/
 
-		try {		
-			enumeration = cimClient.referenceNames(
-					this.getCimObjectPath(),
-					CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, 
-					role); //$NON-NLS-1$
-		
-		
-			while (enumeration.hasMoreElements()) {
-				Object obj = enumeration.nextElement();
-			
-				if (obj instanceof CIMObjectPath) {
-					if (deep || ((CIMObjectPath)obj).getObjectName().equals(Linux_DHCPServiceConfiguration.CIM_CLASS_NAME)) {
-						resultArrayList.add(obj);
-					}
-				}
-			}
-		} finally {
-			try {
-				if (enumeration != null) {
-					((CIMEnumeration)enumeration).close();
-				}
-			} catch(Exception e) {
-				throw new CIMException(CIMException.CIM_ERR_FAILED, "The socket of the result could not be closed properly.");
-			}
-		}
-			
-		return resultArrayList;
-	}
+    public java.util.List getAssociations_Linux_DHCPServiceConfigurationForService(
+            WBEMClient cimClient, boolean includeQualifiers, boolean includeClassOrigin,
+            String role, java.lang.String[] propertyList) throws WbemsmtException {
 
-	
-	
-	//*****************************************************
-	// Attribute methods
-	//*****************************************************
-	
-	
-	
-	//*****************************************************
-	// Invoke methods
-	//*****************************************************
-	
-	
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.references(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, role,
+                    includeQualifiers, includeClassOrigin, propertyList);
+        }
+        catch (WBEMException e) {
+            throw new ReferencesException(e, new ReferencesUserObject(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, role,
+                    includeQualifiers, includeClassOrigin, propertyList));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMInstance) {
+                    CIMInstance cimInstance = (CIMInstance) obj;
+                    Class clazz = Linux_DHCPServiceConfigurationForServiceHelper.findClass(
+                            cimClient, cimInstance);
+
+                    if (clazz == null) {
+                        System.err.println("The class " + cimInstance.getClassName()
+                                + " was not found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfigurationForService(cimInstance));
+                        continue;
+                    }
+
+                    Class[] constParams = new Class[1];
+                    constParams[0] = CIMInstance.class;
+                    Constructor cons = null;
+                    try {
+                        cons = clazz.getConstructor(constParams);
+                    }
+                    catch (NoSuchMethodException e) {
+                        System.err.println("The required constructor of class "
+                                + cimInstance.getClassName()
+                                + " could not be found. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfigurationForService(cimInstance));
+                        continue;
+                    }
+
+                    try {
+                        Object[] actargs = new Object[] { cimInstance };
+                        Object dataObj = cons.newInstance(actargs);
+                        result.add(dataObj);
+                    }
+                    catch (Exception e) {
+                        System.err
+                                .println("The instance of class "
+                                        + cimInstance.getClassName()
+                                        + " could not be created successful. Constructing instance of the base class.");
+                        result.add(new Linux_DHCPServiceConfigurationForService(cimInstance));
+                        continue;
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Get a list of CIMObjectPath items of the associations Linux_DHCPServiceConfigurationForService
+     *
+     * @param cimClient the WBEMClient for the communication
+     * @param role This string MUST either contain a valid Property name or be null. It filters the Objects returned to contain only Objects referring to the source Object via a Property with the specified name. If "Antecedent" is specified, then only Associations in which the source Object is the "Antecedent" reference are returned.
+     * @param deep if true the subclasses returned also
+     *
+     * @see javax.wbem.client.WBEMClient#referenceNames(CIMObjectPath, String, String)
+     **/
+
+    public java.util.List getAssociationNames_Linux_DHCPServiceConfigurationForService(
+            WBEMClient cimClient, String role, boolean deep) throws WbemsmtException {
+
+        if (cimClient == null) {
+            throw new WbemsmtException(WbemsmtException.ERR_INVALID_PARAMETER,
+                    "The cimClient parameter does not contain a valid reference.");
+        }
+
+        java.util.List result = new java.util.ArrayList();
+        CloseableIterator enumeration = null;
+
+        try {
+            enumeration = cimClient.referenceNames(this.getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, role);
+        }
+        catch (WBEMException e) {
+            throw new ReferenceNamesException(e, new ReferenceNamesUserObject(this
+                    .getCimObjectPath(),
+                    CIM_ASSOCIATOR_CLASS_NAME_LINUX_DHCPSERVICECONFIGURATIONFORSERVICE, role));
+        }
+
+        try {
+            while (enumeration.hasNext()) {
+                Linux_DHCPServiceHelper.checkException(enumeration);
+                Object obj = enumeration.next();
+                Linux_DHCPServiceHelper.checkException(enumeration);
+
+                if (obj instanceof CIMObjectPath) {
+                    if (deep
+                            || ((CIMObjectPath) obj).getObjectName().equals(
+                                    Linux_DHCPServiceConfigurationForService.CIM_CLASS_NAME)) {
+                        result.add(obj);
+                    }
+                }
+            }
+            Linux_DHCPServiceHelper.checkException(enumeration);
+        }
+        finally {
+            try {
+                if (enumeration != null) {
+                    enumeration.close();
+                }
+            }
+            catch (Exception e) {
+                throw new WbemsmtException(WbemsmtException.ERR_FAILED,
+                        "The socket of the result could not be closed properly.");
+            }
+        }
+        return result;
+    }
+
+    //**********************************************************************
+    // Extrinsic Method invocations     
+    //**********************************************************************                         
+
+    //**********************************************************************
+    // utility methods     
+    //**********************************************************************                         
+
+    /**
+     * return the name of the CIMClass
+     * @return
+     */
+    public String getObjectName() {
+        return Linux_DHCPService.CIM_CLASS_NAME;
+    }
 
 }

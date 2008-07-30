@@ -12,5 +12,6 @@
 	<classpathentry kind="var" path="JAR_REPO/sblim/sblim-cim-client/current/sblim-cim-client.jar"/>
 	<classpathentry kind="var" path="JAR_REPO/myfaces/myfaces-api/current/myfaces-api.jar"/>
 	<classpathentry kind="var" path="JAR_REPO/commons-cli/commons-cli/current/commons-cli.jar"/>
+	<classpathentry kind="lib" path="/wbemsmt-jar-repository/sblim/jsr48-client/current/jsr48-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
