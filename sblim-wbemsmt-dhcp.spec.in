@@ -152,6 +152,9 @@ unlink $WBEMSMT_HELPDIR/plugins/org.sblim.wbemsmt.help.dhcp
 ###############################################################################
 %changelog
 
+* Wed Jul 17 2009 Jeremy Bongio <jbongio@us.ibm.com> 0.5.6-1
+  - Maintenance release
+
 * Wed Jul 30 2008 Prsahanth Karnam <prkarnam@in.ibm.com> 0.5.3-1-CVS
 	- Inclusion of fixes for the following issues:
   		o 1965985  	  wbemsmt-dhcp: migrate to jsr48
