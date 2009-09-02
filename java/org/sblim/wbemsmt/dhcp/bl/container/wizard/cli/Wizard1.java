@@ -3,14 +3,14 @@
   *
 
  
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: org.sblim.wbemsmt.dcg.generator.cmd.CMDPresentationLayerGenerator
   * @template: org/sblim/wbemsmt/dcg/templates/cmd/wizardClass.vm
@@ -43,7 +43,7 @@ public class Wizard1 extends CliWizardBase implements IPageWizardAdapter {
 		super(adapter,ResourceBundleManager.getResourceBundle(new String[]{"messages","messagesDhcp"},Locale.getDefault()));
 		this.container = new org.sblim.wbemsmt.dhcp.wizard.WizardContainer1 (adapter, new org.sblim.wbemsmt.dhcp.wizard.WizardContainer1Panels()
  			{
-            					public Object getNewGroup()  throws WbemsmtException {
+            					public DataContainer getNewGroup()  throws WbemsmtException {
 					DataContainer dc = new org.sblim.wbemsmt.dhcp.bl.container.wizard.cli.NewGroupContainerImpl(adapter);
 					return dc;
 				}

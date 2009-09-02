@@ -1,13 +1,13 @@
 /** 
   *
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: Prashanth Karnam <prkarnam@in.ibm.com>
   * 
@@ -17,7 +17,6 @@
 
 package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.cim.CIMObjectPath;
@@ -65,7 +64,7 @@ public class DhcpLoader {
 	}
 
 	protected CIMObjectPath getPathOfServiceConfiguration(AbstractBaseCimAdapter adapter, Linux_DHCPServiceConfiguration serviceConf, String ServiceConfName) throws WbemsmtException {
-		List ServiceConfNames = serviceConf.getAssociated_Linux_DHCPService_Linux_DHCPServiceConfigurationForServiceNames (adapter.getCimClient());
+		List<CIMObjectPath> ServiceConfNames = serviceConf.getAssociated_Linux_DHCPService_Linux_DHCPServiceConfigurationForServiceNames (adapter.getCimClient());
 		return adapter.getFcoHelper().getPath(ServiceConfNames,"Name",ServiceConfName);
 	}
 

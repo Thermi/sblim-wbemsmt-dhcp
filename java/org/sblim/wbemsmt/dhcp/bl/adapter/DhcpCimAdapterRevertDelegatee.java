@@ -25,10 +25,7 @@ import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterRevertDelegatee implements DhcpCimAdapterRevertIf {
 
-	private DhcpCimAdapter adapter = null;
-	
 	public DhcpCimAdapterRevertDelegatee ( DhcpCimAdapter adapter ) {
-		this.adapter = adapter;
 	}
 
 	public MessageList revertImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {

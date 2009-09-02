@@ -1,25 +1,14 @@
-/** 
- * CIM_EnabledLogicalElement.java
- *
+/**
+ * CIM_EnabledLogicalElement.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE
+ * TER MS OF THE ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS
+ * FILE CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the
+ * Eclipse Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.fco.jsr48.FcoGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm
- *
- * Contributors:
- *    TODO add author by using vm argument -Ddcg.author=<email> during startup 
- * 
- * Description: This class extends LogicalElement to abstract the concept of an element that is enabled and disabled, such as a LogicalDevice or a ServiceAccessPoint.
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: This class extends LogicalElement to abstract
+ *            the concept of an element that is enabled and disabled, such as a LogicalDevice or a
+ *            ServiceAccessPoint. generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.fco;
@@ -41,7 +30,9 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
     /**
      * Constant for method\'s name and parameters
      * Requests that the state of the element be changed to the value specified in the RequestedState parameter. When the requested state change takes place, the EnabledState and RequestedState of the element will be the same. Invoking the RequestStateChange method multiple times could result in earlier requests being overwritten or lost. 
-     * If 0 is returned, then the task completed successfully and the use of ConcreteJob was not required. If 4096 (0x1000) is returned, then the task will take some time to complete, ConcreteJob will be created, and its reference returned in the output parameter Job. Any other return code indicates an error condition.
+     * A return code of 0 shall indicate the state change was successfully initiated. 
+     * A return code of 3 shall indicate that the state transition cannot complete within the interval specified by the TimeoutPeriod parameter. 
+     * A return code of 4096 (0x1000) shall indicate the state change was successfully initiated, a ConcreteJob has been created, and its reference returned in the output parameter Job. Any other return code indicates an error condition.
      */
 
     public static class METHOD_REQUESTSTATECHANGE {
@@ -214,7 +205,6 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * @param value the value to find the ValueMapEntry for
          * @return the ValueMap entry or null if not found
          */
-        //org.sblim.wbemsmt.dcg.generator.DCGContextUtil$Wrapper@6dbdc9
         public static javax.cim.UnsignedInteger32 getValueMapEntry(String value) {
 
             if (VALUE_ENTRY_Completed_with_No_Error.equals(value)) {
@@ -555,7 +545,6 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
              * @param value the value to find the ValueMapEntry for
              * @return the ValueMap entry or null if not found
              */
-            //org.sblim.wbemsmt.dcg.generator.DCGContextUtil$Wrapper@c6eff5
             public static javax.cim.UnsignedInteger16 getValueMapEntry(String value) {
 
                 if (VALUE_ENTRY_Enabled.equals(value)) {
@@ -853,7 +842,6 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * @param value the value to find the ValueMapEntry for
          * @return the ValueMap entry or null if not found
          */
-        //org.sblim.wbemsmt.dcg.generator.DCGContextUtil$Wrapper@b3f9b8
         public static javax.cim.UnsignedInteger16 getValueMapEntry(String value) {
 
             if (VALUE_ENTRY_Enabled.equals(value)) {
@@ -1005,7 +993,7 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
      * Enabled but Offline (6) indicates that the element might be completing commands, and will drop any new requests. 
      * Test (7) indicates that the element is in a test state. 
      * Deferred (8) indicates that the element might be completing commands, but will queue any new requests. 
-     * Quiesce (9) indicates that the element is enabled but in a restricted mode. 
+     * Quiesce (9) indicates that the element is enabled but in a restricted mode.
      * Starting (10) indicates that the element is in the process of going to an Enabled state. New requests are queued.
      */
     public static class PROPERTY_ENABLEDSTATE {
@@ -1169,7 +1157,6 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * @param value the value to find the ValueMapEntry for
          * @return the ValueMap entry or null if not found
          */
-        //org.sblim.wbemsmt.dcg.generator.DCGContextUtil$Wrapper@1cfb802
         public static javax.cim.UnsignedInteger16 getValueMapEntry(String value) {
 
             if (VALUE_ENTRY_Unknown.equals(value)) {
@@ -1376,19 +1363,32 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
 
     /**
      * Constants of property RequestedState
-     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. By default, the RequestedState of the element is 5 ("No Change"). Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
-     * Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
+     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
+     * "Unknown" (0) indicates the last requested state for the element is unknown.
+     * Note that the value "No Change" (5) has been deprecated in lieu of indicating the last requested state is "Unknown" (0). If the last requested or desired state is unknown, RequestedState should have the value "Unknown" (0), but may have the value "No Change" (5).Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
      * It should be noted that there are two new values in RequestedState that build on the statuses of EnabledState. These are "Reboot" (10) and "Reset" (11). Reboot refers to doing a "Shut Down" and then moving to an "Enabled" state. Reset indicates that the element is first "Disabled" and then "Enabled". The distinction between requesting "Shut Down" and "Disabled" should also be noted. Shut Down requests an orderly transition to the Disabled state, and might involve removing power, to completely erase any existing state. The Disabled state requests an immediate disabling of the element, such that it will not execute or accept any commands or processing requests. 
      * 
      * This property is set as the result of a method invocation (such as Start or StopService on CIM_Service), or can be overridden and defined as WRITEable in a subclass. The method approach is considered superior to a WRITEable property, because it allows an explicit invocation of the operation and the return of a result code. 
      * 
-     * A particular instance of EnabledLogicalElement might not support RequestedStateChange. If this occurs, the value 12 ("Not Applicable") is used.
+     * If knowledge of the last RequestedState is not supported for the EnabledLogicalElement, the property shall be NULL or have the value 12 "Not Applicable".
      */
     public static class PROPERTY_REQUESTEDSTATE {
         /**
          * name of the property RequestedState
          */
         public final static String NAME = "RequestedState";
+
+        /**
+         * constant for value map entry 0
+         */
+
+        public final static javax.cim.UnsignedInteger16 VALUE_MAP_ENTRY_0_FOR_VALUE_ENTRY_Unknown = new javax.cim.UnsignedInteger16(
+                "0");
+
+        /**
+         * constant for value entry Unknown (corresponds to mapEntry 0 )
+         */
+        public final static String VALUE_ENTRY_Unknown = "Unknown";
 
         /**
          * constant for value map entry 2
@@ -1545,8 +1545,11 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * @param value the value to find the ValueMapEntry for
          * @return the ValueMap entry or null if not found
          */
-        //org.sblim.wbemsmt.dcg.generator.DCGContextUtil$Wrapper@39c8c1
         public static javax.cim.UnsignedInteger16 getValueMapEntry(String value) {
+
+            if (VALUE_ENTRY_Unknown.equals(value)) {
+                return VALUE_MAP_ENTRY_0_FOR_VALUE_ENTRY_Unknown;
+            }
 
             if (VALUE_ENTRY_Enabled.equals(value)) {
                 return VALUE_MAP_ENTRY_2_FOR_VALUE_ENTRY_Enabled;
@@ -1636,6 +1639,10 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
         public static String getValueEntry(javax.cim.UnsignedInteger16 value) {
             int iValue = value.intValue();
 
+            if (iValue == VALUE_MAP_ENTRY_0_FOR_VALUE_ENTRY_Unknown.intValue()) {
+                return VALUE_ENTRY_Unknown;
+            }
+
             if (iValue == VALUE_MAP_ENTRY_2_FOR_VALUE_ENTRY_Enabled.intValue()) {
                 return VALUE_ENTRY_Enabled;
             }
@@ -1698,6 +1705,7 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * Value Map for the property RequestedState   
          */
         public final static javax.cim.UnsignedInteger16[] VALUE_MAP_ENTRIES = {
+                VALUE_MAP_ENTRY_0_FOR_VALUE_ENTRY_Unknown,
                 VALUE_MAP_ENTRY_2_FOR_VALUE_ENTRY_Enabled,
                 VALUE_MAP_ENTRY_3_FOR_VALUE_ENTRY_Disabled,
                 VALUE_MAP_ENTRY_4_FOR_VALUE_ENTRY_Shut_Down,
@@ -1714,11 +1722,11 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * Contains all values even those having an integer value range representation within the valueMap
          * Value Map for the property RequestedState   
          */
-        public final static String[] VALUE_ENTRIES = { VALUE_ENTRY_Enabled, VALUE_ENTRY_Disabled,
-                VALUE_ENTRY_Shut_Down, VALUE_ENTRY_No_Change, VALUE_ENTRY_Offline,
-                VALUE_ENTRY_Test, VALUE_ENTRY_Deferred, VALUE_ENTRY_Quiesce, VALUE_ENTRY_Reboot,
-                VALUE_ENTRY_Reset, VALUE_ENTRY_Not_Applicable, VALUE_ENTRY_DMTF_Reserved,
-                VALUE_ENTRY_Vendor_Reserved };
+        public final static String[] VALUE_ENTRIES = { VALUE_ENTRY_Unknown, VALUE_ENTRY_Enabled,
+                VALUE_ENTRY_Disabled, VALUE_ENTRY_Shut_Down, VALUE_ENTRY_No_Change,
+                VALUE_ENTRY_Offline, VALUE_ENTRY_Test, VALUE_ENTRY_Deferred, VALUE_ENTRY_Quiesce,
+                VALUE_ENTRY_Reboot, VALUE_ENTRY_Reset, VALUE_ENTRY_Not_Applicable,
+                VALUE_ENTRY_DMTF_Reserved, VALUE_ENTRY_Vendor_Reserved };
 
         /**
          * Values for displaying within pulldown elements, lists, radio buttons etc
@@ -1726,10 +1734,11 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
          * 
          * Value Map for the property RequestedState   
          */
-        public final static String[] VALUE_ENTRIES_FOR_DISPLAY = { VALUE_ENTRY_Enabled,
-                VALUE_ENTRY_Disabled, VALUE_ENTRY_Shut_Down, VALUE_ENTRY_No_Change,
-                VALUE_ENTRY_Offline, VALUE_ENTRY_Test, VALUE_ENTRY_Deferred, VALUE_ENTRY_Quiesce,
-                VALUE_ENTRY_Reboot, VALUE_ENTRY_Reset, VALUE_ENTRY_Not_Applicable };
+        public final static String[] VALUE_ENTRIES_FOR_DISPLAY = { VALUE_ENTRY_Unknown,
+                VALUE_ENTRY_Enabled, VALUE_ENTRY_Disabled, VALUE_ENTRY_Shut_Down,
+                VALUE_ENTRY_No_Change, VALUE_ENTRY_Offline, VALUE_ENTRY_Test, VALUE_ENTRY_Deferred,
+                VALUE_ENTRY_Quiesce, VALUE_ENTRY_Reboot, VALUE_ENTRY_Reset,
+                VALUE_ENTRY_Not_Applicable };
 
     }
 
@@ -1923,7 +1932,7 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
      * Enabled but Offline (6) indicates that the element might be completing commands, and will drop any new requests. 
      * Test (7) indicates that the element is in a test state. 
      * Deferred (8) indicates that the element might be completing commands, but will queue any new requests. 
-     * Quiesce (9) indicates that the element is enabled but in a restricted mode. 
+     * Quiesce (9) indicates that the element is enabled but in a restricted mode.
      * Starting (10) indicates that the element is in the process of going to an Enabled state. New requests are queued.
      *     */
 
@@ -1951,7 +1960,7 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
      * Enabled but Offline (6) indicates that the element might be completing commands, and will drop any new requests. 
      * Test (7) indicates that the element is in a test state. 
      * Deferred (8) indicates that the element might be completing commands, but will queue any new requests. 
-     * Quiesce (9) indicates that the element is enabled but in a restricted mode. 
+     * Quiesce (9) indicates that the element is enabled but in a restricted mode.
      * Starting (10) indicates that the element is in the process of going to an Enabled state. New requests are queued.
      *
      * @return true if the property was found, false if the property was not found and the value was not set
@@ -2004,7 +2013,7 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
      * Enabled but Offline (6) indicates that the element might be completing commands, and will drop any new requests. 
      * Test (7) indicates that the element is in a test state. 
      * Deferred (8) indicates that the element might be completing commands, but will queue any new requests. 
-     * Quiesce (9) indicates that the element is enabled but in a restricted mode. 
+     * Quiesce (9) indicates that the element is enabled but in a restricted mode.
      * Starting (10) indicates that the element is in the process of going to an Enabled state. New requests are queued.
      */
 
@@ -2106,13 +2115,14 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
     /**
      * Get the property RequestedState
      *     * <br>
-     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. By default, the RequestedState of the element is 5 ("No Change"). Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
-     * Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
+     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
+     * "Unknown" (0) indicates the last requested state for the element is unknown.
+     * Note that the value "No Change" (5) has been deprecated in lieu of indicating the last requested state is "Unknown" (0). If the last requested or desired state is unknown, RequestedState should have the value "Unknown" (0), but may have the value "No Change" (5).Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
      * It should be noted that there are two new values in RequestedState that build on the statuses of EnabledState. These are "Reboot" (10) and "Reset" (11). Reboot refers to doing a "Shut Down" and then moving to an "Enabled" state. Reset indicates that the element is first "Disabled" and then "Enabled". The distinction between requesting "Shut Down" and "Disabled" should also be noted. Shut Down requests an orderly transition to the Disabled state, and might involve removing power, to completely erase any existing state. The Disabled state requests an immediate disabling of the element, such that it will not execute or accept any commands or processing requests. 
      * 
      * This property is set as the result of a method invocation (such as Start or StopService on CIM_Service), or can be overridden and defined as WRITEable in a subclass. The method approach is considered superior to a WRITEable property, because it allows an explicit invocation of the operation and the return of a result code. 
      * 
-     * A particular instance of EnabledLogicalElement might not support RequestedStateChange. If this occurs, the value 12 ("Not Applicable") is used.
+     * If knowledge of the last RequestedState is not supported for the EnabledLogicalElement, the property shall be NULL or have the value 12 "Not Applicable".
      *     */
 
     public javax.cim.UnsignedInteger16 get_RequestedState() {
@@ -2131,13 +2141,14 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
     /**
      * Set the property RequestedState
      * <br>
-     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. By default, the RequestedState of the element is 5 ("No Change"). Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
-     * Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
+     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
+     * "Unknown" (0) indicates the last requested state for the element is unknown.
+     * Note that the value "No Change" (5) has been deprecated in lieu of indicating the last requested state is "Unknown" (0). If the last requested or desired state is unknown, RequestedState should have the value "Unknown" (0), but may have the value "No Change" (5).Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
      * It should be noted that there are two new values in RequestedState that build on the statuses of EnabledState. These are "Reboot" (10) and "Reset" (11). Reboot refers to doing a "Shut Down" and then moving to an "Enabled" state. Reset indicates that the element is first "Disabled" and then "Enabled". The distinction between requesting "Shut Down" and "Disabled" should also be noted. Shut Down requests an orderly transition to the Disabled state, and might involve removing power, to completely erase any existing state. The Disabled state requests an immediate disabling of the element, such that it will not execute or accept any commands or processing requests. 
      * 
      * This property is set as the result of a method invocation (such as Start or StopService on CIM_Service), or can be overridden and defined as WRITEable in a subclass. The method approach is considered superior to a WRITEable property, because it allows an explicit invocation of the operation and the return of a result code. 
      * 
-     * A particular instance of EnabledLogicalElement might not support RequestedStateChange. If this occurs, the value 12 ("Not Applicable") is used.
+     * If knowledge of the last RequestedState is not supported for the EnabledLogicalElement, the property shall be NULL or have the value 12 "Not Applicable".
      *
      * @return true if the property was found, false if the property was not found and the value was not set
      */
@@ -2181,13 +2192,14 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
     /**
      * Set the property RequestedState
      * <br>
-     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. By default, the RequestedState of the element is 5 ("No Change"). Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
-     * Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
+     * RequestedState is an integer enumeration that indicates the last requested or desired state for the element, irrespective of the mechanism through which it was requested. The actual state of the element is represented by EnabledState. This property is provided to compare the last requested and current enabled or disabled states. Note that when EnabledState is set to 5 ("Not Applicable"), then this property has no meaning. Refer to the EnabledState property description for explanations of the values in the RequestedState enumeration. 
+     * "Unknown" (0) indicates the last requested state for the element is unknown.
+     * Note that the value "No Change" (5) has been deprecated in lieu of indicating the last requested state is "Unknown" (0). If the last requested or desired state is unknown, RequestedState should have the value "Unknown" (0), but may have the value "No Change" (5).Offline (6) indicates that the element has been requested to transition to the Enabled but Offline EnabledState. 
      * It should be noted that there are two new values in RequestedState that build on the statuses of EnabledState. These are "Reboot" (10) and "Reset" (11). Reboot refers to doing a "Shut Down" and then moving to an "Enabled" state. Reset indicates that the element is first "Disabled" and then "Enabled". The distinction between requesting "Shut Down" and "Disabled" should also be noted. Shut Down requests an orderly transition to the Disabled state, and might involve removing power, to completely erase any existing state. The Disabled state requests an immediate disabling of the element, such that it will not execute or accept any commands or processing requests. 
      * 
      * This property is set as the result of a method invocation (such as Start or StopService on CIM_Service), or can be overridden and defined as WRITEable in a subclass. The method approach is considered superior to a WRITEable property, because it allows an explicit invocation of the operation and the return of a result code. 
      * 
-     * A particular instance of EnabledLogicalElement might not support RequestedStateChange. If this occurs, the value 12 ("Not Applicable") is used.
+     * If knowledge of the last RequestedState is not supported for the EnabledLogicalElement, the property shall be NULL or have the value 12 "Not Applicable".
      */
 
     private static CIMProperty setPropertyValue_RequestedState(CIMProperty currentProperty,
@@ -2298,59 +2310,72 @@ public class CIM_EnabledLogicalElement extends CIM_LogicalElement {
      * <br>
      * @param client the cimclient
      * Requests that the state of the element be changed to the value specified in the RequestedState parameter. When the requested state change takes place, the EnabledState and RequestedState of the element will be the same. Invoking the RequestStateChange method multiple times could result in earlier requests being overwritten or lost. 
-     * If 0 is returned, then the task completed successfully and the use of ConcreteJob was not required. If 4096 (0x1000) is returned, then the task will take some time to complete, ConcreteJob will be created, and its reference returned in the output parameter Job. Any other return code indicates an error condition.
-     *   @param RequestedState The state requested for the element. This information will be placed into the RequestedState property of the instance if the return code of the RequestStateChange method is 0 ('Completed with No Error'), 3 ('Timeout'), or 4096 (0x1000) ('Job Started'). Refer to the description of the EnabledState and RequestedState properties for the detailed explanations of the RequestedState values.
+     * A return code of 0 shall indicate the state change was successfully initiated. 
+     * A return code of 3 shall indicate that the state transition cannot complete within the interval specified by the TimeoutPeriod parameter. 
+     * A return code of 4096 (0x1000) shall indicate the state change was successfully initiated, a ConcreteJob has been created, and its reference returned in the output parameter Job. Any other return code indicates an error condition.
+     *   @param RequestedState The state requested for the element. This information will be placed into the RequestedState property of the instance if the return code of the RequestStateChange method is 0 ('Completed with No Error'), or 4096 (0x1000) ('Job Started'). Refer to the description of the EnabledState and RequestedState properties for the detailed explanations of the RequestedState values.
      *   @param TimeoutPeriod A timeout period that specifies the maximum amount of time that the client expects the transition to the new state to take. The interval format must be used to specify the TimeoutPeriod. A value of 0 or a null parameter indicates that the client has no time requirements for the transition. 
-     *     If this property does not contain 0 or null and the implementation does not support this parameter, a return code of 'Use Of Timeout Parameter Not Supported' must be returned.
+     *     If this property does not contain 0 or null and the implementation does not support this parameter, a return code of 'Use Of Timeout Parameter Not Supported' shall be returned.
      *
      */
 
-    public RequestStateChangeResult invoke_RequestStateChange(WBEMClient cimClient,
-            javax.cim.UnsignedInteger16 RequestedState, javax.cim.CIMDateTime TimeoutPeriod)
-            throws WbemsmtException {
-
-        CIMArgument[] inParameter = new CIMArgument[2];
-        CIMArgument[] outParameter = new CIMArgument[1];
-
-        inParameter[0] = new CIMArgument("RequestedState", CIMDataType.UINT16_T, RequestedState);
-        inParameter[1] = new CIMArgument("TimeoutPeriod", CIMDataType.DATETIME_T, TimeoutPeriod);
-
-        javax.cim.UnsignedInteger32 resultObject = null;
-
-        try {
-            Object oResult = cimClient.invokeMethod(this.getCimObjectPath(),
-                    METHOD_REQUESTSTATECHANGE.NAME, inParameter, outParameter);
-            if (oResult != null) {
-
-                resultObject = (javax.cim.UnsignedInteger32) oResult;
-            }
+    public RequestStateChangeResult invoke_RequestStateChange(WBEMClient cimClient
+                                 ,javax.cim.UnsignedInteger16 RequestedState
+                      ,javax.cim.CIMDateTime TimeoutPeriod
+                      ) throws WbemsmtException {
+         
+       CIMArgument[] inParameter = new CIMArgument[2];
+       CIMArgument[] outParameter = new CIMArgument[1];
+    
+                    inParameter[0] = ( RequestedState == null ? null : new CIMArgument("RequestedState", CIMDataType.UINT16_T, RequestedState) );
+       
+                    inParameter[1] = ( TimeoutPeriod == null ? null : new CIMArgument("TimeoutPeriod", CIMDataType.DATETIME_T, TimeoutPeriod) );
+       
+                            
+       javax.cim.UnsignedInteger32 resultObject = null;
+          
+       try {
+           Object oResult =  cimClient.invokeMethod(           	                                            this.getCimObjectPath()
+           	                                         , 
+                                                    METHOD_REQUESTSTATECHANGE.NAME,
+                                                    inParameter,
+                                                    outParameter);
+           if (oResult != null)
+           {
+              
+                                 resultObject = (javax.cim.UnsignedInteger32)oResult;    
+                         }
+        } catch (WBEMException e) {
+            throw new InvokeMethodException(e,new InvokeMethodUserObject( this.getCimObjectPath() , 
+                                                          METHOD_REQUESTSTATECHANGE.NAME,
+                                                          inParameter,
+                                                          outParameter));
         }
-        catch (WBEMException e) {
-            throw new InvokeMethodException(e, new InvokeMethodUserObject(this.getCimObjectPath(),
-                    METHOD_REQUESTSTATECHANGE.NAME, inParameter, outParameter));
-        }
-
+        
         RequestStateChangeResult result = new RequestStateChangeResult();
         result.setResultObject(resultObject);
 
-        java.util.HashMap mapOutParameter = new java.util.HashMap();
+        java.util.HashMap<String, CIMArgument> mapOutParameter = new java.util.HashMap<String, CIMArgument>();
         for (int i = 0; i < outParameter.length; i++) {
-            CIMArgument argument = outParameter[i];
-            if (argument != null) {
-                mapOutParameter.put(argument.getName(), argument);
-            }
+           CIMArgument argument = outParameter[i];
+           if (argument != null)
+           {
+              mapOutParameter.put(argument.getName(), argument);
+           }
         }
-
+                
+        
         CIMArgument arg_Job = (CIMArgument) mapOutParameter.get("Job");
-        if (arg_Job != null) {
-            CIM_ConcreteJob out_Job = CIM_ConcreteJobHelper.getInstance(cimClient,
-                    (CIMObjectPath) arg_Job.getValue());
-
-            result.set_Job(out_Job);
-        }
-
-        return result;
-    }
+        if (arg_Job != null)
+       	 {
+                                          CIM_ConcreteJob out_Job = CIM_ConcreteJobHelper.getInstance(cimClient,(CIMObjectPath)arg_Job.getValue());
+                                    
+           result.set_Job(out_Job);
+       	 }
+ 
+               
+     return result;               
+   }
 
     /**
      * Result object for the method RequestStateChange

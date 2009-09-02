@@ -1,14 +1,14 @@
 /** 
  * DhcpEntitiesValidator.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -27,7 +27,9 @@ import java.util.Iterator;
 import javax.cim.CIMObjectPath;
 
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
-import org.sblim.wbemsmt.bl.messages.*;
+import org.sblim.wbemsmt.bl.messages.Message;
+import org.sblim.wbemsmt.bl.messages.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageNumber;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroupHelper;
@@ -97,9 +99,9 @@ public class DhcpEntitiesValidator extends Validator {
 			
 			poolparamslist = ((DhcpSubnetObject)parent).getSubnetparamslist ();
 	
-			ArrayList paramslist = (ArrayList) poolparamslist.getFCOs ();
+			ArrayList<Object> paramslist = (ArrayList<Object>) poolparamslist.getFCOs ();
 			
-			for(Iterator iter = paramslist.iterator ();iter.hasNext ();){
+			for(Iterator<Object> iter = paramslist.iterator ();iter.hasNext ();){
 				Linux_DHCPParams fco = (Linux_DHCPParams)iter.next ();
 				if(fco.get_Name ().equals ( "range" )){
 					String val = fco.get_values ();

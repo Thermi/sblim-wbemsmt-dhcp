@@ -1,14 +1,14 @@
 /** 
  * DhcpHostObject.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -21,7 +21,6 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.object;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +42,6 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParamsForEntity;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpOptionsList;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpParamsList;
 import org.sblim.wbemsmt.exception.WbemsmtException;
-import org.sblim.wbemsmt.schema.cim29.CIM_SettingData;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
 public class DhcpHostObject extends DhcpEntityObject {
@@ -61,18 +59,18 @@ public class DhcpHostObject extends DhcpEntityObject {
 		setHostoptionslist ( new DhcpOptionsList());
 		setHostparamslist ( new DhcpParamsList());
 		
-		List hostopArrayList = ((Linux_DHCPHost)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
+		List<Linux_DHCPOptions> hostopArrayList = ((Linux_DHCPHost)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
 						adapter.getCimClient ());
 
-		for (Iterator iter = hostopArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<Linux_DHCPOptions> iter = hostopArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPOptions opsfco = (Linux_DHCPOptions) iter.next ();
 			getHostoptionslist ().addDhcpOptionsObject ( new DhcpOptionsObject ( opsfco, adapter));
 		}
 		
-		List hostparamArrayList = ((Linux_DHCPHost) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
+		List<Linux_DHCPParams> hostparamArrayList = ((Linux_DHCPHost) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
 				adapter.getCimClient () );
 
-		for (Iterator iter = hostparamArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<Linux_DHCPParams> iter = hostparamArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPParams paramsfco = (Linux_DHCPParams) iter.next ();
 			getHostparamslist ().addDhcpParamsObject ( new DhcpParamsObject ( paramsfco, adapter ) );
 		}
@@ -106,11 +104,11 @@ public class DhcpHostObject extends DhcpEntityObject {
 		boolean objFound = false;
 
 			// if the option does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = getHostoptionslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = getHostoptionslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpOptionsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -122,7 +120,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue () != null && fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPOptions opFco = new Linux_DHCPOptions(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
@@ -163,11 +161,11 @@ public class DhcpHostObject extends DhcpEntityObject {
 		boolean objFound = false;
 
 			// if the Param does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = getHostparamslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = getHostparamslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpParamsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -179,7 +177,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue () != null && fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPParams opFco = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
@@ -230,7 +228,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 		
 		DhcpOptionsObject obj = null;
 		
-		for (Iterator iter = getHostoptionslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = getHostoptionslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpOptionsObject)iter.next();
 			obj.updateControls(container);
 			}
@@ -241,7 +239,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 		
 		DhcpParamsObject obj = null;
 		
-		for (Iterator iter = getHostparamslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = getHostparamslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpParamsObject)iter.next();
 			obj.updateControls(container);
 			}
@@ -251,7 +249,7 @@ public class DhcpHostObject extends DhcpEntityObject {
 	public void deleteHost () throws WbemsmtException {
 		
 		Linux_DHCPHost fco = (Linux_DHCPHost) this.fco;
-		List list = Linux_DHCPHostsForEntityHelper.enumerateInstanceNames ( adapter.getCimClient (),adapter.getNamespace (), true );
+		List<CIMObjectPath> list = Linux_DHCPHostsForEntityHelper.enumerateInstanceNames ( adapter.getCimClient (),adapter.getNamespace (), true );
 		if(DhcpCimAdapter.isDummyMode ()){
 		for (int i = 0; i < list.size (); i++) {
 			Linux_DHCPHostsForEntity p = new Linux_DHCPHostsForEntity (adapter.getCimClient (),adapter.getNamespace ());

@@ -1,25 +1,16 @@
-/** 
- * CIM_Service.java
- *
+/**
+ * CIM_Service.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE TER MS OF THE
+ * ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the Common
+ * Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.fco.jsr48.FcoGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm
- *
- * Contributors:
- *    TODO add author by using vm argument -Ddcg.author=<email> during startup 
- * 
- * Description: A Service is a LogicalElement that represents the availability of functionality that can be managed. This functionality may be provided by a seperately modeled entity such as a LogicalDevice or a SoftwareFeature, or both. The modeled Service typically provides only functionality required for management of itself or the elements it affects.
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: A Service is a LogicalElement that represents
+ *            the availability of functionality that can be managed. This functionality may be
+ *            provided by a seperately modeled entity such as a LogicalDevice or a SoftwareFeature,
+ *            or both. The modeled Service typically provides only functionality required for
+ *            management of itself or the elements it affects. generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.fco;
@@ -955,39 +946,47 @@ public class CIM_Service extends CIM_EnabledLogicalElement {
      *
      */
 
-    public StartServiceResult invoke_StartService(WBEMClient cimClient) throws WbemsmtException {
-
-        CIMArgument[] inParameter = new CIMArgument[0];
-        CIMArgument[] outParameter = new CIMArgument[0];
-
-        javax.cim.UnsignedInteger32 resultObject = null;
-
-        try {
-            Object oResult = cimClient.invokeMethod(this.getCimObjectPath(),
-                    METHOD_STARTSERVICE.NAME, inParameter, outParameter);
-            if (oResult != null) {
-
-                resultObject = (javax.cim.UnsignedInteger32) oResult;
-            }
+    public StartServiceResult invoke_StartService(WBEMClient cimClient
+                                 ) throws WbemsmtException {
+         
+       CIMArgument[] inParameter = new CIMArgument[0];
+       CIMArgument[] outParameter = new CIMArgument[0];
+    
+                            
+       javax.cim.UnsignedInteger32 resultObject = null;
+          
+       try {
+           Object oResult =  cimClient.invokeMethod(           	                                            this.getCimObjectPath()
+           	                                         , 
+                                                    METHOD_STARTSERVICE.NAME,
+                                                    inParameter,
+                                                    outParameter);
+           if (oResult != null)
+           {
+              
+                                 resultObject = (javax.cim.UnsignedInteger32)oResult;    
+                         }
+        } catch (WBEMException e) {
+            throw new InvokeMethodException(e,new InvokeMethodUserObject( this.getCimObjectPath() , 
+                                                          METHOD_STARTSERVICE.NAME,
+                                                          inParameter,
+                                                          outParameter));
         }
-        catch (WBEMException e) {
-            throw new InvokeMethodException(e, new InvokeMethodUserObject(this.getCimObjectPath(),
-                    METHOD_STARTSERVICE.NAME, inParameter, outParameter));
-        }
-
+        
         StartServiceResult result = new StartServiceResult();
         result.setResultObject(resultObject);
 
-        java.util.HashMap mapOutParameter = new java.util.HashMap();
+        java.util.HashMap<String, CIMArgument> mapOutParameter = new java.util.HashMap<String, CIMArgument>();
         for (int i = 0; i < outParameter.length; i++) {
-            CIMArgument argument = outParameter[i];
-            if (argument != null) {
-                mapOutParameter.put(argument.getName(), argument);
-            }
+           CIMArgument argument = outParameter[i];
+           if (argument != null)
+           {
+              mapOutParameter.put(argument.getName(), argument);
+           }
         }
-
-        return result;
-    }
+                  
+     return result;               
+   }
 
     /**
      * Result object for the method StartService
@@ -1033,39 +1032,47 @@ public class CIM_Service extends CIM_EnabledLogicalElement {
      *
      */
 
-    public StopServiceResult invoke_StopService(WBEMClient cimClient) throws WbemsmtException {
-
-        CIMArgument[] inParameter = new CIMArgument[0];
-        CIMArgument[] outParameter = new CIMArgument[0];
-
-        javax.cim.UnsignedInteger32 resultObject = null;
-
-        try {
-            Object oResult = cimClient.invokeMethod(this.getCimObjectPath(),
-                    METHOD_STOPSERVICE.NAME, inParameter, outParameter);
-            if (oResult != null) {
-
-                resultObject = (javax.cim.UnsignedInteger32) oResult;
-            }
+    public StopServiceResult invoke_StopService(WBEMClient cimClient
+                                 ) throws WbemsmtException {
+         
+       CIMArgument[] inParameter = new CIMArgument[0];
+       CIMArgument[] outParameter = new CIMArgument[0];
+    
+                            
+       javax.cim.UnsignedInteger32 resultObject = null;
+          
+       try {
+           Object oResult =  cimClient.invokeMethod(           	                                            this.getCimObjectPath()
+           	                                         , 
+                                                    METHOD_STOPSERVICE.NAME,
+                                                    inParameter,
+                                                    outParameter);
+           if (oResult != null)
+           {
+              
+                                 resultObject = (javax.cim.UnsignedInteger32)oResult;    
+                         }
+        } catch (WBEMException e) {
+            throw new InvokeMethodException(e,new InvokeMethodUserObject( this.getCimObjectPath() , 
+                                                          METHOD_STOPSERVICE.NAME,
+                                                          inParameter,
+                                                          outParameter));
         }
-        catch (WBEMException e) {
-            throw new InvokeMethodException(e, new InvokeMethodUserObject(this.getCimObjectPath(),
-                    METHOD_STOPSERVICE.NAME, inParameter, outParameter));
-        }
-
+        
         StopServiceResult result = new StopServiceResult();
         result.setResultObject(resultObject);
 
-        java.util.HashMap mapOutParameter = new java.util.HashMap();
+        java.util.HashMap<String, CIMArgument> mapOutParameter = new java.util.HashMap<String, CIMArgument>();
         for (int i = 0; i < outParameter.length; i++) {
-            CIMArgument argument = outParameter[i];
-            if (argument != null) {
-                mapOutParameter.put(argument.getName(), argument);
-            }
+           CIMArgument argument = outParameter[i];
+           if (argument != null)
+           {
+              mapOutParameter.put(argument.getName(), argument);
+           }
         }
-
-        return result;
-    }
+                  
+     return result;               
+   }
 
     /**
      * Result object for the method StopService

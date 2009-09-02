@@ -1,14 +1,14 @@
 /** 
  * DhcpCimAdapter.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -29,12 +29,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.cim.CIMClass;
-import javax.cim.CIMDataType;
 import javax.cim.CIMInstance;
 import javax.cim.CIMObjectPath;
-import javax.cim.CIMProperty;
-import javax.cim.CIMValuedElement;
 import javax.cim.UnsignedInteger16;
 import javax.wbem.WBEMException;
 import javax.wbem.client.WBEMClient;
@@ -54,9 +50,13 @@ import org.sblim.wbemsmt.bl.adapter.SelectionHierarchy;
 import org.sblim.wbemsmt.bl.adapter.UpdateControlsDelegatee;
 import org.sblim.wbemsmt.bl.adapter.UpdateModelDelegatee;
 import org.sblim.wbemsmt.bl.fco.FcoHelper;
-import org.sblim.wbemsmt.bl.messages.*;
+import org.sblim.wbemsmt.bl.messages.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageUtil;
 import org.sblim.wbemsmt.bl.tree.ICIMInstanceNode;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
+import org.sblim.wbemsmt.cim.indication.HttpServerConnectionManager;
+import org.sblim.wbemsmt.cim.indication.IndicationDestination;
+import org.sblim.wbemsmt.cim.indication.IndicationDestinationManager;
 import org.sblim.wbemsmt.dhcp.bl.DhcpErrorCodes;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListContainer;
@@ -64,32 +64,15 @@ import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListItemContain
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupParamsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGroupsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostParamsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPHostsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPOptionsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPParamsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPPoolOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPPoolParamsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPPoolsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSharednerOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSharednetParamsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSharednetsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetOptionsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetParamsContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPSubnetsContainer;
 import org.sblim.wbemsmt.dhcp.bl.container.edit.DhcpServiceConfContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.edit.WelcomeContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewGroupContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewHostSummaryContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewPoolContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewPoolSummaryContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSharednetSummaryContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetContainer;
-import org.sblim.wbemsmt.dhcp.bl.container.wizard.NewSubnetSummaryContainer;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPEntity;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGlobal;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPGroup;
@@ -97,19 +80,11 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPHost;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPOptions;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParams;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPPool;
-import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPRegisteredProfileHelper;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPService;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPServiceConfiguration;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
 import org.sblim.wbemsmt.dhcp.indications.DHCPChangeIndicationListener;
-import org.sblim.wbemsmt.dhcp.indications.DHCPCustomEventForIndication;
-import org.sblim.wbemsmt.dhcp.wizard.NewGroupWizardContainer;
-import org.sblim.wbemsmt.dhcp.wizard.NewHostWizardContainer;
-import org.sblim.wbemsmt.dhcp.wizard.NewPoolWizardContainer;
-import org.sblim.wbemsmt.dhcp.wizard.NewSharednetWizardContainer;
-import org.sblim.wbemsmt.dhcp.wizard.NewSubnetWizardContainer;
-import org.sblim.wbemsmt.dhcp.wizard.WizardContainer1;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpOptionsList;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpParamsList;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpServiceObjectList;
@@ -130,27 +105,20 @@ import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSharednetWizard;
 import org.sblim.wbemsmt.dhcp.wrapper.wizard.NewSubnetWizard;
 import org.sblim.wbemsmt.exception.ErrorCode;
 import org.sblim.wbemsmt.exception.WbemsmtException;
-import org.sblim.wbemsmt.schema.cim29.CIM_Collection;
-import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilter;
-import org.sblim.wbemsmt.schema.cim29.CIM_IndicationFilterHelper;
-import org.sblim.wbemsmt.schema.cim29.CIM_IndicationSubscription;
-import org.sblim.wbemsmt.schema.cim29.CIM_IndicationSubscriptionHelper;
-import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestination;
-import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationCIMXML;
-import org.sblim.wbemsmt.schema.cim29.CIM_ListenerDestinationHelper;
-import org.sblim.wbemsmt.schema.cim29.CIM_ManagedElement;
-import org.sblim.wbemsmt.schema.cim29.CIM_RegisteredProfile;
-import org.sblim.wbemsmt.session.WbemsmtSession;
+import org.sblim.wbemsmt.schema.cim221.CIM_IndicationFilter;
+import org.sblim.wbemsmt.schema.cim221.CIM_IndicationFilterHelper;
+import org.sblim.wbemsmt.schema.cim221.CIM_IndicationSubscription;
+import org.sblim.wbemsmt.schema.cim221.CIM_IndicationSubscriptionHelper;
+import org.sblim.wbemsmt.schema.cim221.CIM_ListenerDestination;
+import org.sblim.wbemsmt.schema.cim221.CIM_ListenerDestinationCIMXML;
+import org.sblim.wbemsmt.schema.cim221.CIM_ListenerDestinationHelper;
 import org.sblim.wbemsmt.tools.resources.ResourceBundleManager;
-import org.sblim.wbemsmt.cim.indication.*;
-
-import sun.security.action.GetLongAction;
 
 public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	private static final String[] BUNDLES = { "messages", "messagesDhcp" };
 
-	private static Set booleanOps = new HashSet();
+	private static Set<String> booleanOps = new HashSet<String>();
 	
 	private static boolean DummyMode = false;
 	
@@ -203,14 +171,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 	
 	private Linux_DHCPEntity selectedEntity = null;
 	
-	private WBEMClient slpNamespaceCimClient = null;
 	private CIM_ListenerDestinationCIMXML dest = null;
 	
 	private boolean indcOccurred = false;
 	private boolean subscribed = false;
 	IndicationDestination indcDest = null;
-	private int indcPort = 0;
-	
 	public static class DhcpSelectionHeirarchy extends SelectionHierarchy {
 
 		private final DhcpCimAdapter adapter;
@@ -308,8 +273,8 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		deleteDelegatee = new DhcpCimAdpaterDeleteDelegatee ( this);
 		createDelegatee = new DhcpCimAdapterCreateDelegatee ( this );
 		installValidatorsDelegatee = new DhcpCimAdapterInstallValidatorsDelegatee( this);
-		initWizardDelegatee = new DhcpCimAdapterInitWizardDelegatee ( this);
-		initContainerDelegatee = new DhcpCimAdapterInitContainerDelegatee (this);
+		initWizardDelegatee = new DhcpCimAdapterInitWizardDelegatee ();
+		initContainerDelegatee = new DhcpCimAdapterInitContainerDelegatee ();
 		updateModelDelegatee = new DhcpCimAdapterUpdateModelDelegatee(this);
 		countDelegatee = new DhcpCimAdpaterCountDelegatee (this);
 		revertDelegatee = new DhcpCimAdapterRevertDelegatee (this);
@@ -334,7 +299,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		try {
 			indcDest = indcmanager.getIndicationDestination ( "preset1" );
 			HttpServerConnectionManager.getInstance ().addListener ( indcListener,  indcDest);
-			indcPort = indcDest.getPort ().intValue ();
+			indcDest.getPort ().intValue ();
 		} catch (WbemsmtException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -504,8 +469,8 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 		try{
 		if(DhcpServiceObj == null){
-			List listWithServiceNodes = rootNode.findInstanceNodes ( Linux_DHCPService.CIM_CLASS_NAME );
-			for (Iterator iterServiceNodes = listWithServiceNodes.iterator (); iterServiceNodes.hasNext ();) {
+			List<ICIMInstanceNode> listWithServiceNodes = rootNode.findInstanceNodes ( Linux_DHCPService.CIM_CLASS_NAME );
+			for (Iterator<ICIMInstanceNode> iterServiceNodes = listWithServiceNodes.iterator (); iterServiceNodes.hasNext ();) {
 				ICIMInstanceNode serviceNode = (ICIMInstanceNode) iterServiceNodes.next ();
 
 				// set the service object
@@ -544,11 +509,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		DhcpServiceConfigurationObject serviceconfobj = null;
 		
 		if(DhcpServiceConfigurationObj == null){
-				List serviceconfArrayList = getDhcpServiceObj ().getFco ()
+				List<CIMObjectPath> serviceconfArrayList = getDhcpServiceObj ().getFco ()
 				.getAssociated_Linux_DHCPServiceConfiguration_Linux_DHCPServiceConfigurationForServiceNames (
 						cimClient);
 	
-		for (Iterator iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<CIMObjectPath> iter = serviceconfArrayList.iterator (); iter.hasNext ();) {
 			CIMObjectPath obj = (CIMObjectPath) iter.next ();
 			Linux_DHCPServiceConfiguration settingFco = new Linux_DHCPServiceConfiguration(new CIMInstance(obj,null));
 			serviceconfobj = new DhcpServiceConfigurationObject ( settingFco, this );
@@ -570,7 +535,7 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 
 	public CimObjectKey getKeyByTreeNode ( ITaskLauncherTreeNode treeNode ) throws WbemsmtException {
 
-		List nodes = new ArrayList();
+		List<ITaskLauncherTreeNode> nodes = new ArrayList<ITaskLauncherTreeNode>();
 		ITaskLauncherTreeNode Node = treeNode;
 		
 		while(Node instanceof ICIMInstanceNode){
@@ -861,11 +826,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 			DhcpOptionsList globalopslist = null;
 			Linux_DHCPOptions globalopsFco = null;
 			
-				List globalOpsArrayList = getDhcpEntityObj ().getFco ()
+				List<Linux_DHCPOptions> globalOpsArrayList = getDhcpEntityObj ().getFco ()
 						.getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys ( cimClient);
 				if (globalOpsArrayList.size () > 0) {
 					globalopslist = new DhcpOptionsList ();
-					for (Iterator iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
+					for (Iterator<Linux_DHCPOptions> iter = globalOpsArrayList.iterator (); iter.hasNext ();) {
 						globalopsFco = (Linux_DHCPOptions) iter.next ();
 						globalopslist
 								.addDhcpOptionsObject ( new DhcpOptionsObject ( globalopsFco, this ) );
@@ -900,11 +865,11 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 			DhcpParamsList globalparamslist = null;
 			Linux_DHCPParams globalparamsFco = null;
 
-			List globalParamsArrayList = getDhcpEntityObj ().getFco ()
+			List<Linux_DHCPParams> globalParamsArrayList = getDhcpEntityObj ().getFco ()
 					.getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys ( cimClient);
 			if (globalParamsArrayList.size () > 0) {
 				globalparamslist = new DhcpParamsList ();
-				for (Iterator iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
+				for (Iterator<Linux_DHCPParams> iter = globalParamsArrayList.iterator (); iter.hasNext ();) {
 					globalparamsFco = (Linux_DHCPParams) iter.next ();
 					globalparamslist.addDhcpParamsObject ( new DhcpParamsObject ( globalparamsFco,
 							this ) );
@@ -932,9 +897,9 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		Linux_DHCPGlobal globalFco = null;
 		
 		if(DhcpEntityObj == null){
-		List globalEntityArrayList = getDhcpServiceObj ().getFco ().getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
+		List<Linux_DHCPGlobal> globalEntityArrayList = getDhcpServiceObj ().getFco ().getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices (
 				cimClient);
-		for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<Linux_DHCPGlobal> iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
 			globalFco = (Linux_DHCPGlobal) iter.next ();
 		}
 
@@ -1159,8 +1124,8 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		
 		CIM_ListenerDestinationCIMXML ourDestination = null;
         
-        List destinations = CIM_ListenerDestinationHelper.enumerateInstances(cimClient,getNamespace (),true);
-        for (Iterator iterator = destinations.iterator(); iterator.hasNext() && ourDestination == null;) {
+        List<CIM_ListenerDestination> destinations = CIM_ListenerDestinationHelper.enumerateInstances(cimClient,getNamespace (),true);
+        for (Iterator<CIM_ListenerDestination> iterator = destinations.iterator(); iterator.hasNext() && ourDestination == null;) {
         	CIM_ListenerDestinationCIMXML destination = new CIM_ListenerDestinationCIMXML(((CIM_ListenerDestination) iterator.next()).getCimInstance ());
         	if (destination instanceof CIM_ListenerDestinationCIMXML) {
         		CIM_ListenerDestinationCIMXML xmlDestination = (CIM_ListenerDestinationCIMXML) destination;
@@ -1206,13 +1171,13 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		String filt = null;
 
 
-		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
-		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
+		List<CIM_IndicationFilter> filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
+		for (Iterator<CIM_IndicationFilter> iterator = filterslist.iterator (); iterator.hasNext ();){
 			filter = (CIM_IndicationFilter) iterator.next ();
 			if(filter.get_key_Name ().equals("HostIndication") || filter.get_key_Name ().equals("SubnetIndication") || filter.get_key_Name ().equals("SharednetIndication") || filter.get_key_Name ().equals("GroupIndication") || filter.get_key_Name ().equals("PoolIndication") || filter.get_key_Name ().equals("OptionsIndication") || filter.get_key_Name ().equals("ParamsIndication")){
 
-				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
-				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
+				List<CIM_IndicationSubscription> sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
+				for (Iterator<CIM_IndicationSubscription> iterator1 = sublist.iterator (); iterator1.hasNext ();){
 					sub = (CIM_IndicationSubscription) iterator1.next ();
 					if(sub.get_Handler_CIM_ListenerDestination (getCimClient()) != null && sub.get_Filter_CIM_IndicationFilter (getCimClient()) != null){
 						host = sub.get_Handler_CIM_ListenerDestination (getCimClient()).get_key_Name ();
@@ -1391,13 +1356,13 @@ public class DhcpCimAdapter extends AbstractBaseCimAdapter{
 		String filt = null;
 
 
-		List filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
-		for (Iterator iterator = filterslist.iterator (); iterator.hasNext ();){
+		List<CIM_IndicationFilter> filterslist = CIM_IndicationFilterHelper.enumerateInstances ( getCimClient(), getNamespace (),true );
+		for (Iterator<CIM_IndicationFilter> iterator = filterslist.iterator (); iterator.hasNext ();){
 			filter = (CIM_IndicationFilter) iterator.next ();
 			if(filter.get_key_Name ().equals("HostIndication") || filter.get_key_Name ().equals("SubnetIndication") || filter.get_key_Name ().equals("SharednetIndication") || filter.get_key_Name ().equals("GroupIndication") || filter.get_key_Name ().equals("PoolIndication") || filter.get_key_Name ().equals("OptionsIndication") || filter.get_key_Name ().equals("ParamsIndication")){
 
-				List sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
-				for (Iterator iterator1 = sublist.iterator (); iterator1.hasNext ();){
+				List<CIM_IndicationSubscription> sublist = CIM_IndicationSubscriptionHelper.enumerateInstances(getCimClient(),getNamespace (),true);
+				for (Iterator<CIM_IndicationSubscription> iterator1 = sublist.iterator (); iterator1.hasNext ();){
 					sub = (CIM_IndicationSubscription) iterator1.next ();
 					if(sub.get_Handler_CIM_ListenerDestination (getCimClient()) != null && sub.get_Filter_CIM_IndicationFilter (getCimClient()) != null){
 						host = sub.get_Handler_CIM_ListenerDestination (getCimClient()).get_key_Name();

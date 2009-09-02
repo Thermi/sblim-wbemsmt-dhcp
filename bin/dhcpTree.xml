@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cus:customtreeconfig version="VERSION_2_1" xsi:schemaLocation="http://sblim.org/wbemsmt/tasklauncher/customtreeconfig ../../wbemsmt-commons/commons-bl/conf/customtreeconfig.xsd" xmlns:cus="http://sblim.org/wbemsmt/tasklauncher/customtreeconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <cus:treenode>
+        <cus:description>root</cus:description>
+        <cus:treenode>
+            <cus:description>treedhcp</cus:description>
+            <cus:eventListener isSystemListener="true">
+                <cus:classname>org.sblim.wbemsmt.tasklauncher.InitAdapterListener</cus:classname>
+                <cus:param>
+                    <cus:param-name>adapterClassName</cus:param-name>
+                    <cus:param-value>org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter</cus:param-value>
+                </cus:param>
+                <cus:param>
+                    <cus:param-name>taskName</cus:param-name>
+                    <cus:param-value>DHCP</cus:param-value>
+                </cus:param>
+            </cus:eventListener>
+            
+            <cus:cimclass>
+            	<cus:classname>Linux_DHCPService</cus:classname>
+            	<cus:instanceSubnodes>
+            		<cus:treenode>
+            			<cus:description>Childs</cus:description>
+            			<cus:eventListener>
+            				<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.DynamicTreeBuilderListener</cus:classname>
+            			</cus:eventListener>
+            			<cus:contextmenu>
+            				<cus:menuitem>
+            					<cus:description>CreateSubnet</cus:description>
+            					<cus:eventListener>
+            						<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.SubnetcreateActionListener</cus:classname>
+            					</cus:eventListener>
+            				</cus:menuitem>
+            				<cus:menuitem>
+            					<cus:description>CreateSharednet</cus:description>
+            					<cus:eventListener>
+            						<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.SharednetcreateActionListener</cus:classname>
+            					</cus:eventListener>
+            				</cus:menuitem>
+            				<cus:menuitem>
+            					<cus:description>CreateGroup</cus:description>
+            					<cus:eventListener>
+            						<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.GroupcreateActionListener</cus:classname>
+            					</cus:eventListener>
+            				</cus:menuitem>
+            				<cus:menuitem>
+            					<cus:description>CreateHost</cus:description>
+            					<cus:eventListener>
+            						<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.HostcreateActionListener</cus:classname>
+            					</cus:eventListener>
+            				</cus:menuitem>
+            			</cus:contextmenu></cus:treenode>
+            		<cus:eventListener>
+            			<cus:classname>org.sblim.wbemsmt.dhcp.bl.listener.DhcpServiceConfeditActionListener</cus:classname>
+            		</cus:eventListener></cus:instanceSubnodes>
+            	<cus:instanceNamingKey>Name</cus:instanceNamingKey>
+            	
+            </cus:cimclass>
+        </cus:treenode>
+    </cus:treenode>
+</cus:customtreeconfig>

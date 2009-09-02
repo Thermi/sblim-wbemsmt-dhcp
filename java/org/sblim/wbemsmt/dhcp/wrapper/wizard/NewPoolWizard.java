@@ -1,14 +1,14 @@
 /** 
  * NewPoolWizard.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -74,6 +74,8 @@ public class NewPoolWizard {
 		Linux_DHCPParams poolop = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
 		if (DhcpCimAdapter.isDummyMode ())
 			poolop.set_key_InstanceID ( "WBEM_SMT:LinuxDHCPParams::dhcp::" + adapter.getSelectedEntity ().get_Name ()+ ":: range" );
+		else
+		    poolop.set_key_InstanceID("");
 		poolop.set_Name ( "range" );
 		poolop.set_ParentID ( Pool.get_key_InstanceID() );
 		poolop.set_values ( (String)container.get_usr_Range ().getConvertedControlValue () );

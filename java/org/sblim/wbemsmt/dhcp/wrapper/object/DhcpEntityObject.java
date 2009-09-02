@@ -1,14 +1,14 @@
 /** 
  * DhcpEntityObject.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -22,7 +22,6 @@
 package org.sblim.wbemsmt.dhcp.wrapper.object;
 
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -243,11 +242,11 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 		boolean objFound = false;
 
 			// if the option does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = adapter.getDhcpglobalopslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = adapter.getDhcpglobalopslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpOptionsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -259,7 +258,7 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue() != null && fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPOptions opFco = new Linux_DHCPOptions(adapter.getCimClient (),adapter.getNamespace ());
 				opFco.set_key_InstanceID ( "WBEM_SMT:Linux_DHCPOptions::dhcp::" + fld.getLabelText () );
@@ -273,9 +272,9 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 				if (DhcpCimAdapter.isDummyMode ()) {
 					Linux_DHCPGlobal globalFco = null;
 
-					List globalEntityArrayList = adapter.getDhcpServiceObj ().getFco ()
+					List<Linux_DHCPGlobal> globalEntityArrayList = adapter.getDhcpServiceObj ().getFco ()
 							.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices ( adapter.getCimClient () );
-					for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
+					for (Iterator<Linux_DHCPGlobal> iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
 						globalFco = (Linux_DHCPGlobal) iter.next ();
 					}
 
@@ -304,11 +303,11 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 		boolean objFound = false;
 
 			// if the option does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = adapter.getDhcpglobalparamslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = adapter.getDhcpglobalparamslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpParamsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -320,7 +319,7 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue() != null&& fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPParams opFco = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
 				opFco.set_key_InstanceID ( "WBEM_SMT:Linux_DHCPParams::dhcp::" + fld.getLabelText () );
@@ -334,9 +333,9 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 				if (DhcpCimAdapter.isDummyMode ()) {
 					Linux_DHCPGlobal globalFco = null;
 
-					List globalEntityArrayList = adapter.getDhcpServiceObj ().getFco ()
+					List<Linux_DHCPGlobal> globalEntityArrayList = adapter.getDhcpServiceObj ().getFco ()
 							.getAssociated_Linux_DHCPGlobal_Linux_DHCPGlobalForServices ( adapter.getCimClient ());
-					for (Iterator iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
+					for (Iterator<Linux_DHCPGlobal> iter = globalEntityArrayList.iterator (); iter.hasNext ();) {
 						globalFco = (Linux_DHCPGlobal) iter.next ();
 					}
 
@@ -363,7 +362,7 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 		
 		DhcpParamsObject obj = null;
 		
-		for (Iterator iter = adapter.getDhcpglobalparamslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = adapter.getDhcpglobalparamslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpParamsObject)iter.next();
 			obj.updateControls(container);
 			}
@@ -376,7 +375,7 @@ public class DhcpEntityObject extends WbemsmtBusinessObject {
 		
 		DhcpOptionsObject obj = null;
 		
-		for (Iterator iter = adapter.getDhcpglobalopslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = adapter.getDhcpglobalopslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpOptionsObject)iter.next();
 			obj.updateControls(container);
 			}

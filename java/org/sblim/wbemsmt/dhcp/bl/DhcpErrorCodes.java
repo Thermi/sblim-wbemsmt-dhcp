@@ -1,14 +1,14 @@
 /** 
  * DhcpErrorCodes.java
  *
- * Copyright IBM Corp. 2008
+ * Copyright IBM Corp.  2009,2008
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -20,9 +20,6 @@
 
 
 package org.sblim.wbemsmt.dhcp.bl;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.sblim.wbemsmt.bl.messages.ErrCodes;
 import org.sblim.wbemsmt.bl.messages.Message;
 import org.sblim.wbemsmt.bl.messages.MessageDefinition;
@@ -33,8 +30,6 @@ import org.sblim.wbemsmt.bl.messages.MessageNumber;
 
 public class DhcpErrorCodes implements MessageInputHandler {
 
-	private static final Map exceptions = new HashMap();	
-	
 	public final static String COMPONENT = "DIR";
 	
 	/**

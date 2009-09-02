@@ -1,25 +1,12 @@
-/** 
- * HosteditActionListenerEditBeanHostTab.java
- *
+/**
+ * HosteditActionListenerEditBeanHostTab.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED
+ * UNDER THE TER MS OF THE ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR
+ * DISTRIBUTION OF THIS FILE CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a
+ * current copy of the Eclipse Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.jsf.JSFPresentationLayerGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/jsf/editBean.vm
- *
- * Contributors: 
- *   TODO add author by using vm argument -Ddcg.author=<email> during startup
- * 
- * Description: 
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/jsf/editBean.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.listener.jsf;
@@ -29,12 +16,10 @@ import javax.faces.component.html.*;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
-import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
-import org.sblim.wbemsmt.bl.tree.TaskLauncherTreeNodeSelector;
+import org.sblim.wbemsmt.bl.tree.*;
 import org.sblim.wbemsmt.exception.*;
 import org.sblim.wbemsmt.tools.jsf.*;
-import org.sblim.wbemsmt.tools.resources.*;
-//import org.sblim.wbemsmt.tools.input.jsf.*;
+import org.sblim.wbemsmt.tools.resources.*; // import org.sblim.wbemsmt.tools.input.jsf.*;
 import org.sblim.wbemsmt.bl.adapter.*;
 import org.sblim.wbemsmt.bl.messages.*;
 
@@ -85,7 +70,7 @@ public class HosteditActionListenerEditBeanHostTab extends EditBean {
 
     public void edit(ITaskLauncherTreeNode treeNode) throws WbemsmtException {
 
-        String bindingPrefix = null;
+        String expressionPrefix = null;
         HtmlPanelGrid childEditFields = null;
         Div div = null;
         panel = (HtmlPanelGrid) FacesContext.getCurrentInstance().getApplication().createComponent(
@@ -117,11 +102,11 @@ public class HosteditActionListenerEditBeanHostTab extends EditBean {
 
         //ADD THE FIELDS FOR CONTAINER DHCPHostsContainer in EditPanel ${editPanel.getId()}
 
-        bindingPrefix = "objectActionController.editBeans['HostTab'].containers[0].";
+        expressionPrefix = "objectActionController.editBeans['HostTab'].containers[0].";
 
         //create cotainner
         currentEditContainer1 = new org.sblim.wbemsmt.dhcp.bl.container.edit.jsf.DHCPHostsContainerImpl(
-                adapter1, bindingPrefix);
+                adapter1, expressionPrefix);
         currentEditContainer1.getPanelForCustomLayout().setStyleClass("mainTable");
         containerPanel = (HtmlPanelGrid) FacesContext.getCurrentInstance().getApplication()
                 .createComponent(HtmlPanelGrid.COMPONENT_TYPE);

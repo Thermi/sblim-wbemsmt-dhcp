@@ -3,14 +3,14 @@
   *
 
  
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: org.sblim.wbemsmt.dcg.generator.cmd.CMDPresentationLayerGenerator
   * @template: org/sblim/wbemsmt/dcg/templates/cmd/containerImpl.vm
@@ -31,12 +31,14 @@ import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.BaseDataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.bl.adapter.DataContainerUtil;
+import org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListItemContainer;
 import org.sblim.wbemsmt.exception.WbemsmtException;
+import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
 
 public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implements org.sblim.wbemsmt.dhcp.bl.container.edit.DHCPGlobalOptionsListContainer {
 
-				private java.util.List icItems = new java.util.ArrayList();
+				private java.util.List<DHCPGlobalOptionsListItemContainer> icItems = new java.util.ArrayList<DHCPGlobalOptionsListItemContainer>();
 	
 		
 	public DHCPGlobalOptionsListContainerImpl(AbstractBaseCimAdapter adapter) throws WbemsmtException {
@@ -51,7 +53,7 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 		* 
 		* linked container DHCPGlobalOptionsListItemContainer
 		*/
-		public java.util.List getItems()
+		public java.util.List<DHCPGlobalOptionsListItemContainer> getItems()
 		{
 			return icItems;
 		}
@@ -83,7 +85,7 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 	
 	public void traceChilds(java.io.PrintWriter printStream, String listOptions, boolean title)
 	{
-    		        		List listitems = getItems();
+    		        		List<DHCPGlobalOptionsListItemContainer> listitems = getItems();
         		printStream.println();
         		printStream.println(getAdapter().getBundle().getString("DHCPGlobalOptionsListContainer.role.items") + " " + getAdapter().getBundle().getString("items.found", new Object[]{new Integer(listitems.size())}));
         		for (int i = 0; i < listitems.size(); i++) {
@@ -102,9 +104,9 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 	 * Return a list of all Fields. A Field is a LabeledBaseInputComponentIf
 	 * @return
 	 */
-	public List getFields()
+	public List<LabeledBaseInputComponentIf> getFields()
 	{
-		List fields = new ArrayList();
+		List<LabeledBaseInputComponentIf> fields = new ArrayList<LabeledBaseInputComponentIf>();
     			return fields;
 	}
 
@@ -112,9 +114,9 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 	 * Return a list of all associated childContainers. A childContainer is a DataContainer
 	 * @return
 	 */
-	public List getChildContainers()
+	public List<DataContainer> getChildContainers()
 	{
-		List childs = new ArrayList();
+		List<DataContainer> childs = new ArrayList<DataContainer>();
     	    		childs.addAll(getItems());
     	    			return childs;
 	
@@ -125,8 +127,8 @@ public class DHCPGlobalOptionsListContainerImpl extends BaseDataContainer implem
 		DHCPGlobalOptionsListContainerImpl source = (DHCPGlobalOptionsListContainerImpl)sourceContainer;
 	
     			
-    	    		List targetListForItems = getItems();
-    		List sourceListForItems = source.getItems();
+    	    		List<DHCPGlobalOptionsListItemContainer> targetListForItems = getItems();
+    		List<DHCPGlobalOptionsListItemContainer> sourceListForItems = source.getItems();
     		if (sourceListForItems.size() != targetListForItems.size())
     		{
     			throw new IllegalArgumentException("The Lists are not from same size. Source is " + sourceListForItems.size() + " and target is " + targetListForItems.size() );

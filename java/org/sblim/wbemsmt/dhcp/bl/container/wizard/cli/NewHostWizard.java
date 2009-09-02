@@ -1,25 +1,12 @@
-/** 
- * NewHostWizard.java
- *
+/**
+ * NewHostWizard.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE TER MS OF THE
+ * ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the Common
+ * Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.cmd.CMDPresentationLayerGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/cmd/wizardClass.vm
- *
- * Contributors: 
- *   TODO add author by using vm argument -Ddcg.author=<email> during startup
- * 
- * Description: 
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/cmd/wizardClass.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.container.wizard.cli;
@@ -45,13 +32,13 @@ public class NewHostWizard extends CliWizardBase implements IPageWizardAdapter {
                 "messagesDhcp" }, Locale.getDefault()));
         this.container = new org.sblim.wbemsmt.dhcp.wizard.NewHostWizardContainer(adapter,
                 new org.sblim.wbemsmt.dhcp.wizard.NewHostWizardContainerPanels() {
-                    public Object getNewHost() throws WbemsmtException {
+                    public DataContainer getNewHost() throws WbemsmtException {
                         DataContainer dc = new org.sblim.wbemsmt.dhcp.bl.container.wizard.cli.NewHostContainerImpl(
                                 adapter);
                         return dc;
                     }
 
-                    public Object getNewHostSummary() throws WbemsmtException {
+                    public DataContainer getNewHostSummary() throws WbemsmtException {
                         DataContainer dc = new org.sblim.wbemsmt.dhcp.bl.container.wizard.cli.NewHostSummaryContainerImpl(
                                 adapter);
                         return dc;

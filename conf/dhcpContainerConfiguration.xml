@@ -2,14 +2,14 @@
 <!--/**
  *  Generated-File by XMLBeans
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * Author:     org.sblim.wbemsmt.dcg.util.DCGModelUtil
  *
@@ -27,25 +27,25 @@
         <dcg:environment>
             <dcg:fcoPackage id="fcos" dir="../wbemsmt-dhcp/bin" name="org.sblim.wbemsmt.dhcp"/>
             <dcg:mofinput description="New Mofinput" generate="true">
-                <dcg:fcoPackage id="fco" name="org.sblim.wbemsmt.dhcp.bl.fco" dir="../wbemsmt-dhcp/java/org/sblim/wbemsmt/dhcp/bl/fco/"/>
+                <dcg:fcoPackage id="fco" name="org.sblim.wbemsmt.dhcp.bl.fco" dir="../wbemsmt-dhcp/java/"/>
                 <dcg:moffile location="../cmpi-dhcp/model/"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Component.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Configuration.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_LogicalElement.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ManagedElement.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Profile.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Service.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_SettingData.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Event/CIM_Indication.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Interop/CIM_ElementConformsToProfile.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Interop/CIM_RegisteredProfile.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_EnabledLogicalElement.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ManagedSystemElement.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Collection.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ElementConfiguration.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ElementSettingData.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_ConcreteJob.mof"/>
-                <dcg:moffile location="../../My Data/WBEMSMT/CIM/cimv214Final-MOFs/Core/CIM_Job.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/unsupported/Core/CIM_Profile.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_Component.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_Configuration.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_LogicalElement.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_ManagedElement.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_Service.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_SettingData.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Event/CIM_Indication.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Interop/CIM_ElementConformsToProfile.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Interop/CIM_RegisteredProfile.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_EnabledLogicalElement.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_ManagedSystemElement.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_Collection.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_ElementConfiguration.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_ElementSettingData.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_ConcreteJob.mof"/>
+                <dcg:moffile location="../wbemsmt-commons-cim-schema/cim_2_21/supported/Core/CIM_Job.mof"/>
             </dcg:mofinput>
             <dcg:containerInterfacePkg id="editContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.edit"/>
             <dcg:containerInterfacePkg id="wizardContainerIf" dir="../wbemsmt-dhcp/java/" name="org.sblim.wbemsmt.dhcp.bl.container.wizard"/>

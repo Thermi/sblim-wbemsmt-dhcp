@@ -1,39 +1,21 @@
-/** 
- * DeletePoolCommand.java
+/**
+ * DeletePoolCommand.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE TER MS OF
+ * THE ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the Common
+ * Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.cmd.CMDPresentationLayerGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/cmd/deleteCommand.vm
- *
- * Contributors: 
- *   TODO add author by using vm argument -Ddcg.author=<email> during startup
- * 
- * Description: Class for  deleteting objects
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/cmd/deleteCommand.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: Class for deleteting objects generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
+import org.apache.commons.cli.*;
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
 import org.sblim.wbemsmt.bl.adapter.CimAdapterFactory;
 import org.sblim.wbemsmt.exception.WbemsmtException;
-import org.sblim.wbemsmt.tools.cli.CimClientOptionValues;
-import org.sblim.wbemsmt.tools.cli.CimCommand;
-import org.sblim.wbemsmt.tools.cli.CimCommandValues;
-import org.sblim.wbemsmt.tools.cli.CliDataLoader;
-import org.sblim.wbemsmt.tools.cli.LoginOptionValues;
-import org.sblim.wbemsmt.tools.cli.OptionDefinition;
+import org.sblim.wbemsmt.tools.cli.*;
 
 public class DeletePoolCommand extends CimCommand {
 
@@ -46,10 +28,6 @@ public class DeletePoolCommand extends CimCommand {
     public static final OptionDefinition KEY_GLOBAL_serviceName = new OptionDefinition(null,
             "serviceName", "dhcpd", "serviceName.argValue", false, false,
             "serviceName.argDescription");
-    
-    public static final OptionDefinition KEY_GLOBAL_listEntities = new OptionDefinition(null,
-            "listEntities", "", "listEntities.argValue", false, false,
-            "listEntities.argDescription");
     /**
      * used for selection:  -httpProtocolType --httpProtocolType
      */
@@ -125,6 +103,7 @@ public class DeletePoolCommand extends CimCommand {
 
     private static final OptionDefinition[] GLOBAL_WBEMSMT_COMMON_OPTIONS = new OptionDefinition[] {
             KEY_GLOBAL_locale, KEY_GLOBAL_help, KEY_GLOBAL_QUESTION_MARK_, };
+	public static OptionDefinition KEY_GLOBAL_listEntities;
 
     CommandLine cmd = null;
     AbstractBaseCimAdapter adapter = null;

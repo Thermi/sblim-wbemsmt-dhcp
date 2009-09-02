@@ -1,13 +1,13 @@
 /** 
   *
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: Prashanth Karnam <prkarnam@in.ibm.com>
   * 
@@ -20,18 +20,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.cim.CIMInstance;
-import javax.cim.CIMObjectPath;
-import javax.wbem.CloseableIterator;
 import javax.wbem.WBEMException;
 import javax.wbem.client.WBEMClient;
 
 import org.sblim.cimclient.internal.wbem.CloseableIteratorSAX;
-import org.sblim.wbemsmt.bl.fco.FcoHelper;
 import org.sblim.wbemsmt.bl.tree.CIMInstanceNode;
 import org.sblim.wbemsmt.bl.tree.ITaskLauncherTreeNode;
 import org.sblim.wbemsmt.bl.tree.SimpleTextTreeNode;
@@ -49,7 +45,6 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSharednet;
 import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPSubnet;
 import org.sblim.wbemsmt.exception.ExceptionUtil;
 import org.sblim.wbemsmt.exception.WbemsmtException;
-import org.sblim.wbemsmt.schema.cim29.CIM_Namespace;
 import org.sblim.wbemsmt.tasklauncher.TaskLauncherContextMenu;
 import org.sblim.wbemsmt.tasklauncher.customtreeconfig.ContextmenuDocument;
 import org.sblim.wbemsmt.tasklauncher.customtreeconfig.ContextmenuDocument.Contextmenu;
@@ -90,7 +85,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 		super ();
 
 		for (int i = 0; i < EntityTypes.length; i++) {
-			Class cls;
+			Class<?> cls;
 			try {
 				cls = Class.forName ( "org.sblim.wbemsmt.dhcp.bl.fco." + EntityTypes[i] );
 				constructors[i] = cls.getConstructor ( new Class[] { CIMInstance.class } );
@@ -124,9 +119,9 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 					}
 					
 					// get the Global FCO from whcih the hierarchy starts
-					List globallist = Linux_DHCPGlobalHelper.enumerateInstances ( treeNode.getCimClient (), treeNode.getNamespace (), true );
+					List<Linux_DHCPGlobal> globallist = Linux_DHCPGlobalHelper.enumerateInstances ( treeNode.getCimClient (), treeNode.getNamespace (), true );
 
-					for (Iterator iter = globallist.iterator (); iter.hasNext ();) {
+					for (Iterator<Linux_DHCPGlobal> iter = globallist.iterator (); iter.hasNext ();) {
 						globalfco = (Linux_DHCPGlobal) iter.next ();
 					}
 
@@ -178,7 +173,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 		
 		boolean exitstatus = false;
 		
-		Class partypes[] = new Class[4];
+		Class<?> partypes[] = new Class[4];
         partypes[0] = WBEMClient.class;
         partypes[1] = Boolean.TYPE;
         partypes[2] = Boolean.TYPE;
@@ -198,7 +193,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 			Method method = fco.getClass ().getMethod ( methodName, partypes );
 			method.setAccessible ( true );
 			try {
-				ArrayList list = (ArrayList) method.invoke ( fco, args );
+				ArrayList<Linux_DHCPEntity> list = (ArrayList<Linux_DHCPEntity>) method.invoke ( fco, args );
 				if (list.size () > 0) {
 
 //					//add the Folder
@@ -216,7 +211,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 					super.addNode ( treeNode, pNode, true );
 
 					//iterate through the child entities
-					for (Iterator iter = list.iterator (); iter.hasNext ();) {
+					for (Iterator<Linux_DHCPEntity> iter = list.iterator (); iter.hasNext ();) {
 						
 						Linux_DHCPEntity fco1 = (Linux_DHCPEntity) iter.next ();
 						
@@ -344,7 +339,7 @@ public class DynamicTreeBuilderListener extends TaskLauncherTreeNodeEventListene
 
 		boolean exitstatus = false;
 
-		Class partypes[] = new Class[4];
+		Class<?> partypes[] = new Class[4];
 		partypes[0] = WBEMClient.class;
 		partypes[1] = Boolean.TYPE;
 		partypes[2] = Boolean.TYPE;

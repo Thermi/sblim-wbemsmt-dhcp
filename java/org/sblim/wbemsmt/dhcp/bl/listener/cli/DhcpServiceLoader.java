@@ -1,13 +1,13 @@
 /** 
   *
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: Prashanth Karnam <prkarnam@in.ibm.com>
   * 
@@ -20,7 +20,6 @@ package org.sblim.wbemsmt.dhcp.bl.listener.cli;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -103,7 +102,7 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 
 		Reader in = cmd.getIn ();
 		PrintWriter out = cmd.getOut ();
-		List list = null;
+		List<CIMObjectPath> list = null;
 		CIMObjectPath paths[] = null;
 		String msg= new String("Listing Entities ...");
 		int option = 0;
@@ -131,7 +130,7 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 
 		int i = 0;
 		paths = new CIMObjectPath[list.size ()];
-		for (Iterator iter = list.iterator (); iter.hasNext ();) {
+		for (Iterator<CIMObjectPath> iter = list.iterator (); iter.hasNext ();) {
 			CIMObjectPath path = (CIMObjectPath) iter.next ();
 			paths[i] = path;i++;
 		}
@@ -224,9 +223,9 @@ public abstract class DhcpServiceLoader extends DhcpLoader {
 	}
 
 	protected CIMObjectPath getPathOfService ( AbstractBaseCimAdapter adapter, String serviceName ) throws WbemsmtException {
-		List list = Linux_DHCPServiceHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
+		List<CIMObjectPath> list = Linux_DHCPServiceHelper.enumerateInstanceNames ( adapter.getCimClient() , adapter.getNamespace() , false);
 		CIMObjectPath pathService = null;
-		for (Iterator iter = list.iterator (); iter.hasNext ();) {
+		for (Iterator<CIMObjectPath> iter = list.iterator (); iter.hasNext ();) {
 			Object o = iter.next ();
 			CIMObjectPath path = (CIMObjectPath) o;
 			if (((CIMValuedElement) path.getKey ( "Name" ).getValue ()).getValue ().equals ( serviceName )) {

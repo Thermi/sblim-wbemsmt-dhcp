@@ -3,14 +3,14 @@
   *
 
  
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: org.sblim.wbemsmt.dcg.generator.cmd.CMDPresentationLayerGenerator
   * @template: org/sblim/wbemsmt/dcg/templates/cmd/containerImpl.vm
@@ -193,9 +193,9 @@ public class DHCPGlobalOptionsListItemContainerImpl extends BaseDataContainer im
 	 * Return a list of all Fields. A Field is a LabeledBaseInputComponentIf
 	 * @return
 	 */
-	public List getFields()
+	public List<LabeledBaseInputComponentIf> getFields()
 	{
-		List fields = new ArrayList();
+		List<LabeledBaseInputComponentIf> fields = new ArrayList<LabeledBaseInputComponentIf>();
     				fields.add(get_Values());
     				fields.add(get_InstanceID());
     				fields.add(get_ElementName());
@@ -208,9 +208,9 @@ public class DHCPGlobalOptionsListItemContainerImpl extends BaseDataContainer im
 	 * Return a list of all associated childContainers. A childContainer is a DataContainer
 	 * @return
 	 */
-	public List getChildContainers()
+	public List<DataContainer> getChildContainers()
 	{
-		List childs = new ArrayList();
+		List<DataContainer> childs = new ArrayList<DataContainer>();
     	    			return childs;
 	
 	}

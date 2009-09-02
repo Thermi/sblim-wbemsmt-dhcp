@@ -9,10 +9,7 @@ import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterUpdateModelDelegatee implements DhcpCimAdapterUpdateModelIf {
 
-	private DhcpCimAdapter adapter = null;
-	
 	public DhcpCimAdapterUpdateModelDelegatee ( DhcpCimAdapter adapter ) {
-		this.adapter = adapter;
 	}
 
 	public void updateModelImpl ( DhcpServiceConfContainer container ) throws WbemsmtException {

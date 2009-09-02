@@ -34,12 +34,6 @@ import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterInitContainerDelegatee implements DhcpCimAdapterInitContainerIf {
 
-	private DhcpCimAdapter adapter = null;
-	
-	public DhcpCimAdapterInitContainerDelegatee ( DhcpCimAdapter adapter ) {
-		this.adapter = adapter;
-	}
-
 	public void initContainerImpl ( DHCPGlobalOptionsContainer container ) throws WbemsmtException {
 
 	}

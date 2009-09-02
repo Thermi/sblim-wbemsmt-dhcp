@@ -3,14 +3,14 @@
   *
 
  
-  * © Copyright IBM Corp. 2007
+  * © Copyright IBM Corp.  2009,2007
   *
-  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+  * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
   * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
   * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
   *
-  * You can obtain a current copy of the Common Public License from
-  * http://www.opensource.org/licenses/cpl1.0.php
+  * You can obtain a current copy of the Eclipse Public License from
+  * http://www.opensource.org/licenses/eclipse-1.0.php
   *
   * @author: org.sblim.wbemsmt.dcg.generator.WizardGenerator
   * @template: org/sblim/wbemsmt/dcg/templates/wizardContainer.vm
@@ -29,6 +29,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
+import org.sblim.wbemsmt.bl.adapter.DataContainer;
 import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.wizard.WizardStepList;
 import org.sblim.wbemsmt.tools.wizard.container.AbstractWizardContainerBase;
@@ -46,7 +47,7 @@ import org.sblim.wbemsmt.tools.wizard.container.IWizardContainer;
 	public WizardContainer1(AbstractBaseCimAdapter adapter, WizardContainer1Panels panels) {
 		super(adapter);
 		this.panels = panels;
-		hmPages = new HashMap();
+		hmPages = new HashMap<String, DataContainer>();
 		stepList = new WizardStepList();
 	}
 	

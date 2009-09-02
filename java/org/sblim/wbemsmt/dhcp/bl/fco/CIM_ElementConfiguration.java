@@ -1,25 +1,19 @@
-/** 
- * CIM_ElementConfiguration.java
- *
+/**
+ * CIM_ElementConfiguration.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE
+ * TER MS OF THE ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS
+ * FILE CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the
+ * Eclipse Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.fco.jsr48.FcoGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm
- *
- * Contributors:
- *    TODO add author by using vm argument -Ddcg.author=<email> during startup 
- * 
- * Description: This association relates a Configuration object to one or more ManagedSystemElements. The Configuration object represents a certain behavior, or a desired functional state for the associated ManagedSystemElements.
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: Note: The Configuration class is being
+ *            deprecated in lieu of using a ConcreteComponent relationship to indicate a hierarchy
+ *            of Setting or SettingData instances. This association allows the reuse of the element
+ *            to Setting or SettingData associations instead of defining a peer association
+ *            specifically for Configurations. Deprecated description: This association relates a
+ *            Configuration object to one or more ManagedSystemElements. The Configuration object
+ *            represents a certain behavior or a desired functional state for the associated
+ *            ManagedSystemElements. generated Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.fco;
@@ -71,7 +65,8 @@ public class CIM_ElementConfiguration extends org.sblim.wbemsmt.bl.fco.AbstractW
      *   Class constructor
      * 
      *       *   <br>
-     *   This association relates a Configuration object to one or more ManagedSystemElements. The Configuration object represents a certain behavior, or a desired functional state for the associated ManagedSystemElements.
+     *   Note: The Configuration class is being deprecated in lieu of using a ConcreteComponent relationship to indicate a hierarchy of Setting or SettingData instances. This association allows the reuse of the element to Setting or SettingData associations instead of defining a peer association specifically for Configurations. 
+     * Deprecated description: This association relates a Configuration object to one or more ManagedSystemElements. The Configuration object represents a certain behavior or a desired functional state for the associated ManagedSystemElements.
      *   @param client the CIM Client
      *   @param namespace the target namespace
      */
@@ -86,7 +81,8 @@ public class CIM_ElementConfiguration extends org.sblim.wbemsmt.bl.fco.AbstractW
      *   Class constructor
      * 
      *       *   <br>
-     *   This association relates a Configuration object to one or more ManagedSystemElements. The Configuration object represents a certain behavior, or a desired functional state for the associated ManagedSystemElements.
+     *   Note: The Configuration class is being deprecated in lieu of using a ConcreteComponent relationship to indicate a hierarchy of Setting or SettingData instances. This association allows the reuse of the element to Setting or SettingData associations instead of defining a peer association specifically for Configurations. 
+     * Deprecated description: This association relates a Configuration object to one or more ManagedSystemElements. The Configuration object represents a certain behavior or a desired functional state for the associated ManagedSystemElements.
      *   @param cimInstance the instance that is used to create the Object
      */
 

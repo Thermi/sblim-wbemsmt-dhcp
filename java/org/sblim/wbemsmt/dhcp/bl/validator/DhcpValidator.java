@@ -1,14 +1,14 @@
 /** 
- * DhcpValidator.java
+B * DhcpValidator.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -23,11 +23,13 @@ package org.sblim.wbemsmt.dhcp.bl.validator;
 
 
 import org.sblim.wbemsmt.bl.adapter.AbstractBaseCimAdapter;
+import org.sblim.wbemsmt.bl.messages.Message;
+import org.sblim.wbemsmt.bl.messages.MessageList;
+import org.sblim.wbemsmt.bl.messages.MessageNumber;
 import org.sblim.wbemsmt.dhcp.bl.adapter.DhcpCimAdapter;
 import org.sblim.wbemsmt.exception.WbemsmtException;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 import org.sblim.wbemsmt.tools.validator.Validator;
-import org.sblim.wbemsmt.bl.messages.*;
 
 public class DhcpValidator extends Validator {
 
@@ -86,7 +88,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkIfEmpty ( String value, MessageList result ) {
 
-		if (value.equals ( "" )) {
+		if (value==null || value.equals ( "" )) {
 			Message err = Message.create ( new MessageNumber ( this.field.getLabelText (), " Value Not Set", 5 ),
 					Message.ERROR, adapter.getBundle (), value );
 			result.addMessage ( err );
@@ -95,7 +97,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkIfValidIPFormat ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "[[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*]*" ) == false) {
@@ -108,7 +110,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkIfValidMACFormat ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "[0-9a-fA-F]+[0-9a-fA-F]*:[0-9a-fA-F]+[0-9a-fA-F]*:[0-9a-fA-F]+[0-9a-fA-F]*:[0-9a-fA-F]+[0-9a-fA-F]*:[0-9a-fA-F]+[0-9a-fA-F]*:[0-9a-fA-F]+[0-9a-fA-F]*" ) == false) {
@@ -122,7 +124,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkRangeParam ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "(dynamic-bootp)*[ ]*[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*[ ][0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*.[0-9]+[0-9]*[0-9]*" ) == false) {
@@ -139,7 +141,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkNumber ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "[0-9]+" ) == false) {
@@ -152,7 +154,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkOnOff ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "(ON|OFF)" ) == false) {
@@ -165,7 +167,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkHardware ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "(ethernet|token-ring)? (([0-9a-fA-F]?[0-9a-fA-F]:){5}[0-9a-fA-F]?[0-9a-fA-F])" ) == false) {
@@ -179,7 +181,7 @@ public class DhcpValidator extends Validator {
 
 	private void checkDdnsUpdateStyle ( String value, MessageList result ) {
 
-		if (value.equals ( "" ))
+		if (value==null || value.equals ( "" ))
 			return;
 
 		if (value.matches ( "(ad-hoc|interim|none)" ) == false) {

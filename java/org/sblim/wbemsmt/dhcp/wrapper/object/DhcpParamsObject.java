@@ -1,14 +1,14 @@
 /** 
  * DhcpParamsObject.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -133,9 +133,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 
 	public void updateControls(DHCPGlobalParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
@@ -152,9 +152,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 	
 	public void updateControls(DHCPSubnetParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
@@ -171,9 +171,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 
 	public void updateControls(DHCPSharednetParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
@@ -191,9 +191,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 
 	public void updateControls(DHCPPoolParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
@@ -211,9 +211,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 
 	public void updateControls(DHCPGroupParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")
@@ -231,9 +231,9 @@ public class DhcpParamsObject extends WbemsmtBusinessObject {
 
 	public void updateControls(DHCPHostParamsContainer container) {
 		
-		List fields = container.getFields();
+		List<LabeledBaseInputComponentIf> fields = container.getFields();
 		
-		for (Iterator iter = fields.iterator (); iter.hasNext ();){
+		for (Iterator<LabeledBaseInputComponentIf> iter = fields.iterator (); iter.hasNext ();){
 			LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter.next();
 			
 			if(fld.getLabelText ().equals(fco.get_Name())){//.replace("-","")

@@ -14,12 +14,6 @@ import org.sblim.wbemsmt.exception.WbemsmtException;
 
 public class DhcpCimAdapterInitWizardDelegatee implements DhcpCimAdapterInitWizardIf {
 
-	private DhcpCimAdapter adapter = null;
-	
-	public DhcpCimAdapterInitWizardDelegatee ( DhcpCimAdapter adapter ) {
-		this.adapter= adapter;
-	}
-
 	public void initWizardImpl ( NewGroupContainer container, NewGroupWizardContainer wizardContainer, String currentPagename ) throws WbemsmtException {
 		
 	}

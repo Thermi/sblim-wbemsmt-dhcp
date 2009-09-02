@@ -1,27 +1,33 @@
-/** 
- * CIM_Profile.java
- *
+/**
+ * CIM_Profile.java Â© Copyright IBM Corp.  2009,2006,2007 THIS FILE IS PROVIDED UNDER THE TER MS OF THE
+ * ECLIPSE PUBLIC LICENSE ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
+ * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT. You can obtain a current copy of the Common
+ * Public License from http://www.opensource.org/licenses/eclipse-1.0.php
  * 
- * © Copyright IBM Corp. 2006,2007
- *
- * THIS FILE IS PROVIDED UNDER THE TER	MS OF THE COMMON PUBLIC LICENSE
- * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
- * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
- *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
- *
  * @author: org.sblim.wbemsmt.dcg.generator.fco.jsr48.FcoGenerator
- * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm
- *
- * Contributors:
- *    TODO add author by using vm argument -Ddcg.author=<email> during startup 
- * 
- * Description: Profile specifies a general collection of Settings/SettingData that are logically grouped together. Note that the CIM_Profile class uses simplified naming/identity and collection algorithms, as compared to CIM_Configuration. The settings are 'collected' into the Profile using the MemberOfCollection association. Note that a Profile obtains its setting data and other necessary information from collected Setting/SettingData instances, and by the definition of additional properties in subclasses. One example of a Profile is to define the collection of settings for a particular person. Another is to define the collection of settings appropriate when initializing a system. 
- * 
- * Profile is tied to a ManagedElement using the ElementProfile association. The ManagedElement provides context for the Profile, and the settings collected by Profile SHOULD be settings of the associated ManagedElement. Note that a ManagedElement MAY NOT exist when the Profile is instantiated. This is true when the Profile is used in the creation of the real world entity represented by (and then instantiated in) the ManagedElement.
- * 
- * generated Class
+ * @template: org/sblim/wbemsmt/dcg/templates/fco/jsr48/fco.vm Contributors: Prashanth
+ *            Karnam<prkarnam@in.ibm.com> Description: Note: The use of CIM_Profile is deprecated in
+ *            favor of aggregating instances of Setting or SettingData into "higher-level" Settings
+ *            or SettingData objects using the ConcreteComponent association. This use simplifies
+ *            the use of Settings or SettingData. With Profiles subclassing from Collection,
+ *            separate associations were needed between an element and either its Profiles or
+ *            Settings or SettingData. This class introduced unnecessary complexity and redundancy
+ *            into the model. Deprecated description: Profile specifies a general collection of
+ *            Settings or SettingData objects that are logically grouped together. Note: The
+ *            CIM_Profile class uses simplified naming or identity algorithms and collection
+ *            algorithms, as compared to CIM_Configuration. The settings are "collected" into the
+ *            Profile using the MemberOfCollection association. Note that a Profile obtains its
+ *            setting data and other necessary information from collected Setting and SettingData
+ *            instances and by the definition of additional properties in subclasses. One example of
+ *            a Profile is to define the collection of settings for a particular person. Another is
+ *            to define the collection of settings that are appropriate when initializing a system.
+ *            Profile is tied to a ManagedElement using the ElementProfile association. The
+ *            ManagedElement provides the context for the Profile, and the settings collected by
+ *            Profile should be settings of the associated ManagedElement. Note that a
+ *            ManagedElement cannot exist when the Profile is instantiated. This situation is
+ *            important to remember when the Profile is used in the creation of the real-world
+ *            entity that is represented by (and then instantiated in) the ManagedElement. generated
+ *            Class
  */
 
 package org.sblim.wbemsmt.dhcp.bl.fco;
@@ -38,11 +44,11 @@ public class CIM_Profile extends CIM_Collection {
 
     /**
      * Constants of property InstanceID
-     * Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. In order to ensure uniqueness within the NameSpace, the value of InstanceID SHOULD be constructed using the following 'preferred' algorithm: 
+     * Note: The use of this element is deprecated. Deprecated description: Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. To ensure uniqueness within the NameSpace, the value of InstanceID should be constructed using the following "preferred" algorithm: 
      * <OrgID>:<LocalID> 
-     * Where <OrgID> and <LocalID> are separated by a colon ':', and where <OrgID> MUST include a copyrighted, trademarked or otherwise unique name that is owned by the business entity creating/defining the InstanceID, or is a registered ID that is assigned to the business entity by a recognized global authority (This is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness <OrgID> MUST NOT contain a colon (':'). When using this algorithm, the first colon to appear in InstanceID MUST appear between <OrgID> and <LocalID>. 
-     * <LocalID> is chosen by the business entity and SHOULD not be re-used to identify different underlying (real-world) elements. If the above 'preferred' algorithm is not used, the defining entity MUST assure that the resultant InstanceID is not re-used across any InstanceIDs produced by this or other providers for this instance's NameSpace. 
-     * For DMTF defined instances, the 'preferred' algorithm MUST be used with the <OrgID> set to 'CIM'.
+     * Where <OrgID> and <LocalID> are separated by a colon (:), and where <OrgID> must include a copyrighted, trademarked, or otherwise unique name that is owned by the business entity that is creating or defining the InstanceID or that is a registered ID assigned to the business entity by a recognized global authority. (This requirement is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness, <OrgID> must not contain a colon (:). When using this algorithm, the first colon to appear in InstanceID must appear between <OrgID> and <LocalID>. 
+     * <LocalID> is chosen by the business entity and should not be reused to identify different underlying (real-world) elements. If the above "preferred" algorithm is not used, the defining entity must assure that the resulting InstanceID is not reused across any InstanceIDs that are produced by this or other providers for the NameSpace of this instance. 
+     * For DMTF-defined instances, the preferred algorithm must be used with the <OrgID> set to CIM.
      */
     public static class PROPERTY_INSTANCEID {
         /**
@@ -70,9 +76,9 @@ public class CIM_Profile extends CIM_Collection {
      *   Class constructor
      * 
      *       *   <br>
-     *   Profile specifies a general collection of Settings/SettingData that are logically grouped together. Note that the CIM_Profile class uses simplified naming/identity and collection algorithms, as compared to CIM_Configuration. The settings are 'collected' into the Profile using the MemberOfCollection association. Note that a Profile obtains its setting data and other necessary information from collected Setting/SettingData instances, and by the definition of additional properties in subclasses. One example of a Profile is to define the collection of settings for a particular person. Another is to define the collection of settings appropriate when initializing a system. 
-     * 
-     * Profile is tied to a ManagedElement using the ElementProfile association. The ManagedElement provides context for the Profile, and the settings collected by Profile SHOULD be settings of the associated ManagedElement. Note that a ManagedElement MAY NOT exist when the Profile is instantiated. This is true when the Profile is used in the creation of the real world entity represented by (and then instantiated in) the ManagedElement.
+     *   Note: The use of CIM_Profile is deprecated in favor of aggregating instances of Setting or SettingData into "higher-level" Settings or SettingData objects using the ConcreteComponent association. This use simplifies the use of Settings or SettingData. With Profiles subclassing from Collection, separate associations were needed between an element and either its Profiles or Settings or SettingData. This class introduced unnecessary complexity and redundancy into the model. 
+     * Deprecated description: Profile specifies a general collection of Settings or SettingData objects that are logically grouped together. Note: The CIM_Profile class uses simplified naming or identity algorithms and collection algorithms, as compared to CIM_Configuration. The settings are "collected" into the Profile using the MemberOfCollection association. Note that a Profile obtains its setting data and other necessary information from collected Setting and SettingData instances and by the definition of additional properties in subclasses. One example of a Profile is to define the collection of settings for a particular person. Another is to define the collection of settings that are appropriate when initializing a system. 
+     * Profile is tied to a ManagedElement using the ElementProfile association. The ManagedElement provides the context for the Profile, and the settings collected by Profile should be settings of the associated ManagedElement. Note that a ManagedElement cannot exist when the Profile is instantiated. This situation is important to remember when the Profile is used in the creation of the real-world entity that is represented by (and then instantiated in) the ManagedElement.
      *   @param client the CIM Client
      *   @param namespace the target namespace
      */
@@ -87,9 +93,9 @@ public class CIM_Profile extends CIM_Collection {
      *   Class constructor
      * 
      *       *   <br>
-     *   Profile specifies a general collection of Settings/SettingData that are logically grouped together. Note that the CIM_Profile class uses simplified naming/identity and collection algorithms, as compared to CIM_Configuration. The settings are 'collected' into the Profile using the MemberOfCollection association. Note that a Profile obtains its setting data and other necessary information from collected Setting/SettingData instances, and by the definition of additional properties in subclasses. One example of a Profile is to define the collection of settings for a particular person. Another is to define the collection of settings appropriate when initializing a system. 
-     * 
-     * Profile is tied to a ManagedElement using the ElementProfile association. The ManagedElement provides context for the Profile, and the settings collected by Profile SHOULD be settings of the associated ManagedElement. Note that a ManagedElement MAY NOT exist when the Profile is instantiated. This is true when the Profile is used in the creation of the real world entity represented by (and then instantiated in) the ManagedElement.
+     *   Note: The use of CIM_Profile is deprecated in favor of aggregating instances of Setting or SettingData into "higher-level" Settings or SettingData objects using the ConcreteComponent association. This use simplifies the use of Settings or SettingData. With Profiles subclassing from Collection, separate associations were needed between an element and either its Profiles or Settings or SettingData. This class introduced unnecessary complexity and redundancy into the model. 
+     * Deprecated description: Profile specifies a general collection of Settings or SettingData objects that are logically grouped together. Note: The CIM_Profile class uses simplified naming or identity algorithms and collection algorithms, as compared to CIM_Configuration. The settings are "collected" into the Profile using the MemberOfCollection association. Note that a Profile obtains its setting data and other necessary information from collected Setting and SettingData instances and by the definition of additional properties in subclasses. One example of a Profile is to define the collection of settings for a particular person. Another is to define the collection of settings that are appropriate when initializing a system. 
+     * Profile is tied to a ManagedElement using the ElementProfile association. The ManagedElement provides the context for the Profile, and the settings collected by Profile should be settings of the associated ManagedElement. Note that a ManagedElement cannot exist when the Profile is instantiated. This situation is important to remember when the Profile is used in the creation of the real-world entity that is represented by (and then instantiated in) the ManagedElement.
      *   @param cimInstance the instance that is used to create the Object
      */
 
@@ -135,11 +141,11 @@ public class CIM_Profile extends CIM_Collection {
     /**
      * Get the property InstanceID
      *     * <br>
-     * Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. In order to ensure uniqueness within the NameSpace, the value of InstanceID SHOULD be constructed using the following 'preferred' algorithm: 
+     * Note: The use of this element is deprecated. Deprecated description: Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. To ensure uniqueness within the NameSpace, the value of InstanceID should be constructed using the following "preferred" algorithm: 
      * <OrgID>:<LocalID> 
-     * Where <OrgID> and <LocalID> are separated by a colon ':', and where <OrgID> MUST include a copyrighted, trademarked or otherwise unique name that is owned by the business entity creating/defining the InstanceID, or is a registered ID that is assigned to the business entity by a recognized global authority (This is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness <OrgID> MUST NOT contain a colon (':'). When using this algorithm, the first colon to appear in InstanceID MUST appear between <OrgID> and <LocalID>. 
-     * <LocalID> is chosen by the business entity and SHOULD not be re-used to identify different underlying (real-world) elements. If the above 'preferred' algorithm is not used, the defining entity MUST assure that the resultant InstanceID is not re-used across any InstanceIDs produced by this or other providers for this instance's NameSpace. 
-     * For DMTF defined instances, the 'preferred' algorithm MUST be used with the <OrgID> set to 'CIM'.
+     * Where <OrgID> and <LocalID> are separated by a colon (:), and where <OrgID> must include a copyrighted, trademarked, or otherwise unique name that is owned by the business entity that is creating or defining the InstanceID or that is a registered ID assigned to the business entity by a recognized global authority. (This requirement is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness, <OrgID> must not contain a colon (:). When using this algorithm, the first colon to appear in InstanceID must appear between <OrgID> and <LocalID>. 
+     * <LocalID> is chosen by the business entity and should not be reused to identify different underlying (real-world) elements. If the above "preferred" algorithm is not used, the defining entity must assure that the resulting InstanceID is not reused across any InstanceIDs that are produced by this or other providers for the NameSpace of this instance. 
+     * For DMTF-defined instances, the preferred algorithm must be used with the <OrgID> set to CIM.
      *     */
 
     public String get_key_InstanceID() {
@@ -158,11 +164,11 @@ public class CIM_Profile extends CIM_Collection {
     /**
      * Set the property InstanceID
      * <br>
-     * Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. In order to ensure uniqueness within the NameSpace, the value of InstanceID SHOULD be constructed using the following 'preferred' algorithm: 
+     * Note: The use of this element is deprecated. Deprecated description: Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. To ensure uniqueness within the NameSpace, the value of InstanceID should be constructed using the following "preferred" algorithm: 
      * <OrgID>:<LocalID> 
-     * Where <OrgID> and <LocalID> are separated by a colon ':', and where <OrgID> MUST include a copyrighted, trademarked or otherwise unique name that is owned by the business entity creating/defining the InstanceID, or is a registered ID that is assigned to the business entity by a recognized global authority (This is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness <OrgID> MUST NOT contain a colon (':'). When using this algorithm, the first colon to appear in InstanceID MUST appear between <OrgID> and <LocalID>. 
-     * <LocalID> is chosen by the business entity and SHOULD not be re-used to identify different underlying (real-world) elements. If the above 'preferred' algorithm is not used, the defining entity MUST assure that the resultant InstanceID is not re-used across any InstanceIDs produced by this or other providers for this instance's NameSpace. 
-     * For DMTF defined instances, the 'preferred' algorithm MUST be used with the <OrgID> set to 'CIM'.
+     * Where <OrgID> and <LocalID> are separated by a colon (:), and where <OrgID> must include a copyrighted, trademarked, or otherwise unique name that is owned by the business entity that is creating or defining the InstanceID or that is a registered ID assigned to the business entity by a recognized global authority. (This requirement is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness, <OrgID> must not contain a colon (:). When using this algorithm, the first colon to appear in InstanceID must appear between <OrgID> and <LocalID>. 
+     * <LocalID> is chosen by the business entity and should not be reused to identify different underlying (real-world) elements. If the above "preferred" algorithm is not used, the defining entity must assure that the resulting InstanceID is not reused across any InstanceIDs that are produced by this or other providers for the NameSpace of this instance. 
+     * For DMTF-defined instances, the preferred algorithm must be used with the <OrgID> set to CIM.
      *
      * @return true if the property was found, false if the property was not found and the value was not set
      */
@@ -206,11 +212,11 @@ public class CIM_Profile extends CIM_Collection {
     /**
      * Set the property InstanceID
      * <br>
-     * Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. In order to ensure uniqueness within the NameSpace, the value of InstanceID SHOULD be constructed using the following 'preferred' algorithm: 
+     * Note: The use of this element is deprecated. Deprecated description: Within the scope of the instantiating Namespace, InstanceID opaquely and uniquely identifies an instance of this class. To ensure uniqueness within the NameSpace, the value of InstanceID should be constructed using the following "preferred" algorithm: 
      * <OrgID>:<LocalID> 
-     * Where <OrgID> and <LocalID> are separated by a colon ':', and where <OrgID> MUST include a copyrighted, trademarked or otherwise unique name that is owned by the business entity creating/defining the InstanceID, or is a registered ID that is assigned to the business entity by a recognized global authority (This is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness <OrgID> MUST NOT contain a colon (':'). When using this algorithm, the first colon to appear in InstanceID MUST appear between <OrgID> and <LocalID>. 
-     * <LocalID> is chosen by the business entity and SHOULD not be re-used to identify different underlying (real-world) elements. If the above 'preferred' algorithm is not used, the defining entity MUST assure that the resultant InstanceID is not re-used across any InstanceIDs produced by this or other providers for this instance's NameSpace. 
-     * For DMTF defined instances, the 'preferred' algorithm MUST be used with the <OrgID> set to 'CIM'.
+     * Where <OrgID> and <LocalID> are separated by a colon (:), and where <OrgID> must include a copyrighted, trademarked, or otherwise unique name that is owned by the business entity that is creating or defining the InstanceID or that is a registered ID assigned to the business entity by a recognized global authority. (This requirement is similar to the <Schema Name>_<Class Name> structure of Schema class names.) In addition, to ensure uniqueness, <OrgID> must not contain a colon (:). When using this algorithm, the first colon to appear in InstanceID must appear between <OrgID> and <LocalID>. 
+     * <LocalID> is chosen by the business entity and should not be reused to identify different underlying (real-world) elements. If the above "preferred" algorithm is not used, the defining entity must assure that the resulting InstanceID is not reused across any InstanceIDs that are produced by this or other providers for the NameSpace of this instance. 
+     * For DMTF-defined instances, the preferred algorithm must be used with the <OrgID> set to CIM.
      */
 
     private static CIMProperty setPropertyValue_key_InstanceID(CIMProperty currentProperty,

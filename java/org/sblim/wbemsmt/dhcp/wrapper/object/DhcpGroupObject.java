@@ -1,14 +1,14 @@
 /** 
  * DhcpGroupObject.java
  *
- * © Copyright IBM Corp. 2007
+ * © Copyright IBM Corp.  2009,2007
  *
- * THIS FILE IS PROVIDED UNDER THE TERMS OF THE COMMON PUBLIC LICENSE
+ * THIS FILE IS PROVIDED UNDER THE TERMS OF THE ECLIPSE PUBLIC LICENSE
  * ("AGREEMENT"). ANY USE, REPRODUCTION OR DISTRIBUTION OF THIS FILE
  * CONSTITUTES RECIPIENTS ACCEPTANCE OF THE AGREEMENT.
  *
- * You can obtain a current copy of the Common Public License from
- * http://www.opensource.org/licenses/cpl1.0.php
+ * You can obtain a current copy of the Eclipse Public License from
+ * http://www.opensource.org/licenses/eclipse-1.0.php
  *
  * @author: Prashanth Karnam <prkarnam@in.ibm.com>
  *
@@ -21,7 +21,6 @@
 
 package org.sblim.wbemsmt.dhcp.wrapper.object;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,7 +42,6 @@ import org.sblim.wbemsmt.dhcp.bl.fco.Linux_DHCPParamsForEntity;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpOptionsList;
 import org.sblim.wbemsmt.dhcp.wrapper.list.DhcpParamsList;
 import org.sblim.wbemsmt.exception.WbemsmtException;
-import org.sblim.wbemsmt.schema.cim29.CIM_SettingData;
 import org.sblim.wbemsmt.tools.input.LabeledBaseInputComponentIf;
 
 public class DhcpGroupObject extends DhcpEntityObject {
@@ -58,18 +56,18 @@ public class DhcpGroupObject extends DhcpEntityObject {
 		setGroupoptionslist ( new DhcpOptionsList());
 		setGroupparamslist ( new DhcpParamsList());
 		
-		List GroupopArrayList = ((Linux_DHCPGroup)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
+		List<Linux_DHCPOptions> GroupopArrayList = ((Linux_DHCPGroup)fco).getAssociated_Linux_DHCPOptions_Linux_DHCPOptionsForEntitys (
 						adapter.getCimClient () );
 
-		for (Iterator iter = GroupopArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<Linux_DHCPOptions> iter = GroupopArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPOptions opsfco = (Linux_DHCPOptions) iter.next ();
 			getGroupoptionslist ().addDhcpOptionsObject ( new DhcpOptionsObject ( opsfco, adapter));
 		}
 		
-		List GroupparamArrayList = ((Linux_DHCPGroup) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
+		List<Linux_DHCPParams> GroupparamArrayList = ((Linux_DHCPGroup) fco).getAssociated_Linux_DHCPParams_Linux_DHCPParamsForEntitys (
 				adapter.getCimClient ());
 
-		for (Iterator iter = GroupparamArrayList.iterator (); iter.hasNext ();) {
+		for (Iterator<Linux_DHCPParams> iter = GroupparamArrayList.iterator (); iter.hasNext ();) {
 			Linux_DHCPParams paramsfco = (Linux_DHCPParams) iter.next ();
 			getGroupparamslist ().addDhcpParamsObject ( new DhcpParamsObject ( paramsfco, adapter ) );
 		}
@@ -99,11 +97,11 @@ public class DhcpGroupObject extends DhcpEntityObject {
 		boolean objFound = false;
 
 			// if the option does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = getGroupoptionslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = getGroupoptionslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpOptionsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -115,7 +113,7 @@ public class DhcpGroupObject extends DhcpEntityObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue () != null && fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPOptions opFco = new Linux_DHCPOptions(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
@@ -156,11 +154,11 @@ public class DhcpGroupObject extends DhcpEntityObject {
 		boolean objFound = false;
 
 			// if the Param does not exist then create and add to the objects list
-			List fields = container.getFields();
-			for (Iterator iter2 = fields.iterator (); iter2.hasNext ();){
+			List<LabeledBaseInputComponentIf> fields = container.getFields();
+			for (Iterator<LabeledBaseInputComponentIf> iter2 = fields.iterator (); iter2.hasNext ();){
 				LabeledBaseInputComponentIf fld = (LabeledBaseInputComponentIf)iter2.next();
 				objFound = false;
-				for (Iterator iter1 = getGroupparamslist ().iterator (); iter1.hasNext ();){
+				for (Iterator<Object> iter1 = getGroupparamslist ().iterator (); iter1.hasNext ();){
 					obj  = (DhcpParamsObject)iter1.next();
 					if(obj.getFco ().get_Name ().equals(fld.getLabelText ())){
 						try {
@@ -172,7 +170,7 @@ public class DhcpGroupObject extends DhcpEntityObject {
 						break;
 					}
 				}
-			if(objFound==false && fld.getConvertedControlValue ().toString ().equals("") == false){
+			if(objFound==false && fld.getConvertedControlValue () != null && fld.getConvertedControlValue ().toString ().equals("") == false){
 
 				Linux_DHCPParams opFco = new Linux_DHCPParams(adapter.getCimClient (),adapter.getNamespace ());
 				if (DhcpCimAdapter.isDummyMode ())
@@ -211,7 +209,7 @@ public class DhcpGroupObject extends DhcpEntityObject {
 		
 		DhcpParamsObject obj = null;
 		
-		for (Iterator iter = getGroupparamslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = getGroupparamslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpParamsObject)iter.next();
 			obj.updateControls(container);
 			}
@@ -222,7 +220,7 @@ public class DhcpGroupObject extends DhcpEntityObject {
 		
 		DhcpOptionsObject obj = null;
 		
-		for (Iterator iter = getGroupoptionslist ().iterator (); iter.hasNext ();){ 
+		for (Iterator<Object> iter = getGroupoptionslist ().iterator (); iter.hasNext ();){ 
 			obj  = (DhcpOptionsObject)iter.next();
 			obj.updateControls(container);
 			}
@@ -236,7 +234,7 @@ public class DhcpGroupObject extends DhcpEntityObject {
 	public void deleteGroup() throws WbemsmtException {
 		
 		Linux_DHCPGroup fco = (Linux_DHCPGroup) this.fco;
-		List list = Linux_DHCPGroupsForEntityHelper.enumerateInstanceNames( adapter.getCimClient () , adapter.getNamespace (), false);
+		List<CIMObjectPath> list = Linux_DHCPGroupsForEntityHelper.enumerateInstanceNames( adapter.getCimClient () , adapter.getNamespace (), false);
 		
 		if(DhcpCimAdapter.isDummyMode ()){
 		for (int i = 0; i < list.size (); i++) {
